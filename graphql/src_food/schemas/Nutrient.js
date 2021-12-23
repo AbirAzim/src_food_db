@@ -21,43 +21,43 @@ __decorate([
     __metadata("design:type", String)
 ], Nutrient.prototype, "_id", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
 ], Nutrient.prototype, "nutrient", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
 ], Nutrient.prototype, "category", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
 ], Nutrient.prototype, "value", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
 ], Nutrient.prototype, "id", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
 ], Nutrient.prototype, "unitName", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
 ], Nutrient.prototype, "parentNutrient", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
 ], Nutrient.prototype, "min", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", Number)
 ], Nutrient.prototype, "rank", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
 ], Nutrient.prototype, "publication_date", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(() => [RelatedSource_1.default]),
+    (0, type_graphql_1.Field)(() => [RelatedSource_1.default], { nullable: true }),
     __metadata("design:type", Array)
 ], Nutrient.prototype, "related_sources", void 0);
 Nutrient = __decorate([

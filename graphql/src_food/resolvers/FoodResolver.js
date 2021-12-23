@@ -8,6 +8,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -19,13 +22,19 @@ const portion_1 = __importDefault(require("../../../models/portion"));
 const Ingredient_1 = __importDefault(require("../schemas/Ingredient"));
 const Nutrient_1 = __importDefault(require("../schemas/Nutrient"));
 const Portion_1 = __importDefault(require("../schemas/Portion"));
+const IngredientWithImagesAndNutrientCount_1 = __importDefault(require("../schemas/IngredientWithImagesAndNutrientCount"));
 const fs_1 = __importDefault(require("fs"));
 let MemberResolver = class MemberResolver {
     async getAllTheIngredients() {
-        let foods = await ingredient_1.default.find()
-            .populate('nutrients')
-            .populate('portions');
-        return foods;
+        let foods = await ingredient_1.default.find();
+        let returnFoods = [];
+        for (let i = 0; i < foods.length; i++) {
+            returnFoods[i] = foods[i];
+            returnFoods[i].nutrientsCount = foods[i].nutrients.length;
+            returnFoods[i].portionsCount = foods[i].portions.length;
+            returnFoods[i].imagesCount = foods[i].images.length;
+        }
+        return returnFoods;
     }
     async getAllTheNutrients() {
         let nutrients = await nutrient_1.default.find();
@@ -34,6 +43,35 @@ let MemberResolver = class MemberResolver {
     async getAllThePortions() {
         let portions = await portion_1.default.find();
         return portions;
+    }
+    async getAllTheNutrientsAndPortionsByFoodId(foodId) {
+        let food = await ingredient_1.default.findOne({
+            _id: foodId,
+        })
+            .populate('nutrients')
+            .populate('portions');
+        return food;
+    }
+    async getASingleNutrient(nutrientId) {
+        let nutrient = await nutrient_1.default.findOne({
+            _id: nutrientId,
+        });
+        return nutrient;
+    }
+    async getASinglePortions(portionId) {
+        let portion = await portion_1.default.findOne({
+            _id: portionId,
+        });
+        return portion;
+    }
+    async getIngredientsByName(ingredientName) {
+        var regexp = new RegExp(`[a-zA-Z0-9\s]*${ingredientName}[a-zA-Z0-9\s]*`, 'i');
+        const items = await ingredient_1.default.find({
+            ingredientName: regexp,
+        })
+            .populate('nutrients')
+            .populate('portions');
+        return items;
     }
     async databaseShifting() {
         let foods = fs_1.default.readFileSync('./temp/food.json', 'utf-8');
@@ -115,7 +153,7 @@ let MemberResolver = class MemberResolver {
     }
 };
 __decorate([
-    (0, type_graphql_1.Query)(() => [Ingredient_1.default]),
+    (0, type_graphql_1.Query)(() => [IngredientWithImagesAndNutrientCount_1.default]),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
@@ -132,6 +170,34 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], MemberResolver.prototype, "getAllThePortions", null);
+__decorate([
+    (0, type_graphql_1.Query)(() => Ingredient_1.default),
+    __param(0, (0, type_graphql_1.Arg)('foodId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], MemberResolver.prototype, "getAllTheNutrientsAndPortionsByFoodId", null);
+__decorate([
+    (0, type_graphql_1.Query)(() => Nutrient_1.default),
+    __param(0, (0, type_graphql_1.Arg)('nutrientId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], MemberResolver.prototype, "getASingleNutrient", null);
+__decorate([
+    (0, type_graphql_1.Query)(() => Portion_1.default),
+    __param(0, (0, type_graphql_1.Arg)('portionId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], MemberResolver.prototype, "getASinglePortions", null);
+__decorate([
+    (0, type_graphql_1.Query)(() => [Ingredient_1.default]),
+    __param(0, (0, type_graphql_1.Arg)('ingredientName')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], MemberResolver.prototype, "getIngredientsByName", null);
 __decorate([
     (0, type_graphql_1.Query)(() => String),
     __metadata("design:type", Function),

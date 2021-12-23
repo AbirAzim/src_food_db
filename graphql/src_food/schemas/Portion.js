@@ -17,15 +17,15 @@ __decorate([
     __metadata("design:type", String)
 ], Portion.prototype, "_id", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
 ], Portion.prototype, "measurement", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
 ], Portion.prototype, "measurement2", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
 ], Portion.prototype, "meausermentWeight", void 0);
 Portion = __decorate([

@@ -13,71 +13,50 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
-const Nutrient_1 = __importDefault(require("./Nutrient"));
-const Portion_1 = __importDefault(require("./Portion"));
-let Ingredient = class Ingredient {
+const CreateRelatedSource_1 = __importDefault(require("./CreateRelatedSource"));
+let CreateEditNutrient = class CreateEditNutrient {
 };
 __decorate([
-    (0, type_graphql_1.Field)(() => type_graphql_1.ID),
+    (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
-], Ingredient.prototype, "_id", void 0);
+], CreateEditNutrient.prototype, "nutrient", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
-], Ingredient.prototype, "id", void 0);
+], CreateEditNutrient.prototype, "category", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
-], Ingredient.prototype, "ingredientName", void 0);
+], CreateEditNutrient.prototype, "value", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
-], Ingredient.prototype, "category", void 0);
+], CreateEditNutrient.prototype, "id", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
-], Ingredient.prototype, "blendStatus", void 0);
+], CreateEditNutrient.prototype, "unitName", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
-], Ingredient.prototype, "classType", void 0);
+], CreateEditNutrient.prototype, "parentNutrient", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
-], Ingredient.prototype, "source", void 0);
+], CreateEditNutrient.prototype, "min", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Number)
+], CreateEditNutrient.prototype, "rank", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
-], Ingredient.prototype, "description", void 0);
+], CreateEditNutrient.prototype, "publication_date", void 0);
 __decorate([
-    (0, type_graphql_1.Field)({ nullable: true }),
-    __metadata("design:type", String)
-], Ingredient.prototype, "sourceId", void 0);
-__decorate([
-    (0, type_graphql_1.Field)({ nullable: true }),
-    __metadata("design:type", String)
-], Ingredient.prototype, "sourceCategory", void 0);
-__decorate([
-    (0, type_graphql_1.Field)({ nullable: true }),
-    __metadata("design:type", String)
-], Ingredient.prototype, "publication_date", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(() => [Nutrient_1.default], { nullable: true }),
+    (0, type_graphql_1.Field)(() => [CreateRelatedSource_1.default], { nullable: true }),
     __metadata("design:type", Array)
-], Ingredient.prototype, "nutrients", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(() => [Portion_1.default], { nullable: true }),
-    __metadata("design:type", Array)
-], Ingredient.prototype, "portions", void 0);
-__decorate([
-    (0, type_graphql_1.Field)({ nullable: true }),
-    __metadata("design:type", String)
-], Ingredient.prototype, "featuredImage", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(() => [String], { nullable: true }),
-    __metadata("design:type", Array)
-], Ingredient.prototype, "images", void 0);
-Ingredient = __decorate([
-    (0, type_graphql_1.ObjectType)()
-], Ingredient);
-exports.default = Ingredient;
+], CreateEditNutrient.prototype, "related_sources", void 0);
+CreateEditNutrient = __decorate([
+    (0, type_graphql_1.InputType)()
+], CreateEditNutrient);
+exports.default = CreateEditNutrient;

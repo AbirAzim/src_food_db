@@ -10,25 +10,21 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
-let RelatedSource = class RelatedSource {
+let CreateEditPortion = class CreateEditPortion {
 };
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
-], RelatedSource.prototype, "source", void 0);
+], CreateEditPortion.prototype, "measurement", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
-], RelatedSource.prototype, "sourceId", void 0);
+], CreateEditPortion.prototype, "measurement2", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
-], RelatedSource.prototype, "sourceNutrientName", void 0);
-__decorate([
-    (0, type_graphql_1.Field)({ nullable: true }),
-    __metadata("design:type", String)
-], RelatedSource.prototype, "units", void 0);
-RelatedSource = __decorate([
-    (0, type_graphql_1.ObjectType)()
-], RelatedSource);
-exports.default = RelatedSource;
+], CreateEditPortion.prototype, "meausermentWeight", void 0);
+CreateEditPortion = __decorate([
+    (0, type_graphql_1.InputType)()
+], CreateEditPortion);
+exports.default = CreateEditPortion;

@@ -8,27 +8,23 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
-let RelatedSource = class RelatedSource {
+const CreateEditIngredient_1 = __importDefault(require("./CreateEditIngredient"));
+let EditIngredient = class EditIngredient {
 };
 __decorate([
-    (0, type_graphql_1.Field)({ nullable: true }),
+    (0, type_graphql_1.Field)(),
     __metadata("design:type", String)
-], RelatedSource.prototype, "source", void 0);
+], EditIngredient.prototype, "editId", void 0);
 __decorate([
-    (0, type_graphql_1.Field)({ nullable: true }),
-    __metadata("design:type", String)
-], RelatedSource.prototype, "sourceId", void 0);
-__decorate([
-    (0, type_graphql_1.Field)({ nullable: true }),
-    __metadata("design:type", String)
-], RelatedSource.prototype, "sourceNutrientName", void 0);
-__decorate([
-    (0, type_graphql_1.Field)({ nullable: true }),
-    __metadata("design:type", String)
-], RelatedSource.prototype, "units", void 0);
-RelatedSource = __decorate([
-    (0, type_graphql_1.ObjectType)()
-], RelatedSource);
-exports.default = RelatedSource;
+    (0, type_graphql_1.Field)((type) => CreateEditIngredient_1.default),
+    __metadata("design:type", CreateEditIngredient_1.default)
+], EditIngredient.prototype, "editableObject", void 0);
+EditIngredient = __decorate([
+    (0, type_graphql_1.InputType)()
+], EditIngredient);
+exports.default = EditIngredient;
