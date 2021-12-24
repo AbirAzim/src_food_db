@@ -8,23 +8,23 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
-let CreatePortion = class CreatePortion {
+const CreatePortion_1 = __importDefault(require("./CreatePortion"));
+let AddPortionToAIngredient = class AddPortionToAIngredient {
 };
 __decorate([
     (0, type_graphql_1.Field)(),
     __metadata("design:type", String)
-], CreatePortion.prototype, "measurement", void 0);
+], AddPortionToAIngredient.prototype, "ingredientId", void 0);
 __decorate([
-    (0, type_graphql_1.Field)({ nullable: true }),
-    __metadata("design:type", String)
-], CreatePortion.prototype, "measurement2", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(),
-    __metadata("design:type", String)
-], CreatePortion.prototype, "meausermentWeight", void 0);
-CreatePortion = __decorate([
+    (0, type_graphql_1.Field)((type) => CreatePortion_1.default),
+    __metadata("design:type", CreatePortion_1.default)
+], AddPortionToAIngredient.prototype, "portionData", void 0);
+AddPortionToAIngredient = __decorate([
     (0, type_graphql_1.InputType)()
-], CreatePortion);
-exports.default = CreatePortion;
+], AddPortionToAIngredient);
+exports.default = AddPortionToAIngredient;

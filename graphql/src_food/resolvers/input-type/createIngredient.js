@@ -8,13 +8,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
-const CreateNutrient_1 = __importDefault(require("./CreateNutrient"));
-const CreatePortion_1 = __importDefault(require("./CreatePortion"));
 let CreateIngredient = class CreateIngredient {
 };
 __decorate([
@@ -57,14 +52,6 @@ __decorate([
     (0, type_graphql_1.Field)(),
     __metadata("design:type", String)
 ], CreateIngredient.prototype, "publication_date", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(() => [CreateNutrient_1.default]),
-    __metadata("design:type", Array)
-], CreateIngredient.prototype, "nutrients", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(() => [CreatePortion_1.default]),
-    __metadata("design:type", Array)
-], CreateIngredient.prototype, "portions", void 0);
 __decorate([
     (0, type_graphql_1.Field)(),
     __metadata("design:type", String)
