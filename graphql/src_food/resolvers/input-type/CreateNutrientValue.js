@@ -17,6 +17,14 @@ __decorate([
     __metadata("design:type", String)
 ], CreateNutrientValue.prototype, "value", void 0);
 __decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], CreateNutrientValue.prototype, "nutrient", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], CreateNutrientValue.prototype, "category", void 0);
+__decorate([
     (0, type_graphql_1.Field)(),
     __metadata("design:type", String)
 ], CreateNutrientValue.prototype, "sourceId", void 0);
