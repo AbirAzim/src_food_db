@@ -47,6 +47,9 @@ let MemberResolver = class MemberResolver {
     async gerASingleIngredient(ingredientId) {
         let ingredient = await ingredient_1.default.findOne({
             _id: ingredientId,
+        }).populate({
+            path: 'nutrients.uniqueNutrientRefference',
+            model: 'UniqueNutrient',
         });
         return ingredient;
     }

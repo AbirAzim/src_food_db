@@ -24,7 +24,7 @@ __decorate([
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
-], Ingredient.prototype, "id", void 0);
+], Ingredient.prototype, "ingredientId", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
