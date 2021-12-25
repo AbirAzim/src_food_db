@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
-const CreateEditNutreint_1 = __importDefault(require("./CreateEditNutreint"));
+const CreateUniqueNutrient_1 = __importDefault(require("./CreateUniqueNutrient"));
 let EditNutrient = class EditNutrient {
 };
 __decorate([
@@ -21,8 +21,8 @@ __decorate([
     __metadata("design:type", String)
 ], EditNutrient.prototype, "editId", void 0);
 __decorate([
-    (0, type_graphql_1.Field)((type) => CreateEditNutreint_1.default),
-    __metadata("design:type", CreateEditNutreint_1.default)
+    (0, type_graphql_1.Field)((type) => CreateUniqueNutrient_1.default),
+    __metadata("design:type", CreateUniqueNutrient_1.default)
 ], EditNutrient.prototype, "editableObject", void 0);
 EditNutrient = __decorate([
     (0, type_graphql_1.InputType)()

@@ -8,6 +8,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -15,12 +18,44 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
 const ingredient_1 = __importDefault(require("../../../models/ingredient"));
 const uniqueNutrient_1 = __importDefault(require("../../../models/uniqueNutrient"));
+const EditIngredients_1 = __importDefault(require("./input-type/EditIngredients"));
+const EditNutrient_1 = __importDefault(require("./input-type/EditNutrient"));
 const Ingredient_1 = __importDefault(require("../schemas/Ingredient"));
+const ReturnIngredient_1 = __importDefault(require("../schemas/ReturnIngredient"));
+const UniqueNutrient_1 = __importDefault(require("../schemas/UniqueNutrient"));
 const fs_1 = __importDefault(require("fs"));
 let MemberResolver = class MemberResolver {
     async getAllTheIngredients() {
         let ingredients = await ingredient_1.default.find({});
-        return ingredients;
+        let returnIngredients = [];
+        for (let i = 0; i < ingredients.length; i++) {
+            let returnIngredient = ingredients[i];
+            returnIngredient.nutrientCount = ingredients[i].nutrients.length;
+            returnIngredient.portionCount = ingredients[i].portions.length;
+            returnIngredient.imageCount = ingredients[i].images.length;
+            returnIngredients.push(returnIngredient);
+        }
+        return returnIngredients;
+    }
+    async gerASingleIngredient(ingredientId) {
+        let ingredient = await ingredient_1.default.findOne({
+            _id: ingredientId,
+        });
+        return ingredient;
+    }
+    async getAUniqueNutrient(nutrientId) {
+        let nutrient = await uniqueNutrient_1.default.findOne({
+            _id: nutrientId,
+        });
+        return nutrient;
+    }
+    async editUniqueNutrient(data) {
+        await uniqueNutrient_1.default.findOneAndUpdate({ _id: data.editId }, data.editableObject);
+        return 'Successfully Edited';
+    }
+    async EditIngredient(data) {
+        await ingredient_1.default.findOneAndUpdate({ _id: data.editId }, data.editableObject);
+        return 'Successfully Edited';
     }
     async storeAllUniqueNutrient() {
         let nutrients = fs_1.default.readFileSync('./temp/nutrients.json', 'utf-8');
@@ -104,11 +139,39 @@ let MemberResolver = class MemberResolver {
     }
 };
 __decorate([
-    (0, type_graphql_1.Query)(() => [Ingredient_1.default]),
+    (0, type_graphql_1.Query)(() => [ReturnIngredient_1.default]),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], MemberResolver.prototype, "getAllTheIngredients", null);
+__decorate([
+    (0, type_graphql_1.Query)(() => Ingredient_1.default),
+    __param(0, (0, type_graphql_1.Arg)('ingredientId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], MemberResolver.prototype, "gerASingleIngredient", null);
+__decorate([
+    (0, type_graphql_1.Query)(() => UniqueNutrient_1.default),
+    __param(0, (0, type_graphql_1.Arg)('nutrientId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], MemberResolver.prototype, "getAUniqueNutrient", null);
+__decorate([
+    (0, type_graphql_1.Mutation)(() => String),
+    __param(0, (0, type_graphql_1.Arg)('data')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [EditNutrient_1.default]),
+    __metadata("design:returntype", Promise)
+], MemberResolver.prototype, "editUniqueNutrient", null);
+__decorate([
+    (0, type_graphql_1.Mutation)(() => String),
+    __param(0, (0, type_graphql_1.Arg)('data')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [EditIngredients_1.default]),
+    __metadata("design:returntype", Promise)
+], MemberResolver.prototype, "EditIngredient", null);
 __decorate([
     (0, type_graphql_1.Query)(() => String),
     __metadata("design:type", Function),

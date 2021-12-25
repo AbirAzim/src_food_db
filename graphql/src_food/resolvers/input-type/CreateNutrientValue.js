@@ -10,25 +10,29 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
-let CreatePortion = class CreatePortion {
+let CreateNutrientValue = class CreateNutrientValue {
 };
 __decorate([
     (0, type_graphql_1.Field)(),
     __metadata("design:type", String)
-], CreatePortion.prototype, "measurement", void 0);
-__decorate([
-    (0, type_graphql_1.Field)({ nullable: true }),
-    __metadata("design:type", String)
-], CreatePortion.prototype, "measurement2", void 0);
+], CreateNutrientValue.prototype, "nutrient", void 0);
 __decorate([
     (0, type_graphql_1.Field)(),
     __metadata("design:type", String)
-], CreatePortion.prototype, "meausermentWeight", void 0);
+], CreateNutrientValue.prototype, "category", void 0);
 __decorate([
-    (0, type_graphql_1.Field)({ nullable: true }),
+    (0, type_graphql_1.Field)(),
     __metadata("design:type", String)
-], CreatePortion.prototype, "sourceId", void 0);
-CreatePortion = __decorate([
+], CreateNutrientValue.prototype, "value", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(),
+    __metadata("design:type", String)
+], CreateNutrientValue.prototype, "sourceId", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(),
+    __metadata("design:type", String)
+], CreateNutrientValue.prototype, "uniqueNutrientRefference", void 0);
+CreateNutrientValue = __decorate([
     (0, type_graphql_1.InputType)()
-], CreatePortion);
-exports.default = CreatePortion;
+], CreateNutrientValue);
+exports.default = CreateNutrientValue;
