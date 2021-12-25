@@ -20,6 +20,7 @@ const ingredient_1 = __importDefault(require("../../../models/ingredient"));
 const uniqueNutrient_1 = __importDefault(require("../../../models/uniqueNutrient"));
 const EditIngredients_1 = __importDefault(require("./input-type/EditIngredients"));
 const EditNutrient_1 = __importDefault(require("./input-type/EditNutrient"));
+const createIngredient_1 = __importDefault(require("./input-type/createIngredient"));
 const Ingredient_1 = __importDefault(require("../schemas/Ingredient"));
 const ReturnIngredient_1 = __importDefault(require("../schemas/ReturnIngredient"));
 const UniqueNutrient_1 = __importDefault(require("../schemas/UniqueNutrient"));
@@ -43,6 +44,10 @@ let MemberResolver = class MemberResolver {
     async getALlUniqueNutrientList() {
         let nutrients = await uniqueNutrient_1.default.find({});
         return nutrients;
+    }
+    async createNewIngredient(data) {
+        let ingredient = await ingredient_1.default.create(data);
+        return ingredient;
     }
     async gerASingleIngredient(ingredientId) {
         let ingredient = await ingredient_1.default.findOne({
@@ -159,6 +164,13 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], MemberResolver.prototype, "getALlUniqueNutrientList", null);
+__decorate([
+    (0, type_graphql_1.Mutation)(() => Ingredient_1.default),
+    __param(0, (0, type_graphql_1.Arg)('data')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [createIngredient_1.default]),
+    __metadata("design:returntype", Promise)
+], MemberResolver.prototype, "createNewIngredient", null);
 __decorate([
     (0, type_graphql_1.Query)(() => Ingredient_1.default),
     __param(0, (0, type_graphql_1.Arg)('ingredientId')),
