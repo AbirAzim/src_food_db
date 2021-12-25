@@ -15,21 +15,13 @@ let CreateNutrientValue = class CreateNutrientValue {
 __decorate([
     (0, type_graphql_1.Field)(),
     __metadata("design:type", String)
-], CreateNutrientValue.prototype, "nutrient", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(),
-    __metadata("design:type", String)
-], CreateNutrientValue.prototype, "category", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(),
-    __metadata("design:type", String)
 ], CreateNutrientValue.prototype, "value", void 0);
 __decorate([
     (0, type_graphql_1.Field)(),
     __metadata("design:type", String)
 ], CreateNutrientValue.prototype, "sourceId", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)((type) => type_graphql_1.ID),
     __metadata("design:type", String)
 ], CreateNutrientValue.prototype, "uniqueNutrientRefference", void 0);
 CreateNutrientValue = __decorate([

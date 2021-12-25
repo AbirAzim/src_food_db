@@ -8,27 +8,52 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+var CreateUniqueNutrient_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
-let CreateUniqueNutrient = class CreateUniqueNutrient {
+const CreateRelatedSource_1 = __importDefault(require("./CreateRelatedSource"));
+let CreateUniqueNutrient = CreateUniqueNutrient_1 = class CreateUniqueNutrient {
 };
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
-], CreateUniqueNutrient.prototype, "source", void 0);
+], CreateUniqueNutrient.prototype, "nutrient", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
-], CreateUniqueNutrient.prototype, "sourceId", void 0);
+], CreateUniqueNutrient.prototype, "category", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
-], CreateUniqueNutrient.prototype, "sourceNutrientName", void 0);
+], CreateUniqueNutrient.prototype, "nutrientId", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
-], CreateUniqueNutrient.prototype, "units", void 0);
-CreateUniqueNutrient = __decorate([
+], CreateUniqueNutrient.prototype, "unitName", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], CreateUniqueNutrient.prototype, "min", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Number)
+], CreateUniqueNutrient.prototype, "rank", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], CreateUniqueNutrient.prototype, "publication_date", void 0);
+__decorate([
+    (0, type_graphql_1.Field)((type) => CreateUniqueNutrient_1, { nullable: true }),
+    __metadata("design:type", CreateUniqueNutrient)
+], CreateUniqueNutrient.prototype, "parentNutrient", void 0);
+__decorate([
+    (0, type_graphql_1.Field)((type) => [CreateRelatedSource_1.default], { nullable: true }),
+    __metadata("design:type", Array)
+], CreateUniqueNutrient.prototype, "related_sources", void 0);
+CreateUniqueNutrient = CreateUniqueNutrient_1 = __decorate([
     (0, type_graphql_1.InputType)()
 ], CreateUniqueNutrient);
 exports.default = CreateUniqueNutrient;

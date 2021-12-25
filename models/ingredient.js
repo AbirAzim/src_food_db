@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
 const ingredientSchema = new mongoose_1.Schema({
     refDatabaseId: String,
-    id: String,
+    ingredientId: String,
     ingredientName: String,
     category: String,
     blendStatus: String,
@@ -15,11 +15,12 @@ const ingredientSchema = new mongoose_1.Schema({
     publication_date: String,
     nutrients: [
         {
-            nutrient: String,
-            category: String,
             value: String,
             sourceId: String,
-            uniqueNutrientRefference: String,
+            uniqueNutrientRefference: {
+                type: mongoose_1.Schema.Types.ObjectId,
+                ref: 'UniqueNutrient',
+            },
         },
     ],
     portions: [

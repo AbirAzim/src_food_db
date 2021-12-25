@@ -26,7 +26,10 @@ const UniqueNutrient_1 = __importDefault(require("../schemas/UniqueNutrient"));
 const fs_1 = __importDefault(require("fs"));
 let MemberResolver = class MemberResolver {
     async getAllTheIngredients() {
-        let ingredients = await ingredient_1.default.find({});
+        let ingredients = await ingredient_1.default.find({}).populate({
+            path: 'nutrients.uniqueNutrientRefference',
+            model: 'UniqueNutrient',
+        });
         let returnIngredients = [];
         for (let i = 0; i < ingredients.length; i++) {
             let returnIngredient = ingredients[i];
@@ -36,6 +39,10 @@ let MemberResolver = class MemberResolver {
             returnIngredients.push(returnIngredient);
         }
         return returnIngredients;
+    }
+    async getALlUniqueNutrientList() {
+        let nutrients = await uniqueNutrient_1.default.find({});
+        return nutrients;
     }
     async gerASingleIngredient(ingredientId) {
         let ingredient = await ingredient_1.default.findOne({
@@ -96,7 +103,7 @@ let MemberResolver = class MemberResolver {
                     portions: [],
                     refDatabaseId: foods[i]._id,
                     ingredientName: foods[i].name,
-                    id: '',
+                    ingredientId: '',
                     category: '',
                     blendStatus: 'Review',
                     classType: '',
@@ -110,8 +117,6 @@ let MemberResolver = class MemberResolver {
                 };
                 for (let j = 0; j < foods[i].nutrients.length; j++) {
                     let newNutrient = {
-                        nutrient: foods[i].nutrients[j].nutrientDescription.name,
-                        category: '',
                         value: foods[i].nutrients[j].amount,
                         sourceId: foods[i].nutrients[j].id,
                         uniqueNutrientRefference: foods[i].nutrients[j].nutrientDescription._id,
@@ -135,6 +140,7 @@ let MemberResolver = class MemberResolver {
     }
     async deleteFood() {
         await uniqueNutrient_1.default.deleteMany({});
+        await ingredient_1.default.deleteMany({});
         return 'done';
     }
 };
@@ -144,6 +150,12 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], MemberResolver.prototype, "getAllTheIngredients", null);
+__decorate([
+    (0, type_graphql_1.Query)(() => [UniqueNutrient_1.default]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], MemberResolver.prototype, "getALlUniqueNutrientList", null);
 __decorate([
     (0, type_graphql_1.Query)(() => Ingredient_1.default),
     __param(0, (0, type_graphql_1.Arg)('ingredientId')),
