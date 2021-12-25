@@ -15,14 +15,19 @@ const ingredientSchema = new mongoose_1.Schema({
     publication_date: String,
     nutrients: [
         {
-            type: mongoose_1.Schema.Types.ObjectId,
-            ref: 'Nutrient',
+            nutrient: String,
+            category: String,
+            value: String,
+            sourceId: String,
+            uniqueNutrientRefference: String,
         },
     ],
     portions: [
         {
-            type: mongoose_1.Schema.Types.ObjectId,
-            ref: 'Portion',
+            measurement: String,
+            measurement2: String,
+            meausermentWeight: String,
+            sourceId: String,
         },
     ],
     featuredImage: String,

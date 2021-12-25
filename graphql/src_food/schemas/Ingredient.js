@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
-const Nutrient_1 = __importDefault(require("./Nutrient"));
+const NutrientValue_1 = __importDefault(require("./NutrientValue"));
 const Portion_1 = __importDefault(require("./Portion"));
 let Ingredient = class Ingredient {
 };
@@ -42,6 +42,14 @@ __decorate([
     __metadata("design:type", String)
 ], Ingredient.prototype, "classType", void 0);
 __decorate([
+    (0, type_graphql_1.Field)((type) => [NutrientValue_1.default], { nullable: true }),
+    __metadata("design:type", Array)
+], Ingredient.prototype, "nutrients", void 0);
+__decorate([
+    (0, type_graphql_1.Field)((type) => [Portion_1.default], { nullable: true }),
+    __metadata("design:type", Array)
+], Ingredient.prototype, "portions", void 0);
+__decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
 ], Ingredient.prototype, "source", void 0);
@@ -61,14 +69,6 @@ __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
 ], Ingredient.prototype, "publication_date", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(() => [Nutrient_1.default], { nullable: true }),
-    __metadata("design:type", Array)
-], Ingredient.prototype, "nutrients", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(() => [Portion_1.default], { nullable: true }),
-    __metadata("design:type", Array)
-], Ingredient.prototype, "portions", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
