@@ -46,6 +46,10 @@ __decorate([
 ], CreateEditNutrient.prototype, "min", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], CreateEditNutrient.prototype, "max", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", Number)
 ], CreateEditNutrient.prototype, "rank", void 0);
 __decorate([

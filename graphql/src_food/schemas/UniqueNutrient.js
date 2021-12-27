@@ -43,6 +43,10 @@ __decorate([
 ], UniqueNutrient.prototype, "min", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], UniqueNutrient.prototype, "max", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", Number)
 ], UniqueNutrient.prototype, "rank", void 0);
 __decorate([

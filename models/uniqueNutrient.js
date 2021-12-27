@@ -7,6 +7,7 @@ const uniqueNutrientSchema = new mongoose_1.Schema({
     nutrientId: String,
     unitName: String,
     min: String,
+    max: String,
     rank: Number,
     publication_date: String,
     refDatabaseId: String,
