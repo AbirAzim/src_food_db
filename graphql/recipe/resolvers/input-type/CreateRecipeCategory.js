@@ -39,6 +39,10 @@ __decorate([
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
+], CreateRecipeCategory.prototype, "title", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
 ], CreateRecipeCategory.prototype, "canonicalURL", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
