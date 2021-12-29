@@ -11,6 +11,7 @@ const type_graphql_1 = require("type-graphql");
 require("reflect-metadata");
 const FoodResolver_1 = __importDefault(require("./graphql/src_food/resolvers/FoodResolver"));
 const RecipeResolver_1 = __importDefault(require("./graphql/recipe/resolvers/RecipeResolver"));
+const RecipeCategoryResolver_1 = __importDefault(require("./graphql/recipe/resolvers/RecipeCategoryResolver"));
 process.on('uncaughtException', (err) => {
     console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
     console.log(err.name, err.message);
@@ -29,7 +30,7 @@ async function bootstrap() {
     // ... Building schema here
     try {
         schema = await (0, type_graphql_1.buildSchema)({
-            resolvers: [FoodResolver_1.default, RecipeResolver_1.default],
+            resolvers: [FoodResolver_1.default, RecipeResolver_1.default, RecipeCategoryResolver_1.default],
         });
     }
     catch (e) {
