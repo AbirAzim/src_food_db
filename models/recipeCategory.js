@@ -15,6 +15,11 @@ const recipeCategorySchema = new mongoose_1.Schema({
     description: String,
     image: String,
     icon: String,
+    title: String,
+    canonicalURL: String,
+    siteMap: String,
+    metaDesc: String,
+    keywords: [String],
     isPublished: {
         type: Boolean,
         default: false,

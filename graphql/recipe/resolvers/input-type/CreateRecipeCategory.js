@@ -36,6 +36,22 @@ __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", Boolean)
 ], CreateRecipeCategory.prototype, "isPublished", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], CreateRecipeCategory.prototype, "canonicalURL", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], CreateRecipeCategory.prototype, "siteMap", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], CreateRecipeCategory.prototype, "metaDesc", void 0);
+__decorate([
+    (0, type_graphql_1.Field)((type) => [String], { nullable: true }),
+    __metadata("design:type", Array)
+], CreateRecipeCategory.prototype, "keywords", void 0);
 CreateRecipeCategory = __decorate([
     (0, type_graphql_1.InputType)()
 ], CreateRecipeCategory);

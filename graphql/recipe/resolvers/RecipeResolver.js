@@ -23,59 +23,11 @@ const EditRecipe_1 = __importDefault(require("./input-type/EditRecipe"));
 let RecipeResolver = class RecipeResolver {
     // @Query((type) => String)
     // async test() {
-    //   let recipe = {
-    //     image: [
-    //       {
-    //         image:
-    //           'https://www.whiskaffair.com/wp-content/uploads/2020/03/Lemon-Tea-4.jpg',
-    //         default: true,
-    //       },
-    //       {
-    //         image:
-    //           'https://www.whiskaffair.com/wp-content/uploads/2020/03/Lemon-Tea-4-500x500.jpg',
-    //         default: false,
-    //       },
-    //       {
-    //         image:
-    //           'https://www.whiskaffair.com/wp-content/uploads/2020/03/Lemon-Tea-4-500x375.jpg',
-    //         default: false,
-    //       },
-    //       {
-    //         image:
-    //           'https://www.whiskaffair.com/wp-content/uploads/2020/03/Lemon-Tea-4-480x270.jpg',
-    //         default: false,
-    //       },
-    //     ],
-    //     recipeInstructions: [
-    //       'Heat water in a pan.',
-    //       'Once the water comes to a boil, simmer the heat.',
-    //       'Add tea leaves and let them steep for a minute.',
-    //       'Strain the tea in serving cups.',
-    //       'Add lemon juice and honey and stir well.',
-    //       'Serve immediately.',
-    //     ],
-    //     name: 'Lemon Tea Recipe',
-    //     prepTime: '5 minutes',
-    //     cookTime: '5 minutes',
-    //     totalTime: '10 minutes',
-    //     recipeYield: '2',
-    //     recipeIngredients: [
-    //       '2 cups Water',
-    //       '2 tsp Black Tea',
-    //       '1 tbsp Lemon Juice',
-    //       '2 tsp Honey',
-    //     ],
-    //     recipeCuisines: ['Continental'],
-    //     keywords: ['Lemon Tea'],
-    //     author: ['Neha Mathor'],
-    //     description:
-    //       'Lemon Tea is a refreshing tea where lemon juice is added in black or green tea. It soothes the throat, prevents cough and congestion and helps in weightloss. Here is how to make it.',
-    //     datePublished: '2020-03-29T01:45:42+00:00',
-    //     url: 'https://www.whiskaffair.com/lemon-tea-recipe/',
-    //     favicon: 'https://www.whiskaffair.com/favicon.ico',
-    //     __v: 0,
-    //   };
-    //   await RecipeModel.create(recipe);
+    //   let recipes = fs.readFileSync('./temp/recipes.json', 'utf-8');
+    //   recipes = JSON.parse(recipes);
+    //   for (let i = 1; i < recipes.length; i++) {
+    //     await RecipeModel.create(recipes[i]);
+    //   }
     //   return 'Recipe Created';
     // }
     async getAllRecipes() {
@@ -93,6 +45,10 @@ let RecipeResolver = class RecipeResolver {
     async editARecipe(data) {
         await recipe_1.default.findOneAndUpdate({ _id: data.editId }, data.editableObject);
         return 'recipe updated successfully';
+    }
+    async deleteARecipe(recipeId) {
+        await recipe_1.default.findOneAndDelete({ _id: recipeId });
+        return 'recipe deleted successfully';
     }
 };
 __decorate([
@@ -122,6 +78,13 @@ __decorate([
     __metadata("design:paramtypes", [EditRecipe_1.default]),
     __metadata("design:returntype", Promise)
 ], RecipeResolver.prototype, "editARecipe", null);
+__decorate([
+    (0, type_graphql_1.Mutation)((type) => String),
+    __param(0, (0, type_graphql_1.Arg)('recipeId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], RecipeResolver.prototype, "deleteARecipe", null);
 RecipeResolver = __decorate([
     (0, type_graphql_1.Resolver)()
 ], RecipeResolver);

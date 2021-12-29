@@ -40,6 +40,26 @@ __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", Boolean)
 ], RecipeCategoryResolver.prototype, "isPublished", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], RecipeCategoryResolver.prototype, "title", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], RecipeCategoryResolver.prototype, "canonicalURL", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], RecipeCategoryResolver.prototype, "siteMap", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], RecipeCategoryResolver.prototype, "metaDesc", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(type => [String], { nullable: true }),
+    __metadata("design:type", Array)
+], RecipeCategoryResolver.prototype, "keywords", void 0);
 RecipeCategoryResolver = __decorate([
     (0, type_graphql_1.ObjectType)()
 ], RecipeCategoryResolver);
