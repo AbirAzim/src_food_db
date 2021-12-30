@@ -54,6 +54,10 @@ __decorate([
     __metadata("design:type", String)
 ], UniqueNutrient.prototype, "publication_date", void 0);
 __decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], UniqueNutrient.prototype, "units", void 0);
+__decorate([
     (0, type_graphql_1.Field)((type) => UniqueNutrient_1, { nullable: true }),
     __metadata("design:type", UniqueNutrient)
 ], UniqueNutrient.prototype, "parentNutrient", void 0);

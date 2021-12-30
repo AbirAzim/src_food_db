@@ -6,6 +6,7 @@ const uniqueNutrientSchema = new mongoose_1.Schema({
     category: String,
     nutrientId: String,
     unitName: String,
+    units: String,
     min: String,
     max: String,
     rank: Number,
