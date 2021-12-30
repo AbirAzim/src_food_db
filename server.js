@@ -13,6 +13,8 @@ const FoodResolver_1 = __importDefault(require("./graphql/src_food/resolvers/Foo
 const RecipeResolver_1 = __importDefault(require("./graphql/recipe/resolvers/RecipeResolver"));
 const RecipeCategoryResolver_1 = __importDefault(require("./graphql/recipe/resolvers/RecipeCategoryResolver"));
 const BrandResolver_1 = __importDefault(require("./graphql/recipe/resolvers/BrandResolver"));
+const AdminResolver_1 = __importDefault(require("./graphql/admin/resolvers/AdminResolver"));
+const RoleResolver_1 = __importDefault(require("./graphql/admin/resolvers/RoleResolver"));
 process.on('uncaughtException', (err) => {
     console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
     console.log(err.name, err.message);
@@ -36,6 +38,8 @@ async function bootstrap() {
                 RecipeResolver_1.default,
                 RecipeCategoryResolver_1.default,
                 BrandResolver_1.default,
+                AdminResolver_1.default,
+                RoleResolver_1.default,
             ],
         });
     }
