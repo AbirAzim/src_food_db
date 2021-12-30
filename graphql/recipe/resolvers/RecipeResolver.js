@@ -30,6 +30,10 @@ let RecipeResolver = class RecipeResolver {
     //   }
     //   return 'Recipe Created';
     // }
+    async getAllRecipesByBlendCategory(blendType) {
+        const recipes = await recipe_1.default.find({ recipeBlendCategory: blendType });
+        return recipes;
+    }
     async getAllRecipes() {
         const recipes = await recipe_1.default.find().populate('ingredients');
         return recipes;
@@ -105,6 +109,13 @@ let RecipeResolver = class RecipeResolver {
         return 'recipe deleted successfully';
     }
 };
+__decorate([
+    (0, type_graphql_1.Query)((type) => [Recipe_1.default]),
+    __param(0, (0, type_graphql_1.Arg)('blendType')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], RecipeResolver.prototype, "getAllRecipesByBlendCategory", null);
 __decorate([
     (0, type_graphql_1.Query)((type) => [Recipe_1.default]),
     __metadata("design:type", Function),
