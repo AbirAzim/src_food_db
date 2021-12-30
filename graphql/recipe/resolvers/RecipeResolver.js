@@ -34,6 +34,18 @@ let RecipeResolver = class RecipeResolver {
         const recipes = await recipe_1.default.find().populate('ingredients');
         return recipes;
     }
+    async getAllrecomendedRecipes() {
+        const recipes = await recipe_1.default.find();
+        return recipes;
+    }
+    async getAllpopularRecipes() {
+        const recipes = await recipe_1.default.find().limit(4);
+        return recipes;
+    }
+    async getAllLatestRecipes() {
+        const recipes = await recipe_1.default.find().sort({ datePublished: -1 });
+        return recipes;
+    }
     async getARecipe(recipeId) {
         const recipe = await recipe_1.default.findById(recipeId).populate('ingredients');
         return recipe;
@@ -41,6 +53,48 @@ let RecipeResolver = class RecipeResolver {
     async addNewRecipe(data) {
         const newRecipe = await recipe_1.default.create(data);
         return 'new recipe created successfully';
+    }
+    // @Mutation(() => String)
+    // async storeAllBrands() {
+    //   let recipes = await RecipeModel.find();
+    //   for (let i = 0; i < recipes.length; i++) {
+    //     let url = recipes[i].url;
+    //     let brand = await BrandModel.findOne({ brandUrl: url });
+    //     if (!brand) {
+    //       let brandNameFromUrl = new URL(url).hostname;
+    //       brandNameFromUrl = brandNameFromUrl.replace(/^www\./, '');
+    //       brandNameFromUrl = brandNameFromUrl.replace(/\.com$/, '');
+    //       let newBrand = {
+    //         brandName: brandNameFromUrl,
+    //         brandUrl: url,
+    //         brandIcon: recipes[i].favicon,
+    //       };
+    //       await BrandModel.create(newBrand);
+    //       console.log(newBrand);
+    //     }
+    //   }
+    //   return true;
+    // }
+    async addTestIngredient() {
+        let recipes = await recipe_1.default.find();
+        for (let i = 0; i < recipes.length; i++) {
+            console.log('step 1');
+            let ingredients = recipes[i].recipeIngredients;
+            for (let j = 0; j < ingredients.length; j++) {
+                console.log('step 2');
+                let ingredient = ingredients[j].split(' ');
+                var first = ingredient.shift();
+                var second = ingredient.shift();
+                var third = ingredient.length ? ingredient.join(' ') : undefined;
+                let newIngredient = {
+                    quantity: first,
+                    unit: second,
+                    name: third,
+                };
+                await recipe_1.default.findOneAndUpdate({ _id: recipes[i]._id }, { $push: { testIngredient: newIngredient } });
+            }
+        }
+        return 'done';
     }
     async editARecipe(data) {
         await recipe_1.default.findOneAndUpdate({ _id: data.editId }, data.editableObject);
@@ -58,6 +112,24 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], RecipeResolver.prototype, "getAllRecipes", null);
 __decorate([
+    (0, type_graphql_1.Query)((type) => [Recipe_1.default]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], RecipeResolver.prototype, "getAllrecomendedRecipes", null);
+__decorate([
+    (0, type_graphql_1.Query)((type) => [Recipe_1.default]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], RecipeResolver.prototype, "getAllpopularRecipes", null);
+__decorate([
+    (0, type_graphql_1.Query)((type) => [Recipe_1.default]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], RecipeResolver.prototype, "getAllLatestRecipes", null);
+__decorate([
     (0, type_graphql_1.Query)((type) => Recipe_1.default),
     __param(0, (0, type_graphql_1.Arg)('recipeId')),
     __metadata("design:type", Function),
@@ -71,6 +143,12 @@ __decorate([
     __metadata("design:paramtypes", [CreateRecipe_1.default]),
     __metadata("design:returntype", Promise)
 ], RecipeResolver.prototype, "addNewRecipe", null);
+__decorate([
+    (0, type_graphql_1.Mutation)((type) => String),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], RecipeResolver.prototype, "addTestIngredient", null);
 __decorate([
     (0, type_graphql_1.Mutation)((type) => String),
     __param(0, (0, type_graphql_1.Arg)('data')),

@@ -27,6 +27,23 @@ __decorate([
 Image = __decorate([
     (0, type_graphql_1.ObjectType)()
 ], Image);
+let TestIngredient = class TestIngredient {
+};
+__decorate([
+    (0, type_graphql_1.Field)(),
+    __metadata("design:type", String)
+], TestIngredient.prototype, "quantity", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(),
+    __metadata("design:type", String)
+], TestIngredient.prototype, "unit", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], TestIngredient.prototype, "name", void 0);
+TestIngredient = __decorate([
+    (0, type_graphql_1.ObjectType)()
+], TestIngredient);
 let Recipe = class Recipe {
 };
 __decorate([
@@ -111,6 +128,10 @@ __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
 ], Recipe.prototype, "favicon", void 0);
+__decorate([
+    (0, type_graphql_1.Field)((type) => [TestIngredient], { nullable: true }),
+    __metadata("design:type", Array)
+], Recipe.prototype, "testIngredient", void 0);
 Recipe = __decorate([
     (0, type_graphql_1.ObjectType)()
 ], Recipe);

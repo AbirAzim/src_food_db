@@ -10,57 +10,49 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
-let RecipeCategory = class RecipeCategory {
+let CreateEditRecipeBrand = class CreateEditRecipeBrand {
 };
 __decorate([
-    (0, type_graphql_1.Field)((type) => type_graphql_1.ID),
+    (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
-], RecipeCategory.prototype, "_id", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(),
-    __metadata("design:type", String)
-], RecipeCategory.prototype, "name", void 0);
+], CreateEditRecipeBrand.prototype, "brandName", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
-], RecipeCategory.prototype, "slug", void 0);
+], CreateEditRecipeBrand.prototype, "brandDescription", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
-], RecipeCategory.prototype, "description", void 0);
+], CreateEditRecipeBrand.prototype, "brandImage", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
-], RecipeCategory.prototype, "image", void 0);
+], CreateEditRecipeBrand.prototype, "brandIcon", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
-], RecipeCategory.prototype, "icon", void 0);
-__decorate([
-    (0, type_graphql_1.Field)({ nullable: true }),
-    __metadata("design:type", Boolean)
-], RecipeCategory.prototype, "isPublished", void 0);
+], CreateEditRecipeBrand.prototype, "brandUrl", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
-], RecipeCategory.prototype, "title", void 0);
+], CreateEditRecipeBrand.prototype, "title", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
-], RecipeCategory.prototype, "canonicalURL", void 0);
+], CreateEditRecipeBrand.prototype, "canonicalURL", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
-], RecipeCategory.prototype, "siteMap", void 0);
+], CreateEditRecipeBrand.prototype, "siteMap", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
-], RecipeCategory.prototype, "metaDesc", void 0);
+], CreateEditRecipeBrand.prototype, "metaDesc", void 0);
 __decorate([
     (0, type_graphql_1.Field)((type) => [String], { nullable: true }),
     __metadata("design:type", Array)
-], RecipeCategory.prototype, "keywords", void 0);
-RecipeCategory = __decorate([
-    (0, type_graphql_1.ObjectType)()
-], RecipeCategory);
-exports.default = RecipeCategory;
+], CreateEditRecipeBrand.prototype, "keywords", void 0);
+CreateEditRecipeBrand = __decorate([
+    (0, type_graphql_1.InputType)()
+], CreateEditRecipeBrand);
+exports.default = CreateEditRecipeBrand;

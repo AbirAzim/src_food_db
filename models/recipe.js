@@ -24,6 +24,13 @@ const recipeSchema = new mongoose_1.Schema({
             ref: 'Ingredient',
         },
     ],
+    testIngredient: [
+        {
+            quantity: String,
+            unit: String,
+            name: String,
+        },
+    ],
     isPublished: {
         type: Boolean,
         default: false,
