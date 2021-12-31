@@ -11,11 +11,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-var CreateUniqueNutrient_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
 const CreateRelatedSource_1 = __importDefault(require("./CreateRelatedSource"));
-let CreateUniqueNutrient = CreateUniqueNutrient_1 = class CreateUniqueNutrient {
+let CreateUniqueNutrient = class CreateUniqueNutrient {
 };
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
@@ -54,14 +53,14 @@ __decorate([
     __metadata("design:type", String)
 ], CreateUniqueNutrient.prototype, "publication_date", void 0);
 __decorate([
-    (0, type_graphql_1.Field)((type) => CreateUniqueNutrient_1, { nullable: true }),
-    __metadata("design:type", CreateUniqueNutrient)
+    (0, type_graphql_1.Field)((type) => type_graphql_1.ID, { nullable: true }),
+    __metadata("design:type", String)
 ], CreateUniqueNutrient.prototype, "parentNutrient", void 0);
 __decorate([
     (0, type_graphql_1.Field)((type) => [CreateRelatedSource_1.default], { nullable: true }),
     __metadata("design:type", Array)
 ], CreateUniqueNutrient.prototype, "related_sources", void 0);
-CreateUniqueNutrient = CreateUniqueNutrient_1 = __decorate([
+CreateUniqueNutrient = __decorate([
     (0, type_graphql_1.InputType)()
 ], CreateUniqueNutrient);
 exports.default = CreateUniqueNutrient;
