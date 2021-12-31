@@ -23,6 +23,14 @@ __decorate([
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
+], Brand.prototype, "slug", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Boolean)
+], Brand.prototype, "isPublished", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
 ], Brand.prototype, "brandDescription", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),

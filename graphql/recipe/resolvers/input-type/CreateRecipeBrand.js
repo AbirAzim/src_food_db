@@ -19,6 +19,14 @@ __decorate([
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
+], CreateRecipeBrand.prototype, "slug", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Boolean)
+], CreateRecipeBrand.prototype, "isPublished", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
 ], CreateRecipeBrand.prototype, "brandDescription", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),

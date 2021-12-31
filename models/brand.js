@@ -7,6 +7,7 @@ const brandSchema = new mongoose_1.Schema({
         required: [true, 'brand name is required'],
         unique: true,
     },
+    slug: String,
     brandDescription: String,
     brandImage: String,
     brandIcon: String,
@@ -16,6 +17,7 @@ const brandSchema = new mongoose_1.Schema({
     siteMap: String,
     metaDesc: String,
     keywords: [String],
+    isPublished: Boolean,
 });
 const RecipeBrand = (0, mongoose_1.model)('RecipeBrand', brandSchema);
 exports.default = RecipeBrand;
