@@ -30,8 +30,10 @@ let RecipeResolver = class RecipeResolver {
     //   }
     //   return 'Recipe Created';
     // }
-    async getAllRecipesByBlendCategory(blendType) {
-        const recipes = await recipe_1.default.find({ recipeBlendCategory: blendType });
+    async getAllRecipesByBlendCategory(blendTypes) {
+        const recipes = await recipe_1.default.find({
+            recipeBlendCategory: { $in: blendTypes },
+        });
         return recipes;
     }
     async getAllRecipes() {
@@ -111,9 +113,9 @@ let RecipeResolver = class RecipeResolver {
 };
 __decorate([
     (0, type_graphql_1.Query)((type) => [Recipe_1.default]),
-    __param(0, (0, type_graphql_1.Arg)('blendType')),
+    __param(0, (0, type_graphql_1.Arg)('blendTypes', (type) => [String])),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [Array]),
     __metadata("design:returntype", Promise)
 ], RecipeResolver.prototype, "getAllRecipesByBlendCategory", null);
 __decorate([
