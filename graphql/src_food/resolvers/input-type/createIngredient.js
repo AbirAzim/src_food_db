@@ -20,7 +20,7 @@ let CreateIngredient = class CreateIngredient {
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
-], CreateIngredient.prototype, "ingredientid", void 0);
+], CreateIngredient.prototype, "ingredientId", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)

@@ -37,6 +37,11 @@ const recipeSchema = new mongoose_1.Schema({
     },
     url: String,
     favicon: String,
+    // blendStatus:
+    // userType: Admin/ user,
+    // discovery: false,
+    // users:[],
+    // admins:[sdjflksdjlkjaskl, oisdjfiosjfioj]
 });
 const Recipe = (0, mongoose_1.model)('Recipe', recipeSchema);
 exports.default = Recipe;
