@@ -8,21 +8,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
-let Image2 = class Image2 {
-};
-__decorate([
-    (0, type_graphql_1.Field)(),
-    __metadata("design:type", String)
-], Image2.prototype, "image", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(),
-    __metadata("design:type", Boolean)
-], Image2.prototype, "default", void 0);
-Image2 = __decorate([
-    (0, type_graphql_1.InputType)()
-], Image2);
+const ImageInput_1 = __importDefault(require("./ImageInput"));
 let CreateEditRecipe = class CreateEditRecipe {
 };
 __decorate([
@@ -34,7 +25,7 @@ __decorate([
     __metadata("design:type", String)
 ], CreateEditRecipe.prototype, "name", void 0);
 __decorate([
-    (0, type_graphql_1.Field)((type) => [Image2], { nullable: true }),
+    (0, type_graphql_1.Field)((type) => [ImageInput_1.default], { nullable: true }),
     __metadata("design:type", Array)
 ], CreateEditRecipe.prototype, "image", void 0);
 __decorate([

@@ -17,6 +17,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
 const recipe_1 = __importDefault(require("../../../models/recipe"));
+const recipeCategory_1 = __importDefault(require("../../../models/recipeCategory"));
 const Recipe_1 = __importDefault(require("../../recipe/schemas/Recipe"));
 const CreateRecipe_1 = __importDefault(require("./input-type/CreateRecipe"));
 const EditRecipe_1 = __importDefault(require("./input-type/EditRecipe"));
@@ -32,28 +33,46 @@ let RecipeResolver = class RecipeResolver {
     // }
     async getAllRecipesByBlendCategory(blendTypes) {
         const recipes = await recipe_1.default.find({
-            recipeBlendCategory: { $in: blendTypes },
+            tempBlendCategory: { $in: blendTypes },
         });
         return recipes;
     }
     async getAllRecipes() {
-        const recipes = await recipe_1.default.find().populate('ingredients');
+        const recipes = await recipe_1.default.find()
+            .populate('ingredients')
+            .populate('ingredients')
+            .populate('brand')
+            .populate('recipeBlendCategory');
         return recipes;
     }
     async getAllrecomendedRecipes() {
-        const recipes = await recipe_1.default.find();
+        const recipes = await recipe_1.default.find()
+            .populate('ingredients')
+            .populate('brand')
+            .populate('recipeBlendCategory');
         return recipes;
     }
     async getAllpopularRecipes() {
-        const recipes = await recipe_1.default.find().limit(4);
+        const recipes = await recipe_1.default.find()
+            .limit(4)
+            .populate('ingredients')
+            .populate('brand')
+            .populate('recipeBlendCategory');
         return recipes;
     }
     async getAllLatestRecipes() {
-        const recipes = await recipe_1.default.find().sort({ datePublished: -1 });
+        const recipes = await recipe_1.default.find()
+            .sort({ datePublished: -1 })
+            .populate('ingredients')
+            .populate('brand')
+            .populate('recipeBlendCategory');
         return recipes;
     }
     async getARecipe(recipeId) {
-        const recipe = await recipe_1.default.findById(recipeId).populate('ingredients');
+        const recipe = await recipe_1.default.findById(recipeId)
+            .populate('ingredients')
+            .populate('brand')
+            .populate('recipeBlendCategory');
         return recipe;
     }
     async addNewRecipe(data) {
@@ -103,7 +122,12 @@ let RecipeResolver = class RecipeResolver {
         return 'done';
     }
     async editARecipe(data) {
-        await recipe_1.default.findOneAndUpdate({ _id: data.editId }, data.editableObject);
+        let updatedData = data.editableObject;
+        let recipeBlendCategory = await recipeCategory_1.default.findOne({
+            _id: data.editableObject.recipeBlendCategory,
+        });
+        updatedData.tempBlendCategory = recipeBlendCategory.name;
+        await recipe_1.default.findOneAndUpdate({ _id: data.editId }, updatedData);
         return 'recipe updated successfully';
     }
     async deleteARecipe(recipeId) {

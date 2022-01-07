@@ -10,53 +10,53 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
-let CreateEditAdmin = class CreateEditAdmin {
+let Configuiration = class Configuiration {
 };
 __decorate([
-    (0, type_graphql_1.Field)({ nullable: true }),
+    (0, type_graphql_1.Field)((type) => type_graphql_1.ID),
     __metadata("design:type", String)
-], CreateEditAdmin.prototype, "firstName", void 0);
+], Configuiration.prototype, "_id", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
-], CreateEditAdmin.prototype, "lastName", void 0);
+], Configuiration.prototype, "gender", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Number)
+], Configuiration.prototype, "weight", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Number)
+], Configuiration.prototype, "age", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Number)
+], Configuiration.prototype, "height", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
-], CreateEditAdmin.prototype, "displayName", void 0);
+], Configuiration.prototype, "activity", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
-], CreateEditAdmin.prototype, "location", void 0);
+], Configuiration.prototype, "dieteryLifeStyle", void 0);
 __decorate([
-    (0, type_graphql_1.Field)({ nullable: true }),
-    __metadata("design:type", String)
-], CreateEditAdmin.prototype, "email", void 0);
+    (0, type_graphql_1.Field)((type) => [String], { nullable: true }),
+    __metadata("design:type", Array)
+], Configuiration.prototype, "allergies", void 0);
 __decorate([
-    (0, type_graphql_1.Field)({ nullable: true }),
-    __metadata("design:type", String)
-], CreateEditAdmin.prototype, "number", void 0);
+    (0, type_graphql_1.Field)((type) => [String], { nullable: true }),
+    __metadata("design:type", Array)
+], Configuiration.prototype, "preExistingMedicalConditions", void 0);
 __decorate([
-    (0, type_graphql_1.Field)({ nullable: true }),
-    __metadata("design:type", String)
-], CreateEditAdmin.prototype, "title", void 0);
+    (0, type_graphql_1.Field)((type) => [String], { nullable: true }),
+    __metadata("design:type", Array)
+], Configuiration.prototype, "meditcation", void 0);
 __decorate([
-    (0, type_graphql_1.Field)({ nullable: true }),
-    __metadata("design:type", String)
-], CreateEditAdmin.prototype, "notes", void 0);
-__decorate([
-    (0, type_graphql_1.Field)({ nullable: true }),
-    __metadata("design:type", String)
-], CreateEditAdmin.prototype, "profilePicture", void 0);
-__decorate([
-    (0, type_graphql_1.Field)({ nullable: true }),
-    __metadata("design:type", String)
-], CreateEditAdmin.prototype, "image", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(() => type_graphql_1.ID, { nullable: true }),
-    __metadata("design:type", String)
-], CreateEditAdmin.prototype, "role", void 0);
-CreateEditAdmin = __decorate([
-    (0, type_graphql_1.InputType)()
-], CreateEditAdmin);
-exports.default = CreateEditAdmin;
+    (0, type_graphql_1.Field)((type) => [String], { nullable: true }),
+    __metadata("design:type", Array)
+], Configuiration.prototype, "whyBlending", void 0);
+Configuiration = __decorate([
+    (0, type_graphql_1.ObjectType)()
+], Configuiration);
+exports.default = Configuiration;
