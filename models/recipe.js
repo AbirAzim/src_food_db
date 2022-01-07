@@ -17,7 +17,7 @@ const recipeSchema = new mongoose_1.Schema({
     author: [String],
     recipeBlendCategory: { type: mongoose_1.Schema.Types.ObjectId, ref: 'RecipeCategory' },
     tempBlendCategory: String,
-    brand: { type: mongoose_1.Schema.Types.ObjectId, ref: 'Brand' },
+    brand: { type: mongoose_1.Schema.Types.ObjectId, ref: 'RecipeBrand' },
     foodCategories: [String],
     ingredients: [
         {
