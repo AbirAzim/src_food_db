@@ -13,26 +13,22 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
-const Recipe_1 = __importDefault(require("../../recipe/schemas/Recipe"));
-let CollectionType = class CollectionType {
+const NewUserRecipeInput_1 = __importDefault(require("./NewUserRecipeInput"));
+let CollectionInput = class CollectionInput {
 };
 __decorate([
-    (0, type_graphql_1.Field)((type) => type_graphql_1.ID),
-    __metadata("design:type", String)
-], CollectionType.prototype, "_id", void 0);
-__decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
-], CollectionType.prototype, "name", void 0);
+], CollectionInput.prototype, "name", void 0);
 __decorate([
-    (0, type_graphql_1.Field)((type) => [Recipe_1.default], { nullable: true }),
+    (0, type_graphql_1.Field)((type) => [NewUserRecipeInput_1.default], { nullable: true }),
     __metadata("design:type", Array)
-], CollectionType.prototype, "recipes", void 0);
+], CollectionInput.prototype, "recipes", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
-], CollectionType.prototype, "image", void 0);
-CollectionType = __decorate([
-    (0, type_graphql_1.ObjectType)()
-], CollectionType);
-exports.default = CollectionType;
+], CollectionInput.prototype, "image", void 0);
+CollectionInput = __decorate([
+    (0, type_graphql_1.InputType)()
+], CollectionInput);
+exports.default = CollectionInput;

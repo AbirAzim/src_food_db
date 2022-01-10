@@ -16,12 +16,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
+const AppError_1 = __importDefault(require("../../../utils/AppError"));
 const Member_1 = __importDefault(require("../schemas/Member"));
+const Collection_1 = __importDefault(require("../schemas/Collection"));
 const NewUserInput_1 = __importDefault(require("./input-type/NewUserInput"));
 const EditUser_1 = __importDefault(require("./input-type/EditUser"));
 const memberModel_1 = __importDefault(require("../../../models/memberModel"));
 const memberConfiguiration_1 = __importDefault(require("../../../models/memberConfiguiration"));
 const userCollection_1 = __importDefault(require("../../../models/userCollection"));
+const CreateNewCollection_1 = __importDefault(require("./input-type/CreateNewCollection"));
 let MemberResolver = class MemberResolver {
     async createNewUser(data) {
         let user = await memberModel_1.default.findOne({ email: data.email })
@@ -58,8 +61,29 @@ let MemberResolver = class MemberResolver {
         return user;
     }
     async getASingleUserByEmail(email) {
-        let user = await memberModel_1.default.findOne({ email }).populate('configuration');
+        let user = await memberModel_1.default.findOne({ email })
+            .populate('configuration')
+            .populate({
+            path: 'collections',
+            populate: {
+                path: 'recipes',
+                model: 'Recipe',
+            },
+        });
         return user;
+    }
+    async createNewCollection(data) {
+        let user = await memberModel_1.default.findOne({ email: data.UserEmail }).populate('collections');
+        if (!user)
+            return new AppError_1.default(`User ${data.UserEmail} does not exist`, 402);
+        for (let i = 0; i < user.collections.length; i++) {
+            if (user.collections[i].name === data.collection.name) {
+                return new AppError_1.default(`Collection ${data.collection.name} already exists`, 402);
+            }
+        }
+        let collection = await userCollection_1.default.create(data.collection);
+        await memberModel_1.default.findOneAndUpdate({ email: data.UserEmail }, { $push: { collections: collection._id } });
+        return collection;
     }
     async getAllusers() {
         let users = await memberModel_1.default.find().populate('configuration');
@@ -100,6 +124,13 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], MemberResolver.prototype, "getASingleUserByEmail", null);
+__decorate([
+    (0, type_graphql_1.Mutation)(() => Collection_1.default),
+    __param(0, (0, type_graphql_1.Arg)('data')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [CreateNewCollection_1.default]),
+    __metadata("design:returntype", Promise)
+], MemberResolver.prototype, "createNewCollection", null);
 __decorate([
     (0, type_graphql_1.Query)(() => [Member_1.default]),
     __metadata("design:type", Function),

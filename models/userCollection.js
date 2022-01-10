@@ -6,6 +6,7 @@ const userCollectionSchema = new mongoose_1.Schema({
         type: String,
         required: [true, 'name is required'],
     },
+    image: String,
     recipes: [
         {
             type: mongoose_1.Schema.Types.ObjectId,

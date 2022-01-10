@@ -39,8 +39,14 @@ const recipeSchema = new mongoose_1.Schema({
     url: String,
     favicon: String,
     // blendStatus:
-    // userType: Admin/ user,
-    // discovery: false,
+    scrappedByAdmin: {
+        type: Boolean,
+        default: false,
+    },
+    discovery: {
+        type: Boolean,
+        default: false,
+    },
     // users:[],
     // admins:[sdjflksdjlkjaskl, oisdjfiosjfioj]
 });

@@ -14,14 +14,16 @@ const uniqueNutrientSchema = new mongoose_1.Schema({
     refDatabaseId: String,
     parentNutrient: {
         type: mongoose_1.Schema.Types.ObjectId,
-        ref: 'UniqueNutrient'
+        ref: 'UniqueNutrient',
     },
-    related_sources: [{
+    related_sources: [
+        {
             source: String,
             sourceId: String,
             sourceNutrientName: String,
             units: String,
-        }]
+        },
+    ],
 });
 const UniqueNutrient = (0, mongoose_1.model)('UniqueNutrient', uniqueNutrientSchema);
 exports.default = UniqueNutrient;

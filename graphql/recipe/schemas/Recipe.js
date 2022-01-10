@@ -116,6 +116,14 @@ __decorate([
 ], Recipe.prototype, "url", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Boolean)
+], Recipe.prototype, "scrappedByAdmin", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Boolean)
+], Recipe.prototype, "discovery", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
 ], Recipe.prototype, "favicon", void 0);
 __decorate([
