@@ -151,6 +151,18 @@ let MemberResolver = class MemberResolver {
         await ingredient_1.default.deleteMany({});
         return 'done';
     }
+    async SearchIngredients(searchTerm) {
+        let ingredients = await ingredient_1.default.find({
+            ingredientName: { $regex: searchTerm, $options: 'i' },
+        }).populate({
+            path: 'nutrients',
+            populate: {
+                path: 'uniqueNutrientRefference',
+                model: 'UniqueNutrient',
+            },
+        });
+        return ingredients;
+    }
 };
 __decorate([
     (0, type_graphql_1.Query)(() => [ReturnIngredient_1.default]),
@@ -217,6 +229,13 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], MemberResolver.prototype, "deleteFood", null);
+__decorate([
+    (0, type_graphql_1.Query)(() => [Ingredient_1.default]),
+    __param(0, (0, type_graphql_1.Arg)('searchTerm')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], MemberResolver.prototype, "SearchIngredients", null);
 MemberResolver = __decorate([
     (0, type_graphql_1.Resolver)()
 ], MemberResolver);
