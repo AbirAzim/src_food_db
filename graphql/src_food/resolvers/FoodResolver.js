@@ -163,6 +163,13 @@ let MemberResolver = class MemberResolver {
         });
         return ingredients;
     }
+    async changeIngredientName() {
+        let ingredients = await ingredient_1.default.find({});
+        for (let i = 0; i < ingredients.length; i++) {
+            await ingredient_1.default.findOneAndUpdate({ _id: ingredients[i]._id }, { ingredientName: ingredients[i].description });
+        }
+        return 'done';
+    }
 };
 __decorate([
     (0, type_graphql_1.Query)(() => [ReturnIngredient_1.default]),
@@ -236,6 +243,12 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], MemberResolver.prototype, "SearchIngredients", null);
+__decorate([
+    (0, type_graphql_1.Query)(() => String),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], MemberResolver.prototype, "changeIngredientName", null);
 MemberResolver = __decorate([
     (0, type_graphql_1.Resolver)()
 ], MemberResolver);

@@ -28,6 +28,7 @@ const ingredientSchema = new mongoose_1.Schema({
             measurement: String,
             measurement2: String,
             meausermentWeight: String,
+            default: Boolean,
             sourceId: String,
         },
     ],

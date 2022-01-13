@@ -81,6 +81,10 @@ __decorate([
     (0, type_graphql_1.Field)((type) => [Collection_1.default], { nullable: true }),
     __metadata("design:type", Array)
 ], Member.prototype, "collections", void 0);
+__decorate([
+    (0, type_graphql_1.Field)((type) => type_graphql_1.ID),
+    __metadata("design:type", String)
+], Member.prototype, "lastModifiedCollection", void 0);
 Member = __decorate([
     (0, type_graphql_1.ObjectType)()
 ], Member);

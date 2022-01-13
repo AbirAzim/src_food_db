@@ -13,6 +13,7 @@ const userCollectionSchema = new mongoose_1.Schema({
             ref: 'UserRecipe',
         },
     ],
+    updatedAt: { type: Date, default: Date.now },
 });
 const UserCollection = (0, mongoose_1.model)('UserCollection', userCollectionSchema);
 exports.default = UserCollection;
