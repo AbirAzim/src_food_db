@@ -25,6 +25,10 @@ __decorate([
     __metadata("design:type", String)
 ], Portion.prototype, "meausermentWeight", void 0);
 __decorate([
+    (0, type_graphql_1.Field)(),
+    __metadata("design:type", Boolean)
+], Portion.prototype, "default", void 0);
+__decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
 ], Portion.prototype, "sourceId", void 0);

@@ -21,6 +21,10 @@ __decorate([
     __metadata("design:type", String)
 ], CreateEditPortion.prototype, "measurement2", void 0);
 __decorate([
+    (0, type_graphql_1.Field)(),
+    __metadata("design:type", Boolean)
+], CreateEditPortion.prototype, "default", void 0);
+__decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
 ], CreateEditPortion.prototype, "meausermentWeight", void 0);
