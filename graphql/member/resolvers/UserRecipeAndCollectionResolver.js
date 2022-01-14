@@ -21,6 +21,7 @@ const AddExistingRecipeInput_1 = __importDefault(require("./input-type/AddExisti
 const ChangeRecipeCollectionInput_1 = __importDefault(require("./input-type/ChangeRecipeCollectionInput"));
 const RemoveACollectionInput_1 = __importDefault(require("./input-type/RemoveACollectionInput"));
 const EditCollection_1 = __importDefault(require("./input-type/EditCollection"));
+const Collection_1 = __importDefault(require("../schemas/Collection"));
 const AppError_1 = __importDefault(require("../../../utils/AppError"));
 const memberModel_1 = __importDefault(require("../../../models/memberModel"));
 const userCollection_1 = __importDefault(require("../../../models/userCollection"));
@@ -103,7 +104,9 @@ let UserRecipeAndCollectionResolver = class UserRecipeAndCollectionResolver {
         return 'successfull';
     }
     async getLastModifieldCollection(userEmail) {
-        let user = await memberModel_1.default.findOne({ email: userEmail });
+        let user = await memberModel_1.default.findOne({ email: userEmail })
+            .populate('defaultCollection')
+            .populate('lastModifiedCollection');
         if (!user) {
             return new AppError_1.default('User with that email not found', 404);
         }
@@ -116,26 +119,30 @@ let UserRecipeAndCollectionResolver = class UserRecipeAndCollectionResolver {
         if (!user) {
             return new AppError_1.default('User with that email not found', 404);
         }
-        let collection = await userCollection_1.default.findOne({
-            _id: data.collectionId,
-        });
-        if (!collection) {
-            return new AppError_1.default('Collection not found', 404);
-        }
-        let previousCollection = await userCollection_1.default.findOne({
-            _id: data.previousCollectionId,
-        });
-        if (!previousCollection) {
-            return new AppError_1.default('Previous collection not found', 404);
-        }
         let recipe = await recipe_1.default.findOne({ _id: data.recipe });
         if (!recipe) {
             return new AppError_1.default('Recipe not found', 404);
         }
-        await userCollection_1.default.findOneAndUpdate({ _id: collection._id }, { $push: { recipes: recipe._id }, $set: { updatedAt: Date.now() } });
-        await userCollection_1.default.findOneAndUpdate({ _id: previousCollection._id }, { $pull: { recipes: recipe._id } });
-        await memberModel_1.default.findOneAndUpdate({ _id: user._id }, { lastModifiedCollection: collection._id });
-        this.removeDuplicateRecipe(collection._id);
+        for (let j = 0; j < data.previousCollectionIds.length; j++) {
+            await userCollection_1.default.findOneAndUpdate({ _id: data.previousCollectionIds[j] }, { $pull: { recipes: recipe._id } });
+        }
+        for (let i = 0; i < data.collectionIds.length; i++) {
+            let collection = await userCollection_1.default.findOne({
+                _id: data.collectionIds[i],
+            });
+            if (!collection) {
+                return new AppError_1.default('Collection not found', 404);
+            }
+            // let previousCollection: any = await UserCollectoionModel.findOne({
+            //   _id: data.previousCollectionId,
+            // });
+            // if (!previousCollection) {
+            //   return new AppError('Previous collection not found', 404);
+            // }
+            await userCollection_1.default.findOneAndUpdate({ _id: collection._id }, { $push: { recipes: recipe._id }, $set: { updatedAt: Date.now() } });
+            await memberModel_1.default.findOneAndUpdate({ _id: user._id }, { lastModifiedCollection: collection._id });
+            this.removeDuplicateRecipe(collection._id);
+        }
         return 'successfull';
     }
     async deleteCollection(data) {
@@ -216,7 +223,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UserRecipeAndCollectionResolver.prototype, "addExistingRecipeToACollection", null);
 __decorate([
-    (0, type_graphql_1.Query)(() => String),
+    (0, type_graphql_1.Query)(() => Collection_1.default),
     __param(0, (0, type_graphql_1.Arg)('userEmail')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),

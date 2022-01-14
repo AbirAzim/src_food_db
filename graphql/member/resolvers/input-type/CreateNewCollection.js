@@ -19,7 +19,7 @@ let CreateNewCollection = class CreateNewCollection {
 __decorate([
     (0, type_graphql_1.Field)(),
     __metadata("design:type", String)
-], CreateNewCollection.prototype, "UserEmail", void 0);
+], CreateNewCollection.prototype, "userEmail", void 0);
 __decorate([
     (0, type_graphql_1.Field)((type) => CollectionInput_1.default),
     __metadata("design:type", CollectionInput_1.default)

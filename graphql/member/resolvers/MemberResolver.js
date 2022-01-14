@@ -73,16 +73,16 @@ let MemberResolver = class MemberResolver {
         return user;
     }
     async createNewCollection(data) {
-        let user = await memberModel_1.default.findOne({ email: data.UserEmail }).populate('collections');
+        let user = await memberModel_1.default.findOne({ email: data.userEmail }).populate('collections');
         if (!user)
-            return new AppError_1.default(`User ${data.UserEmail} does not exist`, 402);
+            return new AppError_1.default(`User ${data.userEmail} does not exist`, 402);
         for (let i = 0; i < user.collections.length; i++) {
             if (user.collections[i].name === data.collection.name) {
                 return new AppError_1.default(`Collection ${data.collection.name} already exists`, 402);
             }
         }
         let collection = await userCollection_1.default.create(data.collection);
-        await memberModel_1.default.findOneAndUpdate({ email: data.UserEmail }, { $push: { collections: collection._id } });
+        await memberModel_1.default.findOneAndUpdate({ email: data.userEmail }, { $push: { collections: collection._id } });
         return collection;
     }
     async getAllusers() {

@@ -17,13 +17,13 @@ __decorate([
     __metadata("design:type", String)
 ], ChangeRecipeCollectionInput.prototype, "userEmail", void 0);
 __decorate([
-    (0, type_graphql_1.Field)((type) => type_graphql_1.ID, { nullable: true }),
-    __metadata("design:type", String)
-], ChangeRecipeCollectionInput.prototype, "collectionId", void 0);
+    (0, type_graphql_1.Field)((type) => [type_graphql_1.ID], { nullable: true }),
+    __metadata("design:type", Array)
+], ChangeRecipeCollectionInput.prototype, "collectionIds", void 0);
 __decorate([
-    (0, type_graphql_1.Field)((type) => type_graphql_1.ID),
-    __metadata("design:type", String)
-], ChangeRecipeCollectionInput.prototype, "previousCollectionId", void 0);
+    (0, type_graphql_1.Field)(() => [type_graphql_1.ID]),
+    __metadata("design:type", Array)
+], ChangeRecipeCollectionInput.prototype, "previousCollectionIds", void 0);
 __decorate([
     (0, type_graphql_1.Field)((type) => type_graphql_1.ID),
     __metadata("design:type", String)
