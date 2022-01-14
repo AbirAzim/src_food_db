@@ -24,6 +24,7 @@ const createIngredient_1 = __importDefault(require("./input-type/createIngredien
 const Ingredient_1 = __importDefault(require("../schemas/Ingredient"));
 const ReturnIngredient_1 = __importDefault(require("../schemas/ReturnIngredient"));
 const UniqueNutrient_1 = __importDefault(require("../schemas/UniqueNutrient"));
+const AppError_1 = __importDefault(require("../../../utils/AppError"));
 const fs_1 = __importDefault(require("fs"));
 let MemberResolver = class MemberResolver {
     async getAllTheIngredients() {
@@ -69,7 +70,40 @@ let MemberResolver = class MemberResolver {
         return 'Successfully Edited';
     }
     async EditIngredient(data) {
-        await ingredient_1.default.findOneAndUpdate({ _id: data.editId }, data.editableObject);
+        let food = await ingredient_1.default.findOne({ _id: data.editId });
+        if (!food) {
+            return new AppError_1.default('Ingredient not found', 404);
+        }
+        if (data.editableObject.defaultPortion === '') {
+            await ingredient_1.default.findOneAndUpdate({ _id: data.editId }, data.editableObject);
+        }
+        else {
+            let newData = food;
+            //@ts-ignore
+            let newPortions = [];
+            console.log(newData.portions);
+            for (let i = 0; i < newData.portions.length; i++) {
+                // console.log(newData.portions[i]._id);
+                // console.log(data.editableObject.defaultPortion);
+                if (String(newData.portions[i]._id) ===
+                    String(data.editableObject.defaultPortion)) {
+                    console.log('matched');
+                    let changePortion = {
+                        measurement: newData.portions[i].measurement,
+                        measurement2: newData.portions[i].measurement2,
+                        meausermentWeight: newData.portions[i].meausermentWeight,
+                        default: true,
+                        _id: newData.portions[i]._id,
+                    };
+                    newPortions.push(changePortion);
+                }
+                else {
+                    newPortions.push(newData.portions[i]);
+                }
+            }
+            newData.portions = newPortions;
+            await ingredient_1.default.findOneAndUpdate({ _id: data.editId }, newData);
+        }
         return 'Successfully Edited';
     }
     async storeAllUniqueNutrient() {

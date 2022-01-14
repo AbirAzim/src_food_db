@@ -32,6 +32,10 @@ __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
 ], CreatePortion.prototype, "sourceId", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], CreatePortion.prototype, "_id", void 0);
 CreatePortion = __decorate([
     (0, type_graphql_1.InputType)()
 ], CreatePortion);
