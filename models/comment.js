@@ -12,6 +12,7 @@ const commentSchema = new mongoose_1.Schema({
         max: 5,
         default: 1,
     },
+    recipeId: { type: mongoose_1.SchemaTypes.ObjectId, ref: 'Recipe' },
     createdAt: { type: Date, default: Date.now },
     commnetedBy: { type: mongoose_1.SchemaTypes.ObjectId, ref: 'User' },
     modifiedAt: Date,

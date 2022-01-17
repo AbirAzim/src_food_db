@@ -18,6 +18,7 @@ const RoleResolver_1 = __importDefault(require("./graphql/admin/resolvers/RoleRe
 const MemberResolver_1 = __importDefault(require("./graphql/member/resolvers/MemberResolver"));
 const ConfigurationResolver_1 = __importDefault(require("./graphql/configuiration/resolvers/ConfigurationResolver"));
 const UserRecipeAndCollectionResolver_1 = __importDefault(require("./graphql/member/resolvers/UserRecipeAndCollectionResolver"));
+const UserCommentResolver_1 = __importDefault(require("./graphql/member/resolvers/UserCommentResolver"));
 process.on('uncaughtException', (err) => {
     console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
     console.log(err.name, err.message);
@@ -46,6 +47,7 @@ async function bootstrap() {
                 MemberResolver_1.default,
                 ConfigurationResolver_1.default,
                 UserRecipeAndCollectionResolver_1.default,
+                UserCommentResolver_1.default,
             ],
         });
     }
