@@ -21,6 +21,7 @@ const AddExistingRecipeInput_1 = __importDefault(require("./input-type/AddExisti
 const ChangeRecipeCollectionInput_1 = __importDefault(require("./input-type/ChangeRecipeCollectionInput"));
 const RemoveACollectionInput_1 = __importDefault(require("./input-type/RemoveACollectionInput"));
 const EditCollection_1 = __importDefault(require("./input-type/EditCollection"));
+const AddToLastModifiedCollection_1 = __importDefault(require("./input-type/AddToLastModifiedCollection"));
 const Collection_1 = __importDefault(require("../schemas/Collection"));
 const AppError_1 = __importDefault(require("../../../utils/AppError"));
 const memberModel_1 = __importDefault(require("../../../models/memberModel"));
@@ -114,6 +115,29 @@ let UserRecipeAndCollectionResolver = class UserRecipeAndCollectionResolver {
         return user.lastModifiedCollection
             ? user.lastModifiedCollection
             : user.defaultCollection;
+    }
+    async addTolastModifiedCollection(data) {
+        let user = await memberModel_1.default.findOne({ email: data.userEmail });
+        if (!user) {
+            return new AppError_1.default('User with that email not found', 404);
+        }
+        let recipe = await recipe_1.default.findOne({ _id: data.recipe });
+        if (!recipe) {
+            return new AppError_1.default('Recipe not found', 404);
+        }
+        let collectionId = user.lastModifiedCollection
+            ? user.lastModifiedCollection._id
+            : user.defaultCollection;
+        await userCollection_1.default.findOneAndUpdate({ _id: collectionId }, { $push: { recipes: recipe._id }, $set: { updatedAt: Date.now() } });
+        this.removeDuplicateRecipe(collectionId);
+        let member = await memberModel_1.default.findOne({ email: data.userEmail }).populate({
+            path: 'collections',
+            populate: {
+                path: 'recipes',
+                model: 'Recipe',
+            },
+        });
+        return member.collections;
     }
     async addRecipeToAUserCollection(data) {
         let user = await memberModel_1.default.findOne({ email: data.userEmail }).populate('collections');
@@ -260,6 +284,13 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], UserRecipeAndCollectionResolver.prototype, "getLastModifieldCollection", null);
+__decorate([
+    (0, type_graphql_1.Mutation)(() => [Collection_2.default]),
+    __param(0, (0, type_graphql_1.Arg)('data')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [AddToLastModifiedCollection_1.default]),
+    __metadata("design:returntype", Promise)
+], UserRecipeAndCollectionResolver.prototype, "addTolastModifiedCollection", null);
 __decorate([
     (0, type_graphql_1.Mutation)(() => [Collection_2.default]),
     __param(0, (0, type_graphql_1.Arg)('data')),
