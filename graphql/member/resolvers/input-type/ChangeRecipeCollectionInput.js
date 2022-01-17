@@ -10,25 +10,21 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
-let ChangeRecipeCollectionInput = class ChangeRecipeCollectionInput {
+let AddCRecipeTOAUserCollectionInput = class AddCRecipeTOAUserCollectionInput {
 };
 __decorate([
     (0, type_graphql_1.Field)(),
     __metadata("design:type", String)
-], ChangeRecipeCollectionInput.prototype, "userEmail", void 0);
+], AddCRecipeTOAUserCollectionInput.prototype, "userEmail", void 0);
 __decorate([
-    (0, type_graphql_1.Field)((type) => [type_graphql_1.ID], { nullable: true }),
-    __metadata("design:type", Array)
-], ChangeRecipeCollectionInput.prototype, "collectionIds", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(() => [type_graphql_1.ID]),
-    __metadata("design:type", Array)
-], ChangeRecipeCollectionInput.prototype, "previousCollectionIds", void 0);
+    (0, type_graphql_1.Field)((type) => type_graphql_1.ID, { nullable: true }),
+    __metadata("design:type", String)
+], AddCRecipeTOAUserCollectionInput.prototype, "collectionId", void 0);
 __decorate([
     (0, type_graphql_1.Field)((type) => type_graphql_1.ID),
     __metadata("design:type", String)
-], ChangeRecipeCollectionInput.prototype, "recipe", void 0);
-ChangeRecipeCollectionInput = __decorate([
+], AddCRecipeTOAUserCollectionInput.prototype, "recipe", void 0);
+AddCRecipeTOAUserCollectionInput = __decorate([
     (0, type_graphql_1.InputType)()
-], ChangeRecipeCollectionInput);
-exports.default = ChangeRecipeCollectionInput;
+], AddCRecipeTOAUserCollectionInput);
+exports.default = AddCRecipeTOAUserCollectionInput;

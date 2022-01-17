@@ -26,6 +26,7 @@ const AppError_1 = __importDefault(require("../../../utils/AppError"));
 const memberModel_1 = __importDefault(require("../../../models/memberModel"));
 const userCollection_1 = __importDefault(require("../../../models/userCollection"));
 const recipe_1 = __importDefault(require("../../../models/recipe"));
+const Collection_2 = __importDefault(require("../schemas/Collection"));
 let UserRecipeAndCollectionResolver = class UserRecipeAndCollectionResolver {
     async createNewUserRecipeWithCollection(data) {
         let user = await memberModel_1.default.findOne({ email: data.userEmail }).populate('collections');
@@ -114,8 +115,8 @@ let UserRecipeAndCollectionResolver = class UserRecipeAndCollectionResolver {
             ? user.lastModifiedCollection
             : user.defaultCollection;
     }
-    async changeRecipeCollection(data) {
-        let user = await memberModel_1.default.findOne({ email: data.userEmail });
+    async addRecipeToAUserCollection(data) {
+        let user = await memberModel_1.default.findOne({ email: data.userEmail }).populate('collections');
         if (!user) {
             return new AppError_1.default('User with that email not found', 404);
         }
@@ -123,27 +124,57 @@ let UserRecipeAndCollectionResolver = class UserRecipeAndCollectionResolver {
         if (!recipe) {
             return new AppError_1.default('Recipe not found', 404);
         }
-        for (let j = 0; j < data.previousCollectionIds.length; j++) {
-            await userCollection_1.default.findOneAndUpdate({ _id: data.previousCollectionIds[j] }, { $pull: { recipes: recipe._id } });
-        }
-        for (let i = 0; i < data.collectionIds.length; i++) {
-            let collection = await userCollection_1.default.findOne({
-                _id: data.collectionIds[i],
-            });
-            if (!collection) {
-                return new AppError_1.default('Collection not found', 404);
+        let found = false;
+        let collection;
+        for (let k = 0; k < user.collections.length; k++) {
+            if (String(user.collections[k]._id) === String(data.collectionId)) {
+                collection = user.collections[k];
+                found = true;
             }
-            // let previousCollection: any = await UserCollectoionModel.findOne({
-            //   _id: data.previousCollectionId,
-            // });
-            // if (!previousCollection) {
-            //   return new AppError('Previous collection not found', 404);
-            // }
-            await userCollection_1.default.findOneAndUpdate({ _id: collection._id }, { $push: { recipes: recipe._id }, $set: { updatedAt: Date.now() } });
-            await memberModel_1.default.findOneAndUpdate({ _id: user._id }, { lastModifiedCollection: collection._id });
-            this.removeDuplicateRecipe(collection._id);
         }
-        return 'successfull';
+        if (!found) {
+            return new AppError_1.default('Collection not found', 404);
+        }
+        await userCollection_1.default.findOneAndUpdate({ _id: collection._id }, { $push: { recipes: recipe._id }, $set: { updatedAt: Date.now() } });
+        let member = await memberModel_1.default.findOneAndUpdate({ _id: user._id }, { lastModifiedCollection: collection._id }, { new: true }).populate({
+            path: 'collections',
+            populate: {
+                path: 'recipes',
+                model: 'Recipe',
+            },
+        });
+        this.removeDuplicateRecipe(collection._id);
+        return member.collections;
+    }
+    async removeRecipeFromAColection(data) {
+        let user = await memberModel_1.default.findOne({ email: data.userEmail }).populate('collections');
+        if (!user) {
+            return new AppError_1.default('User with that email not found', 404);
+        }
+        let recipe = await recipe_1.default.findOne({ _id: data.recipe });
+        if (!recipe) {
+            return new AppError_1.default('Recipe not found', 404);
+        }
+        let found = false;
+        let collection;
+        for (let k = 0; k < user.collections.length; k++) {
+            if (String(user.collections[k]._id) === String(data.collectionId)) {
+                collection = user.collections[k];
+                found = true;
+            }
+        }
+        if (!found) {
+            return new AppError_1.default('Collection not found', 404);
+        }
+        await userCollection_1.default.findOneAndUpdate({ _id: collection._id }, { $pull: { recipes: recipe._id } });
+        let member = await memberModel_1.default.findOne({ _id: user._id }).populate({
+            path: 'collections',
+            populate: {
+                path: 'recipes',
+                model: 'Recipe',
+            },
+        });
+        return member.collections;
     }
     async deleteCollection(data) {
         let user = await memberModel_1.default.findOne({ email: data.userEmail }).populate('collections');
@@ -230,12 +261,19 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UserRecipeAndCollectionResolver.prototype, "getLastModifieldCollection", null);
 __decorate([
-    (0, type_graphql_1.Mutation)(() => String),
+    (0, type_graphql_1.Mutation)(() => [Collection_2.default]),
     __param(0, (0, type_graphql_1.Arg)('data')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [ChangeRecipeCollectionInput_1.default]),
     __metadata("design:returntype", Promise)
-], UserRecipeAndCollectionResolver.prototype, "changeRecipeCollection", null);
+], UserRecipeAndCollectionResolver.prototype, "addRecipeToAUserCollection", null);
+__decorate([
+    (0, type_graphql_1.Mutation)(() => [Collection_2.default]),
+    __param(0, (0, type_graphql_1.Arg)('data')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [ChangeRecipeCollectionInput_1.default]),
+    __metadata("design:returntype", Promise)
+], UserRecipeAndCollectionResolver.prototype, "removeRecipeFromAColection", null);
 __decorate([
     (0, type_graphql_1.Mutation)(() => String),
     __param(0, (0, type_graphql_1.Arg)('data')),
