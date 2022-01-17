@@ -34,6 +34,12 @@ const ingredientSchema = new mongoose_1.Schema({
     ],
     featuredImage: String,
     images: [String],
+    collections: [
+        {
+            type: mongoose_1.Schema.Types.ObjectId,
+            ref: 'AdminCollection',
+        },
+    ],
 });
 const Ingredient = (0, mongoose_1.model)('Ingredient', ingredientSchema);
 exports.default = Ingredient;

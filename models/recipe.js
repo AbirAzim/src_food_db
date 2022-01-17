@@ -47,10 +47,12 @@ const recipeSchema = new mongoose_1.Schema({
         type: Boolean,
         default: false,
     },
-    comments: [{
+    comments: [
+        {
             type: mongoose_1.Schema.Types.ObjectId,
-            ref: 'UserComment',
-        }]
+            ref: 'userComment',
+        },
+    ],
     // users:[],
     // admins:[sdjflksdjlkjaskl, oisdjfiosjfioj]
 });
