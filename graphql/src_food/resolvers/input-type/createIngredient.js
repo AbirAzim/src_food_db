@@ -73,6 +73,10 @@ __decorate([
     (0, type_graphql_1.Field)(() => [String], { nullable: true }),
     __metadata("design:type", Array)
 ], CreateIngredient.prototype, "images", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(() => [type_graphql_1.ID], { nullable: true }),
+    __metadata("design:type", Array)
+], CreateIngredient.prototype, "collections", void 0);
 CreateIngredient = __decorate([
     (0, type_graphql_1.InputType)()
 ], CreateIngredient);
