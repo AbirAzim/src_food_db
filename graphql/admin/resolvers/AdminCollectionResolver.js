@@ -77,7 +77,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], AdminCollectionResolver.prototype, "getAllAdminCollection", null);
 __decorate([
-    (0, type_graphql_1.Query)(() => String),
+    (0, type_graphql_1.Query)(() => [String]),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
