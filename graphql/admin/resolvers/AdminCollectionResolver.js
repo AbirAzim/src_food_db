@@ -50,7 +50,7 @@ let AdminCollectionResolver = class AdminCollectionResolver {
     }
 };
 __decorate([
-    (0, type_graphql_1.Mutation)(() => Boolean),
+    (0, type_graphql_1.Mutation)(() => String),
     __param(0, (0, type_graphql_1.Arg)('data')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [CreateAdminCollection_1.default]),
