@@ -25,8 +25,8 @@ app.use((0, express_mongo_sanitize_1.default)());
 app.use((0, compression_1.default)());
 // Limit requests from same API
 const limiter = (0, express_rate_limit_1.default)({
-    max: 10000,
-    windowMs: 60 * 60 * 1000,
+    max: 1000000,
+    windowMs: 60 * 60 * 100000,
     message: 'Too many requests from this IP, please try again in an hour!',
 });
 app.use('/graphql', limiter);

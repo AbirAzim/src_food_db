@@ -10,7 +10,7 @@ const userCollectionSchema = new mongoose_1.Schema({
     recipes: [
         {
             type: mongoose_1.Schema.Types.ObjectId,
-            ref: 'UserRecipe',
+            ref: 'Recipe',
         },
     ],
     updatedAt: { type: Date, default: Date.now },
