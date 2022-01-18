@@ -18,8 +18,8 @@ if (process.env.NODE_ENV === 'development') {
     app.use((0, morgan_1.default)('dev'));
 }
 // Body parser, reading data from body into req.body
-app.use(express_1.default.json({ limit: '100000kb' }));
-app.use(express_1.default.urlencoded({ extended: true, limit: '100000kb' }));
+app.use(express_1.default.json({ limit: '10000kb' }));
+app.use(express_1.default.urlencoded({ extended: true, limit: '10000kb' }));
 // Data sanitization against NoSQL query injection
 app.use((0, express_mongo_sanitize_1.default)());
 app.use((0, compression_1.default)());
