@@ -81,7 +81,6 @@ let MemberResolver = class MemberResolver {
             let newData = food;
             //@ts-ignore
             let newPortions = [];
-            console.log(newData.portions);
             for (let i = 0; i < newData.portions.length; i++) {
                 // console.log(newData.portions[i]._id);
                 // console.log(data.editableObject.defaultPortion);
