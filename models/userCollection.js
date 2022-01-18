@@ -10,6 +10,7 @@ const userCollectionSchema = new mongoose_1.Schema({
     recipes: [
         {
             type: mongoose_1.Schema.Types.ObjectId,
+            unique: true,
             ref: 'Recipe',
         },
     ],

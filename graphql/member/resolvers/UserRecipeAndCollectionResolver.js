@@ -45,43 +45,16 @@ let UserRecipeAndCollectionResolver = class UserRecipeAndCollectionResolver {
                 await userCollection_1.default.findOneAndUpdate({ _id: collections[k]._id }, { $push: { recipes: recipe._id }, $set: { updatedAt: Date.now() } });
                 found = true;
                 await memberModel_1.default.findOneAndUpdate({ _id: user._id }, { lastModifiedCollection: data.collectionId });
-                this.removeDuplicateRecipe(collections[k]._id);
+                // this.removeDuplicateRecipe(collections[k]._id);
                 break;
             }
         }
         if (!found) {
             await userCollection_1.default.findOneAndUpdate({ _id: user.defaultCollection }, { $push: { recipes: recipe._id }, $set: { updatedAt: Date.now() } });
             await memberModel_1.default.findOneAndUpdate({ _id: user._id }, { lastModifiedCollection: user.defaultCollection });
-            this.removeDuplicateRecipe(user.defaultCollection);
+            // this.removeDuplicateRecipe(user.defaultCollection);
         }
         return 'successfull';
-    }
-    async removeDuplicateRecipe(collectionId) {
-        let collection = await userCollection_1.default.findOne({
-            _id: collectionId,
-        });
-        let NewList = [];
-        for (let i = 0; i < collection.recipes.length; i++) {
-            if (i === 0) {
-                NewList.push(collection.recipes[i]);
-            }
-            else {
-                for (let j = 0; j < NewList.length; j++) {
-                    if (String(collection.recipes[i]) === String(NewList[j])) {
-                        continue;
-                    }
-                    else {
-                        NewList.push(collection.recipes[i]);
-                    }
-                }
-            }
-        }
-        // console.log(NewList);
-        await userCollection_1.default.findOneAndUpdate({
-            _id: collectionId,
-        }, {
-            recipes: NewList,
-        });
     }
     async addExistingRecipeToACollection(data) {
         let user = await memberModel_1.default.findOne({ email: data.userEmail });
@@ -98,9 +71,18 @@ let UserRecipeAndCollectionResolver = class UserRecipeAndCollectionResolver {
         if (!recipe) {
             return new AppError_1.default('Recipe not found', 404);
         }
+        let found = false;
+        for (let k = 0; k < collection.recipes.length; k++) {
+            if (String(collection.recipes[k]) === String(data.recipe)) {
+                found = true;
+                break;
+            }
+        }
+        if (found) {
+            return new AppError_1.default('Recipe already in collection', 404);
+        }
         await userCollection_1.default.findOneAndUpdate({ _id: collection._id }, { $push: { recipes: recipe._id }, $set: { updatedAt: Date.now() } });
         await memberModel_1.default.findOneAndUpdate({ _id: user._id }, { lastModifiedCollection: collection._id });
-        this.removeDuplicateRecipe(collection._id);
         return 'successfull';
     }
     async getLastModifieldCollection(userEmail) {
@@ -124,10 +106,20 @@ let UserRecipeAndCollectionResolver = class UserRecipeAndCollectionResolver {
             return new AppError_1.default('Recipe not found', 404);
         }
         let collectionId = user.lastModifiedCollection
-            ? user.lastModifiedCollection._id
+            ? user.lastModifiedCollection
             : user.defaultCollection;
+        let collection = await userCollection_1.default.findOne({ _id: collectionId });
+        let found = false;
+        for (let k = 0; k < collection.recipes.length; k++) {
+            if (String(collection.recipes[k]) === String(data.recipe)) {
+                found = true;
+                break;
+            }
+        }
+        if (found) {
+            return new AppError_1.default('Recipe already in collection', 404);
+        }
         await userCollection_1.default.findOneAndUpdate({ _id: collectionId }, { $push: { recipes: recipe._id }, $set: { updatedAt: Date.now() } });
-        this.removeDuplicateRecipe(collectionId);
         let member = await memberModel_1.default.findOne({ email: data.userEmail }).populate({
             path: 'collections',
             populate: {
@@ -157,6 +149,16 @@ let UserRecipeAndCollectionResolver = class UserRecipeAndCollectionResolver {
         if (!found) {
             return new AppError_1.default('Collection not found', 404);
         }
+        let found2 = false;
+        for (let k = 0; k < collection.recipes.length; k++) {
+            if (String(collection.recipes[k]) === String(data.recipe)) {
+                found2 = true;
+                break;
+            }
+        }
+        if (found2) {
+            return new AppError_1.default('Recipe already in collection', 404);
+        }
         await userCollection_1.default.findOneAndUpdate({ _id: collection._id }, { $push: { recipes: recipe._id }, $set: { updatedAt: Date.now() } });
         let member = await memberModel_1.default.findOneAndUpdate({ _id: user._id }, { lastModifiedCollection: collection._id }, { new: true }).populate({
             path: 'collections',
@@ -165,7 +167,6 @@ let UserRecipeAndCollectionResolver = class UserRecipeAndCollectionResolver {
                 model: 'Recipe',
             },
         });
-        this.removeDuplicateRecipe(collection._id);
         return member.collections;
     }
     async removeRecipeFromAColection(data) {
