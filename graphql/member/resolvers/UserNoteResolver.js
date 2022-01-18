@@ -36,6 +36,8 @@ let UserNotesResolver = class UserNotesResolver {
         await userNote_1.default.create(data);
         return 'Note added successfully';
     }
+    // @Mutation(() => String)
+    // async editUserNote(@Arg('data') data: E)
     async getMyNotesForARecipe(data) {
         let user = await memberModel_1.default.findOne({ _id: data.userId });
         if (!user) {
