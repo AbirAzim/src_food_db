@@ -36,7 +36,6 @@ let MemberResolver = class MemberResolver {
                 model: 'Recipe',
             },
         });
-        console.log(user);
         if (!user) {
             let configuration = await memberConfiguiration_1.default.create({});
             let collection = await userCollection_1.default.create({

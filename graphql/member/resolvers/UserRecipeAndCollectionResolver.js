@@ -68,11 +68,9 @@ let UserRecipeAndCollectionResolver = class UserRecipeAndCollectionResolver {
             else {
                 for (let j = 0; j < NewList.length; j++) {
                     if (String(collection.recipes[i]) === String(NewList[j])) {
-                        console.log('1');
                         continue;
                     }
                     else {
-                        console.log('2');
                         NewList.push(collection.recipes[i]);
                     }
                 }
