@@ -239,7 +239,14 @@ let UserRecipeAndCollectionResolver = class UserRecipeAndCollectionResolver {
             await memberModel_1.default.findOneAndUpdate({ _id: user._id }, { lastModifiedCollection: user.defaultCollection });
         }
         await userCollection_1.default.findOneAndRemove({ _id: collection._id });
-        let member = await memberModel_1.default.findOneAndUpdate({ _id: user._id }, { $pull: { collections: collection._id } }, { new: true });
+        let member = await memberModel_1.default.findOneAndUpdate({ _id: user._id }, { $pull: { collections: collection._id } }, { new: true }).populate({
+            path: 'collections',
+            populate: {
+                path: 'recipes',
+                model: 'Recipe',
+            },
+        });
+        ;
         return member.collections;
     }
     async editACollection(data) {
