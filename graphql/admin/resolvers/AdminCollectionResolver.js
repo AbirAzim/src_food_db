@@ -41,8 +41,10 @@ let AdminCollectionResolver = class AdminCollectionResolver {
         await adminCollection_1.default.findByIdAndDelete(collectionId);
         return 'Collection deleted successfully';
     }
-    async getAllAdminCollection() {
-        const collections = await adminCollection_1.default.find();
+    async getAllAdminCollection(collectionType) {
+        const collections = await adminCollection_1.default.find({
+            collectionType: collectionType,
+        });
         return collections;
     }
     async getAllAdminCollectionType() {
@@ -72,8 +74,9 @@ __decorate([
 ], AdminCollectionResolver.prototype, "removeAdminCollection", null);
 __decorate([
     (0, type_graphql_1.Query)(() => [AdminCollection_1.default]),
+    __param(0, (0, type_graphql_1.Arg)('collectionType')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], AdminCollectionResolver.prototype, "getAllAdminCollection", null);
 __decorate([
