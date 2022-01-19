@@ -74,7 +74,11 @@ let MemberResolver = class MemberResolver {
         if (!food) {
             return new AppError_1.default('Ingredient not found', 404);
         }
-        if (data.editableObject.defaultPortion === '') {
+        console.log(data.editableObject.defaultPortion);
+        if (data.editableObject.defaultPortion === '' ||
+            data.editableObject.defaultPortion === null ||
+            data.editableObject.defaultPortion === undefined) {
+            console.log('no default portion');
             await ingredient_1.default.findOneAndUpdate({ _id: data.editId }, data.editableObject);
         }
         else {
@@ -97,11 +101,19 @@ let MemberResolver = class MemberResolver {
                     newPortions.push(changePortion);
                 }
                 else {
-                    newPortions.push(newData.portions[i]);
+                    let changePortion2 = {
+                        measurement: newData.portions[i].measurement,
+                        measurement2: newData.portions[i].measurement2,
+                        meausermentWeight: newData.portions[i].meausermentWeight,
+                        default: false,
+                        _id: newData.portions[i]._id,
+                    };
+                    newPortions.push(changePortion2);
                 }
             }
             newData.portions = newPortions;
             await ingredient_1.default.findOneAndUpdate({ _id: data.editId }, newData);
+            await ingredient_1.default.findOneAndUpdate({ _id: data.editId }, data.editableObject);
         }
         return 'Successfully Edited';
     }
