@@ -238,9 +238,9 @@ let UserRecipeAndCollectionResolver = class UserRecipeAndCollectionResolver {
         else {
             await memberModel_1.default.findOneAndUpdate({ _id: user._id }, { lastModifiedCollection: user.defaultCollection });
         }
-        await memberModel_1.default.findOneAndUpdate({ _id: user._id }, { $pull: { collections: collection._id } });
         await userCollection_1.default.findOneAndRemove({ _id: collection._id });
-        return 'successfull Deleted';
+        let member = await memberModel_1.default.findOneAndUpdate({ _id: user._id }, { $pull: { collections: collection._id } }, { new: true });
+        return member.collections;
     }
     async editACollection(data) {
         let user = await memberModel_1.default.findOne({ email: data.userEmail });
@@ -305,7 +305,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UserRecipeAndCollectionResolver.prototype, "removeRecipeFromAColection", null);
 __decorate([
-    (0, type_graphql_1.Mutation)(() => String),
+    (0, type_graphql_1.Mutation)(() => [Collection_2.default]),
     __param(0, (0, type_graphql_1.Arg)('data')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [RemoveACollectionInput_1.default]),
