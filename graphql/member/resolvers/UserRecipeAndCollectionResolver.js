@@ -82,8 +82,14 @@ let UserRecipeAndCollectionResolver = class UserRecipeAndCollectionResolver {
             return new AppError_1.default('Recipe already in collection', 404);
         }
         await userCollection_1.default.findOneAndUpdate({ _id: collection._id }, { $push: { recipes: recipe._id }, $set: { updatedAt: Date.now() } });
-        await memberModel_1.default.findOneAndUpdate({ _id: user._id }, { lastModifiedCollection: collection._id });
-        return 'successfull';
+        let member = await memberModel_1.default.findOneAndUpdate({ _id: user._id }, { lastModifiedCollection: collection._id }, { new: true }).populate({
+            path: 'collections',
+            populate: {
+                path: 'recipes',
+                model: 'Recipe',
+            },
+        });
+        return member.collections;
     }
     async getLastModifieldCollection(userEmail) {
         let user = await memberModel_1.default.findOne({ email: userEmail })
@@ -119,7 +125,10 @@ let UserRecipeAndCollectionResolver = class UserRecipeAndCollectionResolver {
         if (found) {
             return new AppError_1.default('Recipe already in collection', 404);
         }
-        await userCollection_1.default.findOneAndUpdate({ _id: collectionId }, { $push: { recipes: recipe._id }, $set: { updatedAt: Date.now() } });
+        await userCollection_1.default.findOneAndUpdate({ _id: collectionId }, {
+            $push: { recipes: recipe._id },
+            $set: { updatedAt: Date.now(), lastModifiedCollection: collection._id },
+        });
         let member = await memberModel_1.default.findOne({ email: data.userEmail }).populate({
             path: 'collections',
             populate: {
@@ -266,7 +275,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UserRecipeAndCollectionResolver.prototype, "createNewUserRecipeWithCollection", null);
 __decorate([
-    (0, type_graphql_1.Mutation)(() => String),
+    (0, type_graphql_1.Mutation)(() => [Collection_2.default]),
     __param(0, (0, type_graphql_1.Arg)('data')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [AddExistingRecipeInput_1.default]),
