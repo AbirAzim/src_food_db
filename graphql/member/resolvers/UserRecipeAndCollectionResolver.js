@@ -17,12 +17,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
 const NewUserRecipeInput_1 = __importDefault(require("./input-type/NewUserRecipeInput"));
-const AddExistingRecipeInput_1 = __importDefault(require("./input-type/AddExistingRecipeInput"));
 const ChangeRecipeCollectionInput_1 = __importDefault(require("./input-type/ChangeRecipeCollectionInput"));
 const RemoveACollectionInput_1 = __importDefault(require("./input-type/RemoveACollectionInput"));
 const EditCollection_1 = __importDefault(require("./input-type/EditCollection"));
 const AddToLastModifiedCollection_1 = __importDefault(require("./input-type/AddToLastModifiedCollection"));
 const Collection_1 = __importDefault(require("../schemas/Collection"));
+const Recipe_1 = __importDefault(require("../../recipe/schemas/Recipe"));
 const AppError_1 = __importDefault(require("../../../utils/AppError"));
 const memberModel_1 = __importDefault(require("../../../models/memberModel"));
 const userCollection_1 = __importDefault(require("../../../models/userCollection"));
@@ -56,41 +56,51 @@ let UserRecipeAndCollectionResolver = class UserRecipeAndCollectionResolver {
         }
         return 'successfull';
     }
-    async addExistingRecipeToACollection(data) {
-        let user = await memberModel_1.default.findOne({ email: data.userEmail });
-        if (!user) {
-            return new AppError_1.default('User with that email not found', 404);
-        }
-        let collection = await userCollection_1.default.findOne({
-            _id: data.collectionId,
-        });
-        if (!collection) {
-            return new AppError_1.default('Collection not found', 404);
-        }
-        let recipe = await recipe_1.default.findOne({ _id: data.recipe });
-        if (!recipe) {
-            return new AppError_1.default('Recipe not found', 404);
-        }
-        let found = false;
-        for (let k = 0; k < collection.recipes.length; k++) {
-            if (String(collection.recipes[k]) === String(data.recipe)) {
-                found = true;
-                break;
-            }
-        }
-        if (found) {
-            return new AppError_1.default('Recipe already in collection', 404);
-        }
-        await userCollection_1.default.findOneAndUpdate({ _id: collection._id }, { $push: { recipes: recipe._id }, $set: { updatedAt: Date.now() } });
-        let member = await memberModel_1.default.findOneAndUpdate({ _id: user._id }, { lastModifiedCollection: collection._id }, { new: true }).populate({
-            path: 'collections',
-            populate: {
-                path: 'recipes',
-                model: 'Recipe',
-            },
-        });
-        return member.collections;
-    }
+    // @Mutation(() => [CollectionType])
+    // async addExistingRecipeToACollection(
+    //   @Arg('data') data: AddExistingRecipeInput
+    // ) {
+    //   let user = await MemberModel.findOne({ email: data.userEmail });
+    //   if (!user) {
+    //     return new AppError('User with that email not found', 404);
+    //   }
+    //   let collection: any = await UserCollectoionModel.findOne({
+    //     _id: data.collectionId,
+    //   });
+    //   if (!collection) {
+    //     return new AppError('Collection not found', 404);
+    //   }
+    //   let recipe: any = await RecipeModel.findOne({ _id: data.recipe });
+    //   if (!recipe) {
+    //     return new AppError('Recipe not found', 404);
+    //   }
+    //   let found = false;
+    //   for (let k = 0; k < collection.recipes.length; k++) {
+    //     if (String(collection.recipes[k]) === String(data.recipe)) {
+    //       found = true;
+    //       break;
+    //     }
+    //   }
+    //   if (found) {
+    //     return new AppError('Recipe already in collection', 404);
+    //   }
+    //   await UserCollectoionModel.findOneAndUpdate(
+    //     { _id: collection._id },
+    //     { $push: { recipes: recipe._id }, $set: { updatedAt: Date.now() } }
+    //   );
+    //   let member = await MemberModel.findOneAndUpdate(
+    //     { _id: user._id },
+    //     { lastModifiedCollection: collection._id },
+    //     { new: true }
+    //   ).populate({
+    //     path: 'collections',
+    //     populate: {
+    //       path: 'recipes',
+    //       model: 'Recipe',
+    //     },
+    //   });
+    //   return member.collections;
+    // }
     async getLastModifieldCollection(userEmail) {
         let user = await memberModel_1.default.findOne({ email: userEmail })
             .populate('defaultCollection')
@@ -137,6 +147,24 @@ let UserRecipeAndCollectionResolver = class UserRecipeAndCollectionResolver {
             },
         });
         return member.collections;
+    }
+    async getAllRecipesFromCollection(userEmail) {
+        let user = await memberModel_1.default.findOne({ email: userEmail }).populate({
+            path: 'collections',
+            populate: {
+                path: 'recipes',
+                model: 'Recipe',
+            },
+        });
+        let returnRecipe = [];
+        for (let k = 0; k < user.collections.length; k++) {
+            for (let j = 0; j < user.collections[k].recipes.length; j++) {
+                returnRecipe.push(user.collections[k].recipes[j]);
+            }
+        }
+        let ids = returnRecipe.map((o) => o._id);
+        const filtered = returnRecipe.filter(({ _id }, index) => !ids.includes(_id, index + 1));
+        return filtered;
     }
     async addRecipeToAUserCollection(data) {
         let user = await memberModel_1.default.findOne({ email: data.userEmail }).populate('collections');
@@ -209,33 +237,54 @@ let UserRecipeAndCollectionResolver = class UserRecipeAndCollectionResolver {
         return member.collections;
     }
     async deleteCollection(data) {
-        let getUser = await memberModel_1.default.findOne({
+        let user = await memberModel_1.default.findOne({
             email: data.userEmail,
         }).populate('collections');
-        if (!getUser) {
+        if (!user) {
             return new AppError_1.default('User with that email not found', 404);
         }
-        let collection = await userCollection_1.default.findOne({
-            _id: data.collectionId,
-        });
-        if (!collection) {
-            return new AppError_1.default('Collection not found', 404);
+        // look for collection in user
+        let found = false;
+        let collection;
+        for (let k = 0; k < user.collections.length; k++) {
+            if (String(user.collections[k]._id) === String(data.collectionId)) {
+                found = true;
+                collection = user.collections[k];
+            }
         }
-        let user = getUser;
+        if (!found) {
+            return new AppError_1.default('Collection not found in user', 404);
+        }
+        // look for collection in default collection
         if (String(user.defaultCollection) === String(collection._id)) {
             return new AppError_1.default('You can not delete your default collection', 401);
         }
+        let member;
+        // look for collection in last modified collection
         if (String(user.lastModifiedCollection) === String(collection._id)) {
-            if (user.collections.length === 1) {
-                await memberModel_1.default.findOneAndUpdate({ _id: user._id }, { lastModifiedCollection: user.defaultCollection });
+            // look for new last modified collection
+            await userCollection_1.default.findOneAndRemove({ _id: collection._id });
+            member = await memberModel_1.default.findOneAndUpdate({ _id: user._id }, {
+                $pull: { collections: collection._id },
+                $set: { updatedAt: Date.now() },
+            }, { new: true }).populate('collections');
+            let lmc = member.collections[0];
+            for (let i = 1; i < member.collections.length; i++) {
+                if (member.collections[i].updatedAt > lmc.updatedAt) {
+                    lmc = member.collections[i];
+                }
             }
-            // await MemberModel.findOneAndUpdate(
-            //   { _id: user._id },
-            //   { lastModifiedCollection }
-            // );
+            member = await memberModel_1.default.findOneAndUpdate({ _id: user._id }, { $set: { lastModifiedCollection: lmc._id } }, { new: true }).populate({
+                path: 'collections',
+                populate: {
+                    path: 'recipes',
+                    model: 'Recipe',
+                },
+            });
+            return member.collections;
         }
         await userCollection_1.default.findOneAndRemove({ _id: collection._id });
-        let member = await memberModel_1.default.findOneAndUpdate({ _id: user._id }, {
+        member = await memberModel_1.default.findOneAndUpdate({ _id: user._id }, {
             $pull: { collections: collection._id },
             $set: { updatedAt: Date.now() },
         }, { new: true }).populate({
@@ -275,13 +324,6 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UserRecipeAndCollectionResolver.prototype, "createNewUserRecipeWithCollection", null);
 __decorate([
-    (0, type_graphql_1.Mutation)(() => [Collection_2.default]),
-    __param(0, (0, type_graphql_1.Arg)('data')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [AddExistingRecipeInput_1.default]),
-    __metadata("design:returntype", Promise)
-], UserRecipeAndCollectionResolver.prototype, "addExistingRecipeToACollection", null);
-__decorate([
     (0, type_graphql_1.Query)(() => Collection_1.default),
     __param(0, (0, type_graphql_1.Arg)('userEmail')),
     __metadata("design:type", Function),
@@ -295,6 +337,13 @@ __decorate([
     __metadata("design:paramtypes", [AddToLastModifiedCollection_1.default]),
     __metadata("design:returntype", Promise)
 ], UserRecipeAndCollectionResolver.prototype, "addTolastModifiedCollection", null);
+__decorate([
+    (0, type_graphql_1.Query)(() => [Recipe_1.default]),
+    __param(0, (0, type_graphql_1.Arg)('userEmail')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], UserRecipeAndCollectionResolver.prototype, "getAllRecipesFromCollection", null);
 __decorate([
     (0, type_graphql_1.Mutation)(() => [Collection_2.default]),
     __param(0, (0, type_graphql_1.Arg)('data')),

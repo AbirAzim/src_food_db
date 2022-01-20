@@ -39,7 +39,7 @@ let MemberResolver = class MemberResolver {
         if (!user) {
             let configuration = await memberConfiguiration_1.default.create({});
             let collection = await userCollection_1.default.create({
-                name: 'Default',
+                name: 'My Favourite',
             });
             let pushedData = data;
             pushedData.configuration = configuration._id;
