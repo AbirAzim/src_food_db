@@ -17,8 +17,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
 const adminCollection_1 = __importDefault(require("../../../models/adminCollection"));
+const ingredient_1 = __importDefault(require("../../../models/ingredient"));
 const CreateAdminCollection_1 = __importDefault(require("./input-type/CreateAdminCollection"));
 const EditAdminCollection_1 = __importDefault(require("./input-type/EditAdminCollection"));
+const EditChildren_1 = __importDefault(require("./input-type/EditChildren"));
 const AdminCollection_1 = __importDefault(require("./schemas/AdminCollection"));
 let AdminCollectionResolver = class AdminCollectionResolver {
     async addNewAdminCollection(data) {
@@ -31,6 +33,21 @@ let AdminCollectionResolver = class AdminCollectionResolver {
             throw new Error('Collection not found');
         }
         await adminCollection_1.default.findByIdAndUpdate(data.editId, data.editableObject);
+        return 'Collection updated successfully';
+    }
+    async editChildrenInCollection(data) {
+        if (data.checked) {
+            await adminCollection_1.default.updateOne({ _id: data.adminCollectionId }, { $addToSet: { children: data.children } });
+            for (let i = 0; i < data.children.length; i++) {
+                await ingredient_1.default.updateOne({ _id: data.children[i] }, { $addToSet: { collections: data.adminCollectionId } });
+            }
+        }
+        else {
+            await adminCollection_1.default.updateOne({ _id: data.adminCollectionId }, { $pullAll: { children: data.children } });
+            for (let i = 0; i < data.children.length; i++) {
+                await ingredient_1.default.updateOne({ _id: data.children[i] }, { $pullAll: { collections: [data.adminCollectionId] } });
+            }
+        }
         return 'Collection updated successfully';
     }
     async removeAdminCollection(collectionId) {
@@ -65,6 +82,13 @@ __decorate([
     __metadata("design:paramtypes", [EditAdminCollection_1.default]),
     __metadata("design:returntype", Promise)
 ], AdminCollectionResolver.prototype, "editAdminCollectionByID", null);
+__decorate([
+    (0, type_graphql_1.Mutation)(() => String),
+    __param(0, (0, type_graphql_1.Arg)('data')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [EditChildren_1.default]),
+    __metadata("design:returntype", Promise)
+], AdminCollectionResolver.prototype, "editChildrenInCollection", null);
 __decorate([
     (0, type_graphql_1.Mutation)(() => String),
     __param(0, (0, type_graphql_1.Arg)('collectionId')),
