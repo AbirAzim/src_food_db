@@ -36,7 +36,11 @@ let UserNotesResolver = class UserNotesResolver {
             return new AppError_1.default('Recipe not found', 404);
         }
         await userNote_1.default.create(data);
-        return 'Note added successfully';
+        let notes = await userNote_1.default.find({
+            userId: data.userId,
+            recipeId: data.recipeId,
+        });
+        return notes;
     }
     // @Mutation(() => String)
     // async editUserNote(@Arg('data') data: E)
@@ -99,7 +103,7 @@ let UserNotesResolver = class UserNotesResolver {
     }
 };
 __decorate([
-    (0, type_graphql_1.Mutation)(() => String),
+    (0, type_graphql_1.Mutation)(() => [UserNote_1.default]),
     __param(0, (0, type_graphql_1.Arg)('data')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [CreateNewNote_1.default]),
