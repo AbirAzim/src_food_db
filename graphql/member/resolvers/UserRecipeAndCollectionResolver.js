@@ -60,31 +60,23 @@ let UserRecipeAndCollectionResolver = class UserRecipeAndCollectionResolver {
         return 'successfull';
     }
     async checkForRecipeExistenceInCollection(data) {
-        let user = await memberModel_1.default.findOne({ email: data.userEmail });
+        let user = await memberModel_1.default.findOne({ email: data.userEmail }).populate({
+            path: 'collections',
+            populate: {
+                path: 'recipes',
+                model: 'Recipe',
+            },
+        });
         if (!user) {
             return new AppError_1.default('User with that email not found', 404);
         }
-        let collection = await userCollection_1.default.findOne({
-            _id: data.collectionId,
-        }).populate('recipes');
-        if (!collection) {
-            return new AppError_1.default('Collection not found', 404);
-        }
-        let foundCollectionInUser = false;
-        for (let k = 0; k < user.collections.length; k++) {
-            if (String(user.collections[k]) === String(collection._id)) {
-                foundCollectionInUser = true;
-                break;
-            }
-        }
-        if (!foundCollectionInUser) {
-            return new AppError_1.default('Collection not found in user', 404);
-        }
         let foundRecipeInCollection = false;
-        for (let k = 0; k < collection.recipes.length; k++) {
-            if (collection.recipes[k].url === data.recipeUrl) {
-                foundRecipeInCollection = true;
-                break;
+        for (let i = 0; i < user.collections.length; i++) {
+            for (let j = 0; j < user.collections[i].recipes.length; j++) {
+                if (user.collections[i].recipes[j].url === data.recipeUrl) {
+                    foundRecipeInCollection = true;
+                    return foundRecipeInCollection;
+                }
             }
         }
         return foundRecipeInCollection;

@@ -17,10 +17,6 @@ __decorate([
     __metadata("design:type", String)
 ], AddExistingRecipeInput.prototype, "userEmail", void 0);
 __decorate([
-    (0, type_graphql_1.Field)((type) => type_graphql_1.ID, { nullable: true }),
-    __metadata("design:type", String)
-], AddExistingRecipeInput.prototype, "collectionId", void 0);
-__decorate([
     (0, type_graphql_1.Field)(),
     __metadata("design:type", String)
 ], AddExistingRecipeInput.prototype, "recipeUrl", void 0);
