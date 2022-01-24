@@ -50,6 +50,16 @@ let AdminCollectionResolver = class AdminCollectionResolver {
         }
         return 'Collection updated successfully';
     }
+    // @Query(() => [String])
+    // async getChilderenFromAcollection(@Arg('collectionId') collectionId: string) {
+    //   const collection = await AdminCollectionModel.findById(
+    //     collectionId
+    //   ).populate('children');
+    //   if (!collection) {
+    //     throw new AppError('Collection not found', 404);
+    //   }
+    //   return collection.children;
+    // }
     async removeAdminCollection(collectionId) {
         const collection = await adminCollection_1.default.findById(collectionId);
         if (!collection) {

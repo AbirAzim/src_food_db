@@ -21,9 +21,9 @@ __decorate([
     __metadata("design:type", String)
 ], AddExistingRecipeInput.prototype, "collectionId", void 0);
 __decorate([
-    (0, type_graphql_1.Field)((type) => type_graphql_1.ID),
+    (0, type_graphql_1.Field)(),
     __metadata("design:type", String)
-], AddExistingRecipeInput.prototype, "recipe", void 0);
+], AddExistingRecipeInput.prototype, "recipeUrl", void 0);
 AddExistingRecipeInput = __decorate([
     (0, type_graphql_1.InputType)()
 ], AddExistingRecipeInput);
