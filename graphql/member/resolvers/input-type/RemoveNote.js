@@ -10,17 +10,21 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
-let CreateEditUserNote = class CreateEditUserNote {
+let RemoveNote = class RemoveNote {
 };
 __decorate([
-    (0, type_graphql_1.Field)({ nullable: true }),
+    (0, type_graphql_1.Field)((type) => type_graphql_1.ID),
     __metadata("design:type", String)
-], CreateEditUserNote.prototype, "title", void 0);
+], RemoveNote.prototype, "noteId", void 0);
 __decorate([
-    (0, type_graphql_1.Field)({ nullable: true }),
+    (0, type_graphql_1.Field)(type => type_graphql_1.ID),
     __metadata("design:type", String)
-], CreateEditUserNote.prototype, "body", void 0);
-CreateEditUserNote = __decorate([
+], RemoveNote.prototype, "recipeId", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(type => type_graphql_1.ID),
+    __metadata("design:type", String)
+], RemoveNote.prototype, "userId", void 0);
+RemoveNote = __decorate([
     (0, type_graphql_1.InputType)()
-], CreateEditUserNote);
-exports.default = CreateEditUserNote;
+], RemoveNote);
+exports.default = RemoveNote;

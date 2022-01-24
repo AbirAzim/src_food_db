@@ -13,6 +13,10 @@ const type_graphql_1 = require("type-graphql");
 let UserNote = class UserNote {
 };
 __decorate([
+    (0, type_graphql_1.Field)(() => type_graphql_1.ID),
+    __metadata("design:type", String)
+], UserNote.prototype, "_id", void 0);
+__decorate([
     (0, type_graphql_1.Field)(),
     __metadata("design:type", String)
 ], UserNote.prototype, "title", void 0);
@@ -28,6 +32,14 @@ __decorate([
     (0, type_graphql_1.Field)((type) => type_graphql_1.ID),
     __metadata("design:type", String)
 ], UserNote.prototype, "userId", void 0);
+__decorate([
+    (0, type_graphql_1.Field)((type) => Date),
+    __metadata("design:type", Date)
+], UserNote.prototype, "createdAt", void 0);
+__decorate([
+    (0, type_graphql_1.Field)((type) => Date, { nullable: true }),
+    __metadata("design:type", Date)
+], UserNote.prototype, "updatedAt", void 0);
 UserNote = __decorate([
     (0, type_graphql_1.ObjectType)()
 ], UserNote);

@@ -21,8 +21,10 @@ const recipe_1 = __importDefault(require("../../../models/recipe"));
 const userNote_1 = __importDefault(require("../../../models/userNote"));
 const CreateNewNote_1 = __importDefault(require("./input-type/CreateNewNote"));
 const GetMyNote_1 = __importDefault(require("./input-type/GetMyNote"));
+const EditUserNote_1 = __importDefault(require("./input-type/EditUserNote"));
 const UserNote_1 = __importDefault(require("../schemas/UserNote"));
 const AppError_1 = __importDefault(require("../../../utils/AppError"));
+const RemoveNote_1 = __importDefault(require("./input-type/RemoveNote"));
 let UserNotesResolver = class UserNotesResolver {
     async createNewNote(data) {
         let user = await memberModel_1.default.findOne({ _id: data.userId });
@@ -53,12 +55,46 @@ let UserNotesResolver = class UserNotesResolver {
         });
         return Notes;
     }
-    async getAllMyNotes(data) {
+    async editMyNote(data) {
         let user = await memberModel_1.default.findOne({ _id: data.userId });
         if (!user) {
             return new AppError_1.default('User not found', 404);
         }
-        let Notes = await userNote_1.default.find({ userId: data.userId });
+        let newData = data.editableObject;
+        newData.updatedAt = Date.now();
+        await userNote_1.default.findByIdAndUpdate(data.noteId, newData);
+        let notes = await userNote_1.default.find({
+            userId: data.userId,
+            recipeId: data.recipeId,
+        });
+        return notes;
+    }
+    async removeMyNote(data) {
+        let user = await memberModel_1.default.findOne({ _id: data.userId });
+        if (!user) {
+            return new AppError_1.default('User not found', 404);
+        }
+        let note = await userNote_1.default.findOne({
+            _id: data.noteId,
+            recipeId: data.recipeId,
+            userId: data.userId,
+        });
+        if (!note) {
+            return new AppError_1.default('Note not found', 404);
+        }
+        await userNote_1.default.findByIdAndDelete(data.noteId);
+        let notes = await userNote_1.default.find({
+            userId: data.userId,
+            recipeId: data.recipeId,
+        });
+        return notes;
+    }
+    async getAllMyNotes(userId) {
+        let user = await memberModel_1.default.findOne({ _id: userId });
+        if (!user) {
+            return new AppError_1.default('User not found', 404);
+        }
+        let Notes = await userNote_1.default.find({ userId: userId });
         return Notes;
     }
 };
@@ -77,10 +113,24 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UserNotesResolver.prototype, "getMyNotesForARecipe", null);
 __decorate([
-    (0, type_graphql_1.Query)(() => [UserNote_1.default]),
+    (0, type_graphql_1.Mutation)(() => [UserNote_1.default]),
     __param(0, (0, type_graphql_1.Arg)('data')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [GetMyNote_1.default]),
+    __metadata("design:paramtypes", [EditUserNote_1.default]),
+    __metadata("design:returntype", Promise)
+], UserNotesResolver.prototype, "editMyNote", null);
+__decorate([
+    (0, type_graphql_1.Mutation)(() => [UserNote_1.default]),
+    __param(0, (0, type_graphql_1.Arg)('data')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [RemoveNote_1.default]),
+    __metadata("design:returntype", Promise)
+], UserNotesResolver.prototype, "removeMyNote", null);
+__decorate([
+    (0, type_graphql_1.Query)(() => [UserNote_1.default]),
+    __param(0, (0, type_graphql_1.Arg)('userId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], UserNotesResolver.prototype, "getAllMyNotes", null);
 UserNotesResolver = __decorate([

@@ -17,9 +17,17 @@ const CreateEditUserNote_1 = __importDefault(require("./CreateEditUserNote"));
 let EditUserNote = class EditUserNote {
 };
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)((type) => type_graphql_1.ID),
     __metadata("design:type", String)
-], EditUserNote.prototype, "editId", void 0);
+], EditUserNote.prototype, "noteId", void 0);
+__decorate([
+    (0, type_graphql_1.Field)((type) => type_graphql_1.ID),
+    __metadata("design:type", String)
+], EditUserNote.prototype, "userId", void 0);
+__decorate([
+    (0, type_graphql_1.Field)((type) => type_graphql_1.ID),
+    __metadata("design:type", String)
+], EditUserNote.prototype, "recipeId", void 0);
 __decorate([
     (0, type_graphql_1.Field)((type) => CreateEditUserNote_1.default),
     __metadata("design:type", CreateEditUserNote_1.default)
