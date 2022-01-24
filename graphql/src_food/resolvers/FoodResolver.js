@@ -26,6 +26,7 @@ const ReturnIngredient_1 = __importDefault(require("../schemas/ReturnIngredient"
 const UniqueNutrient_1 = __importDefault(require("../schemas/UniqueNutrient"));
 const AppError_1 = __importDefault(require("../../../utils/AppError"));
 const fs_1 = __importDefault(require("fs"));
+const IngredientFilter_1 = __importDefault(require("./input-type/IngredientFilter"));
 let MemberResolver = class MemberResolver {
     async getAllTheIngredients() {
         let ingredients = await ingredient_1.default.find({}).populate({
@@ -215,6 +216,19 @@ let MemberResolver = class MemberResolver {
         }
         return 'done';
     }
+    async filterIngredientByCategoryAndClass(data) {
+        let ingredients = await ingredient_1.default.find({
+            category: data.ingredientCategory,
+            classType: 'Class - ' + data.IngredientClass,
+        }).populate({
+            path: 'nutrients',
+            populate: {
+                path: 'uniqueNutrientRefference',
+                model: 'UniqueNutrient',
+            },
+        });
+        return ingredients;
+    }
 };
 __decorate([
     (0, type_graphql_1.Query)(() => [ReturnIngredient_1.default]),
@@ -294,6 +308,13 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], MemberResolver.prototype, "changeIngredientName", null);
+__decorate([
+    (0, type_graphql_1.Query)(() => [Ingredient_1.default]),
+    __param(0, (0, type_graphql_1.Arg)('data')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [IngredientFilter_1.default]),
+    __metadata("design:returntype", Promise)
+], MemberResolver.prototype, "filterIngredientByCategoryAndClass", null);
 MemberResolver = __decorate([
     (0, type_graphql_1.Resolver)()
 ], MemberResolver);
