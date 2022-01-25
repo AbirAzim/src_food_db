@@ -20,14 +20,6 @@ __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", Number)
 ], CreateEditComment.prototype, "rating", void 0);
-__decorate([
-    (0, type_graphql_1.Field)((type) => type_graphql_1.ID, { nullable: true }),
-    __metadata("design:type", String)
-], CreateEditComment.prototype, "recipeId", void 0);
-__decorate([
-    (0, type_graphql_1.Field)((type) => type_graphql_1.ID, { nullable: true }),
-    __metadata("design:type", String)
-], CreateEditComment.prototype, "commnetedBy", void 0);
 CreateEditComment = __decorate([
     (0, type_graphql_1.InputType)()
 ], CreateEditComment);

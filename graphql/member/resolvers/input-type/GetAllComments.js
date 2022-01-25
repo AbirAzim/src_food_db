@@ -10,33 +10,17 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
-let Comment = class Comment {
+let GetAllComments = class GetAllComments {
 };
 __decorate([
     (0, type_graphql_1.Field)((type) => type_graphql_1.ID),
     __metadata("design:type", String)
-], Comment.prototype, "_id", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(),
-    __metadata("design:type", String)
-], Comment.prototype, "comment", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(),
-    __metadata("design:type", Number)
-], Comment.prototype, "rating", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(),
-    __metadata("design:type", Date)
-], Comment.prototype, "createdAt", void 0);
-__decorate([
-    (0, type_graphql_1.Field)({ nullable: true }),
-    __metadata("design:type", Date)
-], Comment.prototype, "updatedAt", void 0);
+], GetAllComments.prototype, "userId", void 0);
 __decorate([
     (0, type_graphql_1.Field)((type) => type_graphql_1.ID),
     __metadata("design:type", String)
-], Comment.prototype, "userId", void 0);
-Comment = __decorate([
-    (0, type_graphql_1.ObjectType)()
-], Comment);
-exports.default = Comment;
+], GetAllComments.prototype, "recipeId", void 0);
+GetAllComments = __decorate([
+    (0, type_graphql_1.InputType)()
+], GetAllComments);
+exports.default = GetAllComments;

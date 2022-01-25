@@ -13,9 +13,9 @@ const commentSchema = new mongoose_1.Schema({
         default: 0,
     },
     recipeId: { type: mongoose_1.SchemaTypes.ObjectId, ref: 'Recipe' },
+    userId: { type: mongoose_1.SchemaTypes.ObjectId, ref: 'User' },
     createdAt: { type: Date, default: Date.now },
-    commnetedBy: { type: mongoose_1.SchemaTypes.ObjectId, ref: 'User' },
-    modifiedAt: Date,
+    updatedAt: Date,
 });
 const UserComment = (0, mongoose_1.model)('userComment', commentSchema);
 exports.default = UserComment;

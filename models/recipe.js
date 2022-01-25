@@ -47,14 +47,10 @@ const recipeSchema = new mongoose_1.Schema({
         type: Boolean,
         default: false,
     },
-    comments: [
-        {
-            type: mongoose_1.Schema.Types.ObjectId,
-            ref: 'userComment',
-        },
-    ],
-    // users:[],
-    // admins:[sdjflksdjlkjaskl, oisdjfiosjfioj]
+    numberOfRating: { type: Number, default: 0 },
+    totalRating: { type: Number, default: 0 },
+    totalViews: { type: Number, default: 0 },
+    averageRating: { type: Number, default: 0 },
 });
 const Recipe = (0, mongoose_1.model)('Recipe', recipeSchema);
 exports.default = Recipe;

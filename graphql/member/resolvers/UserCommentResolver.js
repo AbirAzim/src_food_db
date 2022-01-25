@@ -20,12 +20,14 @@ const AppError_1 = __importDefault(require("../../../utils/AppError"));
 const CreateComment_1 = __importDefault(require("./input-type/CreateComment"));
 const RemoveComment_1 = __importDefault(require("./input-type/RemoveComment"));
 const EditComment_1 = __importDefault(require("./input-type/EditComment"));
+const GetAllComments_1 = __importDefault(require("./input-type/GetAllComments"));
+const RecipeComments_1 = __importDefault(require("../schemas/RecipeComments"));
 const memberModel_1 = __importDefault(require("../../../models/memberModel"));
 const recipe_1 = __importDefault(require("../../../models/recipe"));
 const comment_1 = __importDefault(require("../../../models/comment"));
 let UserCommentsResolver = class UserCommentsResolver {
-    async addNewComment(data) {
-        let user = await memberModel_1.default.findOne({ _id: data.commnetedBy });
+    async createComment(data) {
+        let user = await memberModel_1.default.findOne({ _id: data.userId });
         if (!user) {
             return new AppError_1.default('User not found', 404);
         }
@@ -33,13 +35,81 @@ let UserCommentsResolver = class UserCommentsResolver {
         if (!recipe) {
             return new AppError_1.default('Recipe not found', 404);
         }
-        let comment = await comment_1.default.create(data);
-        await recipe_1.default.findByIdAndUpdate(data.recipeId, {
-            $push: { comments: comment._id },
+        let comments = await comment_1.default.find({
+            recipeId: data.recipeId,
+        }).select('userId');
+        for (let i = 0; i < comments.length; i++) {
+            if (String(comments[i].userId) === String(data.userId)) {
+                return new AppError_1.default('Comment already exists with that recipe for this user', 400);
+            }
+        }
+        await comment_1.default.create(data);
+        let averageRating = (recipe.totalRating + data.rating) / (recipe.numberOfRating + 1);
+        await recipe_1.default.findOneAndUpdate({ _id: data.recipeId }, {
+            $inc: { numberOfRating: 1, totalRating: data.rating },
+            $set: { averageRating },
         });
-        return 'Comment added successfully';
+        let otherComments = await comment_1.default.find({
+            userId: { $ne: data.userId },
+            recipeId: data.recipeId,
+        });
+        let userComment = await comment_1.default.findOne({
+            userId: data.userId,
+            recipeId: data.recipeId,
+        });
+        return { userComment, comments: otherComments };
     }
-    async deleteComment(data) {
+    async getAllCommentsForARecipe(data) {
+        let user = await memberModel_1.default.findOne({ _id: data.userId });
+        if (!user) {
+            return new AppError_1.default('User not found', 404);
+        }
+        let recipe = await recipe_1.default.findOne({ _id: data.recipeId });
+        if (!recipe) {
+            return new AppError_1.default('Recipe not found', 404);
+        }
+        let comments = await comment_1.default.find({
+            userId: { $ne: data.userId },
+            recipeId: data.recipeId,
+        });
+        let userComment = await comment_1.default.findOne({
+            userId: data.userId,
+            recipeId: data.recipeId,
+        });
+        return { userComment, comments };
+    }
+    async removeComment(data) {
+        let user = await memberModel_1.default.findOne({ _id: data.userId });
+        if (!user) {
+            return new AppError_1.default('User not found', 404);
+        }
+        let recipe = await recipe_1.default.findOne({ recipeId: data.recipeId });
+        if (!recipe) {
+            return new AppError_1.default('Recipe not found', 404);
+        }
+        let comment = await comment_1.default.findOne({
+            _id: data.commentId,
+            userId: data.userId,
+            recipeId: data.recipeId,
+        });
+        if (!comment) {
+            return new AppError_1.default('Comment not found', 404);
+        }
+        let totalRating = recipe.totalRating - comment.rating;
+        let numberOfRating = recipe.numberOfRating - 1;
+        let averageRating;
+        if (numberOfRating === 0) {
+            averageRating = 0;
+        }
+        else {
+            averageRating = totalRating / numberOfRating;
+        }
+        await comment_1.default.deleteOne({ _id: data.commentId });
+        await recipe_1.default.updateOne({ _id: data.recipeId }, { numberOfRating, totalRating, averageRating });
+        let comments = await comment_1.default.find({ recipeId: data.recipeId });
+        return { comments };
+    }
+    async editComment(data) {
         let user = await memberModel_1.default.findOne({ _id: data.userId });
         if (!user) {
             return new AppError_1.default('User not found', 404);
@@ -49,66 +119,62 @@ let UserCommentsResolver = class UserCommentsResolver {
             return new AppError_1.default('Recipe not found', 404);
         }
         let comment = await comment_1.default.findOne({
-            _id: data.commentId,
-            recipeId: data.recipeId,
-            commnetedBy: data.userId,
-        });
-        if (!comment) {
-            return new AppError_1.default('Comment not found', 404);
-        }
-        await comment_1.default.findByIdAndDelete(data.commentId);
-        await recipe_1.default.findByIdAndUpdate(data.recipeId, {
-            $pull: { comments: data.commentId },
-        });
-        return 'Comment deleted successfully';
-    }
-    async updateComment(data) {
-        let user = await memberModel_1.default.findOne({
-            _id: data.editableObject.commnetedBy,
-        });
-        if (!user) {
-            return new AppError_1.default('User not found', 404);
-        }
-        let recipe = await recipe_1.default.findOne({
-            _id: data.editableObject.recipeId,
-        });
-        if (!recipe) {
-            return new AppError_1.default('Recipe not found', 404);
-        }
-        let comment = await comment_1.default.findOne({
             _id: data.editId,
-            recipeId: data.editableObject.recipeId,
+            userId: data.userId,
+            recipeId: data.recipeId,
         });
         if (!comment) {
             return new AppError_1.default('Comment not found', 404);
         }
+        let totalRating = recipe.totalRating - comment.rating + data.editableObject.rating;
+        let averageRating;
+        if (totalRating === 0) {
+            averageRating = 0;
+        }
+        else {
+            averageRating = totalRating / recipe.numberOfRating;
+        }
+        await recipe_1.default.findOneAndUpdate({ _id: data.recipeId }, { totalRating, averageRating });
         let newData = data.editableObject;
-        newData.modifiedAt = Date.now();
-        await comment_1.default.findByIdAndUpdate(data.editId, newData);
-        return 'Comment updated successfully';
+        newData.updatedAt = Date.now();
+        let newComment = await comment_1.default.findOneAndUpdate({ _id: data.editId }, newData, { new: true });
+        console.log(newComment);
+        console.log(data.editId);
+        let comments = await comment_1.default.find({
+            _id: { $ne: data.editId },
+            recipeId: data.recipeId,
+        });
+        return { userComment: newComment, comments };
     }
 };
 __decorate([
-    (0, type_graphql_1.Mutation)(() => String),
+    (0, type_graphql_1.Mutation)((type) => RecipeComments_1.default),
     __param(0, (0, type_graphql_1.Arg)('data')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [CreateComment_1.default]),
     __metadata("design:returntype", Promise)
-], UserCommentsResolver.prototype, "addNewComment", null);
+], UserCommentsResolver.prototype, "createComment", null);
 __decorate([
-    (0, type_graphql_1.Mutation)(() => String),
+    (0, type_graphql_1.Query)(() => RecipeComments_1.default),
+    __param(0, (0, type_graphql_1.Arg)('data')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [GetAllComments_1.default]),
+    __metadata("design:returntype", Promise)
+], UserCommentsResolver.prototype, "getAllCommentsForARecipe", null);
+__decorate([
+    (0, type_graphql_1.Mutation)((type) => RecipeComments_1.default),
     __param(0, (0, type_graphql_1.Arg)('data')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [RemoveComment_1.default]),
     __metadata("design:returntype", Promise)
-], UserCommentsResolver.prototype, "deleteComment", null);
+], UserCommentsResolver.prototype, "removeComment", null);
 __decorate([
-    (0, type_graphql_1.Mutation)(() => String),
+    (0, type_graphql_1.Mutation)((type) => RecipeComments_1.default),
     __param(0, (0, type_graphql_1.Arg)('data')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [EditComment_1.default]),
     __metadata("design:returntype", Promise)
-], UserCommentsResolver.prototype, "updateComment", null);
+], UserCommentsResolver.prototype, "editComment", null);
 UserCommentsResolver = __decorate([
     (0, type_graphql_1.Resolver)()
 ], UserCommentsResolver);

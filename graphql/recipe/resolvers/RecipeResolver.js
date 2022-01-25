@@ -42,16 +42,14 @@ let RecipeResolver = class RecipeResolver {
             .populate('ingredients')
             .populate('ingredients')
             .populate('brand')
-            .populate('recipeBlendCategory')
-            .populate('comments');
+            .populate('recipeBlendCategory');
         return recipes;
     }
     async getAllrecomendedRecipes() {
         const recipes = await recipe_1.default.find()
             .populate('ingredients')
             .populate('brand')
-            .populate('recipeBlendCategory')
-            .populate('comments');
+            .populate('recipeBlendCategory');
         return recipes;
     }
     async getAllpopularRecipes() {
@@ -59,8 +57,7 @@ let RecipeResolver = class RecipeResolver {
             .limit(4)
             .populate('ingredients')
             .populate('brand')
-            .populate('recipeBlendCategory')
-            .populate('comments');
+            .populate('recipeBlendCategory');
         return recipes;
     }
     async getAllLatestRecipes() {
@@ -68,16 +65,14 @@ let RecipeResolver = class RecipeResolver {
             .sort({ datePublished: -1 })
             .populate('ingredients')
             .populate('brand')
-            .populate('recipeBlendCategory')
-            .populate('comments');
+            .populate('recipeBlendCategory');
         return recipes;
     }
     async getARecipe(recipeId) {
         const recipe = await recipe_1.default.findById(recipeId)
             .populate('ingredients')
             .populate('brand')
-            .populate('recipeBlendCategory')
-            .populate('comments');
+            .populate('recipeBlendCategory');
         return recipe;
     }
     async addNewRecipe(data) {

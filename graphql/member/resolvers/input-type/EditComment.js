@@ -17,9 +17,17 @@ const createEditComment_1 = __importDefault(require("./createEditComment"));
 let EditComment = class EditComment {
 };
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)((type) => type_graphql_1.ID),
     __metadata("design:type", String)
 ], EditComment.prototype, "editId", void 0);
+__decorate([
+    (0, type_graphql_1.Field)((type) => type_graphql_1.ID, { nullable: true }),
+    __metadata("design:type", String)
+], EditComment.prototype, "recipeId", void 0);
+__decorate([
+    (0, type_graphql_1.Field)((type) => type_graphql_1.ID, { nullable: true }),
+    __metadata("design:type", String)
+], EditComment.prototype, "userId", void 0);
 __decorate([
     (0, type_graphql_1.Field)((type) => createEditComment_1.default),
     __metadata("design:type", createEditComment_1.default)
