@@ -24,6 +24,7 @@ const createIngredient_1 = __importDefault(require("./input-type/createIngredien
 const Ingredient_1 = __importDefault(require("../schemas/Ingredient"));
 const ReturnIngredient_1 = __importDefault(require("../schemas/ReturnIngredient"));
 const UniqueNutrient_1 = __importDefault(require("../schemas/UniqueNutrient"));
+const ReurnIngredientBasedOnDefaultPortion_1 = __importDefault(require("../schemas/ReurnIngredientBasedOnDefaultPortion"));
 const AppError_1 = __importDefault(require("../../../utils/AppError"));
 const fs_1 = __importDefault(require("fs"));
 const IngredientFilter_1 = __importDefault(require("./input-type/IngredientFilter"));
@@ -233,6 +234,43 @@ let MemberResolver = class MemberResolver {
         });
         return ingredients;
     }
+    async getIngredientInfoBasedOnDefaultPortion(ingredientId) {
+        let ingredient = await ingredient_1.default.findOne({
+            _id: ingredientId,
+        }).populate({
+            path: 'nutrients',
+            populate: {
+                path: 'uniqueNutrientRefference',
+                model: 'UniqueNutrient',
+            },
+        });
+        if (!ingredient) {
+            return new AppError_1.default('Ingredient not found', 404);
+        }
+        let defaultPortion;
+        let found = false;
+        for (let i = 0; i < ingredient.portions.length; i++) {
+            if (ingredient.portions[i].default) {
+                defaultPortion = ingredient.portions[i].meausermentWeight;
+                found = true;
+            }
+        }
+        if (!found) {
+            defaultPortion = ingredient.portions[0].meausermentWeight;
+        }
+        let defaultPortionNutrients = [];
+        for (let i = 0; i < ingredient.nutrients.length; i++) {
+            let nutrient = {
+                value: (ingredient.nutrients[i].value / 100) * defaultPortion,
+                uniqueNutrientRefference: ingredient.nutrients[i].uniqueNutrientRefference,
+            };
+            defaultPortionNutrients.push(nutrient);
+        }
+        let returnIngredientBasedOnDefaultPortion = ingredient;
+        returnIngredientBasedOnDefaultPortion.defaultPortionNutrients =
+            defaultPortionNutrients;
+        return returnIngredientBasedOnDefaultPortion;
+    }
 };
 __decorate([
     (0, type_graphql_1.Query)(() => [ReturnIngredient_1.default]),
@@ -313,6 +351,13 @@ __decorate([
     __metadata("design:paramtypes", [IngredientFilter_1.default]),
     __metadata("design:returntype", Promise)
 ], MemberResolver.prototype, "filterIngredientByCategoryAndClass", null);
+__decorate([
+    (0, type_graphql_1.Query)(() => ReurnIngredientBasedOnDefaultPortion_1.default),
+    __param(0, (0, type_graphql_1.Arg)('ingredientId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], MemberResolver.prototype, "getIngredientInfoBasedOnDefaultPortion", null);
 MemberResolver = __decorate([
     (0, type_graphql_1.Resolver)()
 ], MemberResolver);

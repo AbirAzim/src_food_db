@@ -13,34 +13,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
-const Member_1 = __importDefault(require("./Member"));
-let Comment = class Comment {
+const UniqueNutrient_1 = __importDefault(require("./UniqueNutrient"));
+let DefaultPortionNutrient = class DefaultPortionNutrient {
 };
 __decorate([
-    (0, type_graphql_1.Field)((type) => type_graphql_1.ID),
-    __metadata("design:type", String)
-], Comment.prototype, "_id", void 0);
-__decorate([
     (0, type_graphql_1.Field)(),
     __metadata("design:type", String)
-], Comment.prototype, "comment", void 0);
+], DefaultPortionNutrient.prototype, "value", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(),
-    __metadata("design:type", Number)
-], Comment.prototype, "rating", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(),
-    __metadata("design:type", Date)
-], Comment.prototype, "createdAt", void 0);
-__decorate([
-    (0, type_graphql_1.Field)({ nullable: true }),
-    __metadata("design:type", Date)
-], Comment.prototype, "updatedAt", void 0);
-__decorate([
-    (0, type_graphql_1.Field)((type) => Member_1.default),
-    __metadata("design:type", Member_1.default)
-], Comment.prototype, "userId", void 0);
-Comment = __decorate([
+    (0, type_graphql_1.Field)((type) => UniqueNutrient_1.default),
+    __metadata("design:type", UniqueNutrient_1.default)
+], DefaultPortionNutrient.prototype, "uniqueNutrientRefference", void 0);
+DefaultPortionNutrient = __decorate([
     (0, type_graphql_1.ObjectType)()
-], Comment);
-exports.default = Comment;
+], DefaultPortionNutrient);
+exports.default = DefaultPortionNutrient;

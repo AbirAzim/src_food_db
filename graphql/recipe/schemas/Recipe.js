@@ -17,7 +17,6 @@ const Ingredient_1 = __importDefault(require("../../src_food/schemas/Ingredient"
 const RecipeCategory_1 = __importDefault(require("./RecipeCategory"));
 const Brand_1 = __importDefault(require("./Brand"));
 const ImageType_1 = __importDefault(require("./ImageType"));
-const Comment_1 = __importDefault(require("../../member/schemas/Comment"));
 let TestIngredient = class TestIngredient {
 };
 __decorate([
@@ -132,9 +131,21 @@ __decorate([
     __metadata("design:type", Array)
 ], Recipe.prototype, "testIngredient", void 0);
 __decorate([
-    (0, type_graphql_1.Field)((type) => [Comment_1.default], { nullable: true }),
-    __metadata("design:type", Array)
-], Recipe.prototype, "comments", void 0);
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Number)
+], Recipe.prototype, "numberOfRating", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Number)
+], Recipe.prototype, "totalRating", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Number)
+], Recipe.prototype, "totalViews", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Number)
+], Recipe.prototype, "averageRating", void 0);
 Recipe = __decorate([
     (0, type_graphql_1.ObjectType)()
 ], Recipe);
