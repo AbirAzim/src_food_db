@@ -21,13 +21,16 @@ const uniqueNutrient_1 = __importDefault(require("../../../models/uniqueNutrient
 const EditIngredients_1 = __importDefault(require("./input-type/EditIngredients"));
 const EditNutrient_1 = __importDefault(require("./input-type/EditNutrient"));
 const createIngredient_1 = __importDefault(require("./input-type/createIngredient"));
+const IngredientInfo_1 = __importDefault(require("./input-type/IngredientInfo"));
 const Ingredient_1 = __importDefault(require("../schemas/Ingredient"));
+const NutrientValue_1 = __importDefault(require("../schemas/NutrientValue"));
 const ReturnIngredient_1 = __importDefault(require("../schemas/ReturnIngredient"));
 const UniqueNutrient_1 = __importDefault(require("../schemas/UniqueNutrient"));
 const ReurnIngredientBasedOnDefaultPortion_1 = __importDefault(require("../schemas/ReurnIngredientBasedOnDefaultPortion"));
 const AppError_1 = __importDefault(require("../../../utils/AppError"));
 const fs_1 = __importDefault(require("fs"));
 const IngredientFilter_1 = __importDefault(require("./input-type/IngredientFilter"));
+const mongoose_1 = __importDefault(require("mongoose"));
 let MemberResolver = class MemberResolver {
     async getAllTheIngredients() {
         let ingredients = await ingredient_1.default.find({}).populate({
@@ -271,6 +274,130 @@ let MemberResolver = class MemberResolver {
             defaultPortionNutrients;
         return returnIngredientBasedOnDefaultPortion;
     }
+    async getNutritionBasedOnRecipeTest() {
+        let data = [
+            {
+                ingredientId: '61c6e4453a320071dc96ab1a',
+                value: 12,
+            },
+            { ingredientId: '61c6e4453a320071dc96ab3e', value: 40 },
+            { ingredientId: '61c6e4463a320071dc96ab87', value: 76 },
+        ];
+        let fake = data.map((x) => new mongoose_1.default.mongo.ObjectId(x.ingredientId));
+        console.log(fake);
+        let ingredients = await ingredient_1.default.aggregate([
+            {
+                $match: { _id: { $in: fake } },
+            },
+            {
+                $unwind: '$nutrients',
+            },
+            {
+                $addFields: {
+                    convertedValue: { $toDecimal: '$nutrients.value' },
+                },
+            },
+            { $unwind: '$nutrients.uniqueNutrientRefference' },
+            {
+                $group: {
+                    _id: '$nutrients.uniqueNutrientRefference',
+                    num: { $sum: 1 },
+                    value: { $sum: '$convertedValue' },
+                },
+            },
+        ]);
+        let mynutrient = ingredients.filter((x) => {
+            return String(x._id) === '61c618813ced314894f2924a';
+        });
+        let test = await ingredient_1.default.find({ _id: { $in: fake } });
+        for (let i = 0; i < test.length; i++) {
+            for (let j = 0; j < test[i].nutrients.length; j++) {
+                if (String(test[i].nutrients[j].uniqueNutrientRefference) ===
+                    '61c618813ced314894f2924a') {
+                    console.log(test[i].ingredientName);
+                    console.log(test[i].nutrients[j].uniqueNutrientRefference);
+                    console.log(test[i].nutrients[j].value);
+                }
+            }
+        }
+        // let nutrients = await Promise.all(ingredients.map(async (x) => {
+        //   let myIngredient = data.filter(y => y.ingredientId == x._id.toString())[0];
+        //   let value = myIngredient.value;
+        //   return {
+        //     ingredientId: x._id,
+        //     value: (x.nutrients.value / 100) * value,
+        //     uniqueNutrientRefference: await UniqueNutrientModel.findOne({
+        //       _id: x.nutrients.uniqueNutrientRefference,
+        //     }),
+        //   };
+        // }));
+        // console.log(nutrients);
+        console.log(mynutrient);
+        return 'done';
+    }
+    async getNutritionBasedOnRecipe(ingredientsInfo) {
+        let data = ingredientsInfo;
+        // @ts-ignore
+        let hello = data.map((x) => new mongoose_1.default.mongo.ObjectId(x.ingredientId));
+        let ingredients = await ingredient_1.default.find({
+            _id: { $in: hello },
+        }).populate({
+            path: 'nutrients',
+            populate: {
+                path: 'uniqueNutrientRefference',
+                model: 'UniqueNutrient',
+            },
+        });
+        for (let i = 0; i < ingredients.length; i++) {
+            let value = data.filter(
+            // @ts-ignore
+            (y) => y.ingredientId === String(ingredients[i]._id))[0].value;
+            for (let j = 0; j < ingredients[i].nutrients.length; j++) {
+                ingredients[i].nutrients[j].value =
+                    (+ingredients[i].nutrients[j].value / 100) * value;
+                // if (
+                //   String(ingredients[i].nutrients[j].uniqueNutrientRefference._id) ===
+                //   '61c618813ced314894f2924a'
+                // ) {
+                //   console.log(ingredients[i].nutrients[j].value);
+                // }
+            }
+        }
+        let nutrients = [];
+        for (let i = 0; i < ingredients.length; i++) {
+            nutrients.push(...ingredients[i].nutrients);
+        }
+        //@ts-ignore
+        let returnNutrients = nutrients.reduce((acc, nutrient) => {
+            //@ts-ignore
+            let obj = acc.find(
+            //@ts-ignore
+            (o) => String(o.uniqueNutrientRefference._id) ===
+                String(nutrient.uniqueNutrientRefference._id));
+            if (!obj) {
+                nutrient.count = 1;
+                acc.push(nutrient);
+            }
+            else {
+                //@ts-ignore
+                const index = acc.findIndex((element, index) => {
+                    if (String(element.uniqueNutrientRefference._id) ===
+                        String(obj.uniqueNutrientRefference._id)) {
+                        return true;
+                    }
+                });
+                acc[index].count++;
+                acc[index].value = +acc[index].value + +nutrient.value;
+                if (String(acc[index].uniqueNutrientRefference._id) ===
+                    '61c618813ced314894f2924a') {
+                    console.log(acc[index].value);
+                }
+            }
+            return acc;
+        }, []);
+        console.log(returnNutrients[1]);
+        return returnNutrients;
+    }
 };
 __decorate([
     (0, type_graphql_1.Query)(() => [ReturnIngredient_1.default]),
@@ -358,6 +485,19 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], MemberResolver.prototype, "getIngredientInfoBasedOnDefaultPortion", null);
+__decorate([
+    (0, type_graphql_1.Query)(() => String),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], MemberResolver.prototype, "getNutritionBasedOnRecipeTest", null);
+__decorate([
+    (0, type_graphql_1.Mutation)(() => [NutrientValue_1.default]),
+    __param(0, (0, type_graphql_1.Arg)('ingredientsInfo', (type) => [IngredientInfo_1.default])),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Array]),
+    __metadata("design:returntype", Promise)
+], MemberResolver.prototype, "getNutritionBasedOnRecipe", null);
 MemberResolver = __decorate([
     (0, type_graphql_1.Resolver)()
 ], MemberResolver);
