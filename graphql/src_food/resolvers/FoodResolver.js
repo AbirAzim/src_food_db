@@ -196,11 +196,12 @@ let MemberResolver = class MemberResolver {
         }
         return 'done';
     }
-    async deleteFood() {
-        await uniqueNutrient_1.default.deleteMany({});
-        await ingredient_1.default.deleteMany({});
-        return 'done';
-    }
+    // @Mutation(() => String)
+    // async deleteFood() {
+    //   await UniqueNutrientModel.deleteMany({});
+    //   await FoodSrcModel.deleteMany({});
+    //   return 'done';
+    // }
     async SearchIngredients(searchTerm) {
         let ingredients = await ingredient_1.default.find({
             ingredientName: { $regex: searchTerm, $options: 'i' },
@@ -225,16 +226,30 @@ let MemberResolver = class MemberResolver {
     //   return 'done';
     // }
     async filterIngredientByCategoryAndClass(data) {
-        let ingredients = await ingredient_1.default.find({
-            category: data.ingredientCategory,
-            classType: 'Class - ' + data.IngredientClass,
-        }).populate({
-            path: 'nutrients',
-            populate: {
-                path: 'uniqueNutrientRefference',
-                model: 'UniqueNutrient',
-            },
-        });
+        let ingredients;
+        if (data.ingredientCategory === 'All') {
+            ingredients = await ingredient_1.default.find({
+                classType: 'Class - ' + data.IngredientClass,
+            }).populate({
+                path: 'nutrients',
+                populate: {
+                    path: 'uniqueNutrientRefference',
+                    model: 'UniqueNutrient',
+                },
+            });
+        }
+        else {
+            ingredients = await ingredient_1.default.find({
+                category: data.ingredientCategory,
+                classType: 'Class - ' + data.IngredientClass,
+            }).populate({
+                path: 'nutrients',
+                populate: {
+                    path: 'uniqueNutrientRefference',
+                    model: 'UniqueNutrient',
+                },
+            });
+        }
         return ingredients;
     }
     async getIngredientInfoBasedOnDefaultPortion(ingredientId) {
@@ -458,12 +473,6 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], MemberResolver.prototype, "databaseShifting", null);
-__decorate([
-    (0, type_graphql_1.Mutation)(() => String),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
-], MemberResolver.prototype, "deleteFood", null);
 __decorate([
     (0, type_graphql_1.Query)(() => [Ingredient_1.default]),
     __param(0, (0, type_graphql_1.Arg)('searchTerm')),
