@@ -51,7 +51,8 @@ let RecipeResolver = class RecipeResolver {
         // });
         // console.log(memberRecipes);
         let recipes;
-        if (data.includeIngredientIds !== undefined) {
+        //@ts-ignore
+        if (data.includeIngredientIds.length > 0) {
             recipes = await recipe_1.default.find({
                 tempBlendCategory: { $in: data.blendTypes },
                 'ingredients.ingredientId': { $in: data.includeIngredientIds },
