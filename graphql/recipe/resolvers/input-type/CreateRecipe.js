@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
 const ImageInput_1 = __importDefault(require("./ImageInput"));
+const CreateIngredientData_1 = __importDefault(require("./CreateIngredientData"));
 let CreateRecipe = class CreateRecipe {
 };
 __decorate([
@@ -81,7 +82,7 @@ __decorate([
     __metadata("design:type", Array)
 ], CreateRecipe.prototype, "foodCategories", void 0);
 __decorate([
-    (0, type_graphql_1.Field)((type) => [type_graphql_1.ID], { nullable: true }),
+    (0, type_graphql_1.Field)((type) => [CreateIngredientData_1.default], { nullable: true }),
     __metadata("design:type", Array)
 ], CreateRecipe.prototype, "ingredients", void 0);
 __decorate([
@@ -92,6 +93,14 @@ __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
 ], CreateRecipe.prototype, "favicon", void 0);
+__decorate([
+    (0, type_graphql_1.Field)((type) => type_graphql_1.ID),
+    __metadata("design:type", String)
+], CreateRecipe.prototype, "userId", void 0);
+__decorate([
+    (0, type_graphql_1.Field)((type) => type_graphql_1.ID, { nullable: true }),
+    __metadata("design:type", String)
+], CreateRecipe.prototype, "adminId", void 0);
 CreateRecipe = __decorate([
     (0, type_graphql_1.InputType)()
 ], CreateRecipe);

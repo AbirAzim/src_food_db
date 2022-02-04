@@ -13,10 +13,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
-const Ingredient_1 = __importDefault(require("../../src_food/schemas/Ingredient"));
 const RecipeCategory_1 = __importDefault(require("./RecipeCategory"));
 const Brand_1 = __importDefault(require("./Brand"));
 const ImageType_1 = __importDefault(require("./ImageType"));
+const IngredientData_1 = __importDefault(require("./IngredientData"));
 let TestIngredient = class TestIngredient {
 };
 __decorate([
@@ -107,7 +107,7 @@ __decorate([
     __metadata("design:type", Array)
 ], Recipe.prototype, "foodCategories", void 0);
 __decorate([
-    (0, type_graphql_1.Field)((type) => [Ingredient_1.default], { nullable: true }),
+    (0, type_graphql_1.Field)((type) => [IngredientData_1.default], { nullable: true }),
     __metadata("design:type", Array)
 ], Recipe.prototype, "ingredients", void 0);
 __decorate([

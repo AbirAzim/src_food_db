@@ -18,6 +18,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
 const ingredient_1 = __importDefault(require("../../../models/ingredient"));
 const uniqueNutrient_1 = __importDefault(require("../../../models/uniqueNutrient"));
+const RecycledIngredient_1 = __importDefault(require("../../../models/RecycledIngredient"));
 const EditIngredients_1 = __importDefault(require("./input-type/EditIngredients"));
 const EditNutrient_1 = __importDefault(require("./input-type/EditNutrient"));
 const createIngredient_1 = __importDefault(require("./input-type/createIngredient"));
@@ -413,6 +414,22 @@ let MemberResolver = class MemberResolver {
         console.log(returnNutrients[1]);
         return returnNutrients;
     }
+    async removeIngredient(ingredientId) {
+        let ingredient = await ingredient_1.default.findOne({ _id: ingredientId });
+        if (!ingredient) {
+            return new AppError_1.default('Ingredient not found', 404);
+        }
+        let recycle = await RecycledIngredient_1.default.find();
+        if (!recycle) {
+            recycle = await RecycledIngredient_1.default.create({});
+            await RecycledIngredient_1.default.findOneAndUpdate({ _id: recycle._id }, { $push: { refDtabaseIngredientId: ingredient.refDatabaseId } });
+        }
+        else {
+            await RecycledIngredient_1.default.findOneAndUpdate({ _id: recycle[0]._id }, { $push: { refDtabaseIngredientId: ingredient.refDatabaseId } });
+        }
+        await ingredient_1.default.findOneAndDelete({ _id: ingredientId });
+        return 'done';
+    }
 };
 __decorate([
     (0, type_graphql_1.Query)(() => [ReturnIngredient_1.default]),
@@ -507,6 +524,13 @@ __decorate([
     __metadata("design:paramtypes", [Array]),
     __metadata("design:returntype", Promise)
 ], MemberResolver.prototype, "getNutritionBasedOnRecipe", null);
+__decorate([
+    (0, type_graphql_1.Mutation)(() => String),
+    __param(0, (0, type_graphql_1.Arg)('ingredientId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], MemberResolver.prototype, "removeIngredient", null);
 MemberResolver = __decorate([
     (0, type_graphql_1.Resolver)()
 ], MemberResolver);
@@ -555,3 +579,7 @@ exports.default = MemberResolver;
 //       "/images/user-img.jpg"
 //   ]
 // }
+// you
+// 2 
+// me ()
+// 3

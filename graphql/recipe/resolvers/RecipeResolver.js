@@ -16,11 +16,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
+const AppError_1 = __importDefault(require("../../../utils/AppError"));
 const recipe_1 = __importDefault(require("../../../models/recipe"));
 const recipeCategory_1 = __importDefault(require("../../../models/recipeCategory"));
+const ingredient_1 = __importDefault(require("../../../models/ingredient"));
+const memberModel_1 = __importDefault(require("../../../models/memberModel"));
+const userCollection_1 = __importDefault(require("../../../models/userCollection"));
 const Recipe_1 = __importDefault(require("../../recipe/schemas/Recipe"));
 const CreateRecipe_1 = __importDefault(require("./input-type/CreateRecipe"));
 const EditRecipe_1 = __importDefault(require("./input-type/EditRecipe"));
+const GetAllRecipesByBlendCategory_1 = __importDefault(require("./input-type/GetAllRecipesByBlendCategory"));
 let RecipeResolver = class RecipeResolver {
     // @Query((type) => String)
     // async test() {
@@ -31,10 +36,32 @@ let RecipeResolver = class RecipeResolver {
     //   }
     //   return 'Recipe Created';
     // }
-    async getAllRecipesByBlendCategory(blendTypes) {
-        const recipes = await recipe_1.default.find({
-            tempBlendCategory: { $in: blendTypes },
-        });
+    // fixing
+    async getAllRecipesByBlendCategory(data) {
+        // let user = await MemberModel.findOne({ _id: data.userId }).populate({
+        //   path: 'collections',
+        //   populate: {
+        //     path: 'recipes',
+        //     model: 'Recipe',
+        //   },
+        // });
+        // //@ts-ignore
+        // let memberRecipes = user.collections.map((collection) => {
+        //   return collection.recipes;
+        // });
+        // console.log(memberRecipes);
+        let recipes;
+        if (data.includeIngredientIds !== undefined) {
+            recipes = await recipe_1.default.find({
+                tempBlendCategory: { $in: data.blendTypes },
+                'ingredients.ingredientId': { $in: data.includeIngredientIds },
+            });
+        }
+        else {
+            recipes = await recipe_1.default.find({
+                tempBlendCategory: { $in: data.blendTypes },
+            });
+        }
         return recipes;
     }
     async getAllRecipes() {
@@ -44,6 +71,7 @@ let RecipeResolver = class RecipeResolver {
             .populate('brand')
             .populate('recipeBlendCategory');
         return recipes;
+        5;
     }
     async getAllrecomendedRecipes() {
         const recipes = await recipe_1.default.find()
@@ -134,12 +162,60 @@ let RecipeResolver = class RecipeResolver {
         await recipe_1.default.findOneAndDelete({ _id: recipeId });
         return 'recipe deleted successfully';
     }
+    async addRecipeRecipeFromUser(data) {
+        let user = await memberModel_1.default.findOne({ _id: data.userId });
+        if (!user) {
+            return new AppError_1.default('User not found', 404);
+        }
+        let userDefaultCollection = user.lastModifiedCollection
+            ? user.defaultCollection
+            : user.lastModifiedCollection;
+        let collection = await userCollection_1.default.findOne({
+            _id: userDefaultCollection,
+        });
+        let newData = data;
+        newData.foodCategories = [];
+        for (let i = 0; i < newData.ingredients.length; i++) {
+            if (newData.ingredients[i].customWeightInGram !== undefined) {
+                let ingredient = await ingredient_1.default.findOne({
+                    _id: newData.ingredients[i].ingredientId,
+                });
+                let index = 0;
+                for (let j = 0; j < ingredient.portions.length; j++) {
+                    if (ingredient.portions[j].default === true) {
+                        index = j;
+                        console.log(index);
+                        break;
+                    }
+                }
+                let defaultPortion = ingredient.portions[index];
+                newData.ingredients[i].portion = {
+                    measurement: defaultPortion.measurement,
+                    meausermentWeight: String(newData.ingredients[i].customWeightInGram /
+                        +defaultPortion.meausermentWeight),
+                };
+                newData.foodCategories.push(ingredient.category);
+            }
+            else {
+                let ingredient = await ingredient_1.default.findOne({
+                    _id: newData.ingredients[i].ingredientId,
+                });
+                newData.foodCategories.push(ingredient.category);
+            }
+        }
+        newData.foodCategories = [...new Set(newData.foodCategories)];
+        newData.global = false;
+        newData.userId = user._id;
+        let userRecipe = await recipe_1.default.create(newData);
+        await userCollection_1.default.findOneAndUpdate({ _id: userDefaultCollection }, { $push: { recipes: userRecipe._id } });
+        return newData;
+    }
 };
 __decorate([
     (0, type_graphql_1.Query)((type) => [Recipe_1.default]),
-    __param(0, (0, type_graphql_1.Arg)('blendTypes', (type) => [String])),
+    __param(0, (0, type_graphql_1.Arg)('data')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Array]),
+    __metadata("design:paramtypes", [GetAllRecipesByBlendCategory_1.default]),
     __metadata("design:returntype", Promise)
 ], RecipeResolver.prototype, "getAllRecipesByBlendCategory", null);
 __decorate([
@@ -200,6 +276,13 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], RecipeResolver.prototype, "deleteARecipe", null);
+__decorate([
+    (0, type_graphql_1.Mutation)((type) => Recipe_1.default),
+    __param(0, (0, type_graphql_1.Arg)('data')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [CreateRecipe_1.default]),
+    __metadata("design:returntype", Promise)
+], RecipeResolver.prototype, "addRecipeRecipeFromUser", null);
 RecipeResolver = __decorate([
     (0, type_graphql_1.Resolver)()
 ], RecipeResolver);

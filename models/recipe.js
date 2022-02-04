@@ -21,8 +21,11 @@ const recipeSchema = new mongoose_1.Schema({
     foodCategories: [String],
     ingredients: [
         {
-            type: mongoose_1.Schema.Types.ObjectId,
-            ref: 'Ingredient',
+            ingredientId: { type: mongoose_1.Schema.Types.ObjectId, ref: 'Ingredient' },
+            portion: {
+                measurement: String,
+                meausermentWeight: String,
+            },
         },
     ],
     testIngredient: [
@@ -39,14 +42,25 @@ const recipeSchema = new mongoose_1.Schema({
     url: String,
     favicon: String,
     // blendStatus:
-    scrappedByAdmin: {
+    addedByAdmin: {
         type: Boolean,
         default: false,
     },
+    userId: {
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: 'User',
+    },
+    adminIds: [
+        {
+            type: mongoose_1.Schema.Types.ObjectId,
+            ref: 'Admin',
+        },
+    ],
     discovery: {
         type: Boolean,
         default: false,
     },
+    global: { type: Boolean, default: false },
     numberOfRating: { type: Number, default: 0 },
     totalRating: { type: Number, default: 0 },
     totalViews: { type: Number, default: 0 },
