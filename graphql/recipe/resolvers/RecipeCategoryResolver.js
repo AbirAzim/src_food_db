@@ -21,7 +21,7 @@ const EditRecipeCategory_1 = __importDefault(require("./input-type/EditRecipeCat
 const RecipeCategory_1 = __importDefault(require("../schemas/RecipeCategory"));
 const recipeCategory_1 = __importDefault(require("../../../models/recipeCategory"));
 let RecipeCategoryResolver = class RecipeCategoryResolver {
-    async GetAllCategories() {
+    async getAllCategories() {
         let recipeCategories = await recipeCategory_1.default.find();
         return recipeCategories;
     }
@@ -49,7 +49,7 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
-], RecipeCategoryResolver.prototype, "GetAllCategories", null);
+], RecipeCategoryResolver.prototype, "getAllCategories", null);
 __decorate([
     (0, type_graphql_1.Query)((type) => RecipeCategory_1.default),
     __param(0, (0, type_graphql_1.Arg)('recipeCategoryName')),
