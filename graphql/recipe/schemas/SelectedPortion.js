@@ -10,21 +10,21 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
-let CreateIngredientData = class CreateIngredientData {
+let SelectedPortion = class SelectedPortion {
 };
 __decorate([
-    (0, type_graphql_1.Field)((type) => type_graphql_1.ID),
+    (0, type_graphql_1.Field)(),
     __metadata("design:type", String)
-], CreateIngredientData.prototype, "ingredientId", void 0);
+], SelectedPortion.prototype, "name", void 0);
 __decorate([
-    (0, type_graphql_1.Field)({ nullable: true }),
-    __metadata("design:type", String)
-], CreateIngredientData.prototype, "selectedPortionName", void 0);
-__decorate([
-    (0, type_graphql_1.Field)({ nullable: true }),
+    (0, type_graphql_1.Field)(),
     __metadata("design:type", Number)
-], CreateIngredientData.prototype, "weightInGram", void 0);
-CreateIngredientData = __decorate([
-    (0, type_graphql_1.InputType)()
-], CreateIngredientData);
-exports.default = CreateIngredientData;
+], SelectedPortion.prototype, "quantity", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(),
+    __metadata("design:type", Number)
+], SelectedPortion.prototype, "gram", void 0);
+SelectedPortion = __decorate([
+    (0, type_graphql_1.ObjectType)()
+], SelectedPortion);
+exports.default = SelectedPortion;

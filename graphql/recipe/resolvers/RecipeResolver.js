@@ -171,38 +171,46 @@ let RecipeResolver = class RecipeResolver {
         let userDefaultCollection = user.lastModifiedCollection
             ? user.defaultCollection
             : user.lastModifiedCollection;
-        let collection = await userCollection_1.default.findOne({
-            _id: userDefaultCollection,
-        });
+        // let collection = await UserCollectionModel.findOne({
+        //   _id: userDefaultCollection,
+        // });
         let newData = data;
         newData.foodCategories = [];
         for (let i = 0; i < newData.ingredients.length; i++) {
-            if (newData.ingredients[i].customWeightInGram !== undefined) {
-                let ingredient = await ingredient_1.default.findOne({
-                    _id: newData.ingredients[i].ingredientId,
-                });
-                let index = 0;
-                for (let j = 0; j < ingredient.portions.length; j++) {
-                    if (ingredient.portions[j].default === true) {
-                        index = j;
-                        console.log(index);
-                        break;
-                    }
+            newData.ingredients[i].portions = [];
+            let ingredient = await ingredient_1.default.findOne({
+                _id: newData.ingredients[i].ingredientId,
+            });
+            let index = 0;
+            let selectedPortionIndex = 0;
+            for (let j = 0; j < ingredient.portions.length; j++) {
+                if (ingredient.portions[j].default === true) {
+                    index = j;
+                    console.log(index);
+                    break;
                 }
-                let defaultPortion = ingredient.portions[index];
-                newData.ingredients[i].portion = {
-                    measurement: defaultPortion.measurement,
-                    meausermentWeight: String(newData.ingredients[i].customWeightInGram /
-                        +defaultPortion.meausermentWeight),
+            }
+            for (let k = 0; k < ingredient.portions.length; k++) {
+                if (ingredient.portions[k].measurement ===
+                    newData.ingredients[i].selectedPortionName) {
+                    selectedPortionIndex = k;
+                }
+                let portion = {
+                    name: ingredient.portions[k].measurement,
+                    quantity: newData.ingredients[i].weightInGram /
+                        +ingredient.portions[k].meausermentWeight,
+                    default: ingredient.portions[k].default,
+                    gram: ingredient.portions[k].meausermentWeight,
                 };
-                newData.foodCategories.push(ingredient.category);
+                newData.ingredients[i].portions.push(portion);
             }
-            else {
-                let ingredient = await ingredient_1.default.findOne({
-                    _id: newData.ingredients[i].ingredientId,
-                });
-                newData.foodCategories.push(ingredient.category);
-            }
+            newData.ingredients[i].selectedPortion = {
+                name: ingredient.portions[selectedPortionIndex].measurement,
+                quantity: newData.ingredients[i].weightInGram /
+                    +ingredient.portions[selectedPortionIndex].meausermentWeight,
+                gram: ingredient.portions[selectedPortionIndex].meausermentWeight,
+            };
+            newData.foodCategories.push(ingredient.category);
         }
         newData.foodCategories = [...new Set(newData.foodCategories)];
         newData.global = false;

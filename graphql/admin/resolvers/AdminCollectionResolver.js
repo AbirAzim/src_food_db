@@ -56,7 +56,11 @@ let AdminCollectionResolver = class AdminCollectionResolver {
         let adminCollection = await adminCollection_1.default.findById(data.adminCollectionId);
         let Model = (0, GenericModel_1.default)(adminCollection.collectionType);
         if (Model === null) {
-            return new AppError_1.default('Collection Type Is Not Correct', 404);
+            // has to be fixed
+            return new AppError_1.default(`Collection Type Is Not Correct : Avilable Collection are ${[
+                'Recipe',
+                'Ingredient',
+            ].join(', ')}`, 404);
         }
         if (data.checked) {
             await adminCollection_1.default.updateOne({ _id: data.adminCollectionId }, { $addToSet: { children: data.children } });

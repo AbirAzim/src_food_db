@@ -23,17 +23,26 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
-const IngredientPortion_1 = __importDefault(require("./IngredientPortion"));
+const SelectedPortion_1 = __importDefault(require("./SelectedPortion"));
+const ReturnPortion_1 = __importDefault(require("./ReturnPortion"));
 let IngredientData = class IngredientData {
 };
 __decorate([
-    (0, type_graphql_1.Field)(type => type_graphql_1.ID),
+    (0, type_graphql_1.Field)((type) => type_graphql_1.ID),
     __metadata("design:type", String)
 ], IngredientData.prototype, "ingredientId", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(type => IngredientPortion_1.default),
-    __metadata("design:type", IngredientPortion_1.default)
-], IngredientData.prototype, "portion", void 0);
+    (0, type_graphql_1.Field)(),
+    __metadata("design:type", Number)
+], IngredientData.prototype, "weightInGram", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(),
+    __metadata("design:type", SelectedPortion_1.default)
+], IngredientData.prototype, "selectedPortion", void 0);
+__decorate([
+    (0, type_graphql_1.Field)((type) => [ReturnPortion_1.default], { nullable: true }),
+    __metadata("design:type", Array)
+], IngredientData.prototype, "portions", void 0);
 IngredientData = __decorate([
     (0, type_graphql_1.ObjectType)()
 ], IngredientData);

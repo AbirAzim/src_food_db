@@ -22,10 +22,10 @@ const recipeSchema = new mongoose_1.Schema({
     ingredients: [
         {
             ingredientId: { type: mongoose_1.Schema.Types.ObjectId, ref: 'Ingredient' },
-            portion: {
-                measurement: String,
-                meausermentWeight: String,
-            },
+            selectedPortion: { name: String, quantity: Number, gram: Number },
+            portions: [
+                { name: String, quantiy: Number, default: Boolean, gram: Number },
+            ],
         },
     ],
     testIngredient: [

@@ -1,4 +1,5 @@
 "use strict";
+// name: String, quantiy: Number, default: Boolean, gram: Number
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -10,21 +11,25 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
-let CreateIngredientData = class CreateIngredientData {
+let ReturnPortion = class ReturnPortion {
 };
 __decorate([
-    (0, type_graphql_1.Field)((type) => type_graphql_1.ID),
+    (0, type_graphql_1.Field)(),
     __metadata("design:type", String)
-], CreateIngredientData.prototype, "ingredientId", void 0);
+], ReturnPortion.prototype, "name", void 0);
 __decorate([
-    (0, type_graphql_1.Field)({ nullable: true }),
-    __metadata("design:type", String)
-], CreateIngredientData.prototype, "selectedPortionName", void 0);
-__decorate([
-    (0, type_graphql_1.Field)({ nullable: true }),
+    (0, type_graphql_1.Field)(),
     __metadata("design:type", Number)
-], CreateIngredientData.prototype, "weightInGram", void 0);
-CreateIngredientData = __decorate([
-    (0, type_graphql_1.InputType)()
-], CreateIngredientData);
-exports.default = CreateIngredientData;
+], ReturnPortion.prototype, "quantity", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(),
+    __metadata("design:type", Boolean)
+], ReturnPortion.prototype, "default", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(),
+    __metadata("design:type", Number)
+], ReturnPortion.prototype, "gram", void 0);
+ReturnPortion = __decorate([
+    (0, type_graphql_1.ObjectType)()
+], ReturnPortion);
+exports.default = ReturnPortion;
