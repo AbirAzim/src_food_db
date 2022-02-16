@@ -25,7 +25,7 @@ __decorate([
     __metadata("design:type", String)
 ], BlendNutrientCategory.prototype, "categoryName", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
 ], BlendNutrientCategory.prototype, "slug", void 0);
 __decorate([
@@ -33,15 +33,15 @@ __decorate([
     __metadata("design:type", String)
 ], BlendNutrientCategory.prototype, "nutrientDescription", void 0);
 __decorate([
-    (0, type_graphql_1.Field)((type) => [String]),
+    (0, type_graphql_1.Field)((type) => [String], { nullable: true }),
     __metadata("design:type", Array)
 ], BlendNutrientCategory.prototype, "images", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
 ], BlendNutrientCategory.prototype, "featuredImage", void 0);
 __decorate([
-    (0, type_graphql_1.Field)((type) => [String]),
+    (0, type_graphql_1.Field)((type) => [String], { nullable: true }),
     __metadata("design:type", Array)
 ], BlendNutrientCategory.prototype, "keywords", void 0);
 __decorate([
