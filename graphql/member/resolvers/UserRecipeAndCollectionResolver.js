@@ -345,6 +345,7 @@ let UserRecipeAndCollectionResolver = class UserRecipeAndCollectionResolver {
         await userCollection_1.default.updateMany({ _id: data.removeFromTheseCollections }, { $pull: { recipes: data.recipe } }, { $set: { updatedAt: Date.now() } });
         let collections = data.addToTheseCollections;
         let lastIndex = collections.length - 1;
+        let addTotheseCollection = [];
         for (let i = 0; i < collections.length; i++) {
             6;
             let collection = await userCollection_1.default.findOne({
@@ -353,10 +354,13 @@ let UserRecipeAndCollectionResolver = class UserRecipeAndCollectionResolver {
             let recipeString = data.recipe.toString();
             let id = new mongoose_1.default.Types.ObjectId(recipeString).valueOf();
             if (collection.recipes.indexOf(id) !== -1) {
-                return new AppError_1.default(`This Recipe is Already in collection ${collection.name}`, 404);
+                continue;
+            }
+            else {
+                addTotheseCollection.push(collection._id);
             }
         }
-        await userCollection_1.default.updateMany({ _id: data.addToTheseCollections }, { $push: { recipes: data.recipe } }, { $set: { updatedAt: Date.now() } });
+        await userCollection_1.default.updateMany({ _id: addTotheseCollection }, { $push: { recipes: data.recipe } }, { $set: { updatedAt: Date.now() } });
         let member = await memberModel_1.default.findOneAndUpdate({ _id: user._id }, { lastModifiedCollection: collections[lastIndex] }, { new: true }).populate({
             path: 'collections',
             populate: {
