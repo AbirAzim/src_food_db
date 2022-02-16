@@ -16,11 +16,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
+const mongoose_1 = __importDefault(require("mongoose"));
 const NewUserRecipeInput_1 = __importDefault(require("./input-type/NewUserRecipeInput"));
 const AddExistingRecipeInput_1 = __importDefault(require("./input-type/AddExistingRecipeInput"));
 const ChangeRecipeCollectionInput_1 = __importDefault(require("./input-type/ChangeRecipeCollectionInput"));
 const RemoveACollectionInput_1 = __importDefault(require("./input-type/RemoveACollectionInput"));
 const EditCollection_1 = __importDefault(require("./input-type/EditCollection"));
+const AddOrRemoveRecipeFromCollectionInput_1 = __importDefault(require("./input-type/AddOrRemoveRecipeFromCollectionInput"));
 const AddToLastModifiedCollection_1 = __importDefault(require("./input-type/AddToLastModifiedCollection"));
 const Collection_1 = __importDefault(require("../schemas/Collection"));
 const Recipe_1 = __importDefault(require("../../recipe/schemas/Recipe"));
@@ -335,6 +337,36 @@ let UserRecipeAndCollectionResolver = class UserRecipeAndCollectionResolver {
         await userCollection_1.default.findOneAndUpdate({ _id: '61d7e644bb6b9a32a588fcf5' }, { $set: { recipes: [] } });
         return 'successfull';
     }
+    async addOrRemoveRecipeFromCollection(data) {
+        let user = await memberModel_1.default.findOne({ email: data.userEmail });
+        if (!user) {
+            return new AppError_1.default('User with that email not found', 404);
+        }
+        await userCollection_1.default.updateMany({ _id: data.removeFromTheseCollections }, { $pull: { recipes: data.recipe } }, { $set: { updatedAt: Date.now() } });
+        let collections = data.addToTheseCollections;
+        let lastIndex = collections.length - 1;
+        for (let i = 0; i < collections.length; i++) {
+            6;
+            let collection = await userCollection_1.default.findOne({
+                _id: collections[i],
+            });
+            let recipeString = data.recipe.toString();
+            let id = new mongoose_1.default.Types.ObjectId(recipeString).valueOf();
+            if (collection.recipes.indexOf(id) !== -1) {
+                return new AppError_1.default(`This Recipe is Already in collection ${collection.name}`, 404);
+            }
+        }
+        await userCollection_1.default.updateMany({ _id: data.addToTheseCollections }, { $push: { recipes: data.recipe } }, { $set: { updatedAt: Date.now() } });
+        let member = await memberModel_1.default.findOneAndUpdate({ _id: user._id }, { lastModifiedCollection: collections[lastIndex] }, { new: true }).populate({
+            path: 'collections',
+            populate: {
+                path: 'recipes',
+                model: 'Recipe',
+            },
+        });
+        console.log(member.collections);
+        return member.collections;
+    }
 };
 __decorate([
     (0, type_graphql_1.Mutation)(() => String),
@@ -405,6 +437,13 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], UserRecipeAndCollectionResolver.prototype, "changeCollection", null);
+__decorate([
+    (0, type_graphql_1.Mutation)(() => [Collection_1.default]),
+    __param(0, (0, type_graphql_1.Arg)('data')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [AddOrRemoveRecipeFromCollectionInput_1.default]),
+    __metadata("design:returntype", Promise)
+], UserRecipeAndCollectionResolver.prototype, "addOrRemoveRecipeFromCollection", null);
 UserRecipeAndCollectionResolver = __decorate([
     (0, type_graphql_1.Resolver)()
 ], UserRecipeAndCollectionResolver);
