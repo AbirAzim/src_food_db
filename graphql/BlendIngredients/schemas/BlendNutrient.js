@@ -13,27 +13,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
-const UniqueNutrient_1 = __importDefault(require("./UniqueNutrient"));
 const BlendNutrientData_1 = __importDefault(require("../../blendNutrient/schemas/BlendNutrientData"));
-let NutrientValue = class NutrientValue {
+let BlendNutrient = class BlendNutrient {
 };
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], BlendNutrient.prototype, "value", void 0);
+__decorate([
+    (0, type_graphql_1.Field)((type) => BlendNutrientData_1.default, { nullable: true }),
     __metadata("design:type", BlendNutrientData_1.default)
-], NutrientValue.prototype, "blendData", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(),
-    __metadata("design:type", String)
-], NutrientValue.prototype, "value", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(),
-    __metadata("design:type", String)
-], NutrientValue.prototype, "sourceId", void 0);
-__decorate([
-    (0, type_graphql_1.Field)((type) => UniqueNutrient_1.default),
-    __metadata("design:type", UniqueNutrient_1.default)
-], NutrientValue.prototype, "uniqueNutrientRefference", void 0);
-NutrientValue = __decorate([
+], BlendNutrient.prototype, "blendNutrientRefference", void 0);
+BlendNutrient = __decorate([
     (0, type_graphql_1.ObjectType)()
-], NutrientValue);
-exports.default = NutrientValue;
+], BlendNutrient);
+exports.default = BlendNutrient;

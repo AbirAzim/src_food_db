@@ -19,6 +19,8 @@ const type_graphql_1 = require("type-graphql");
 const ingredient_1 = __importDefault(require("../../../models/ingredient"));
 const uniqueNutrient_1 = __importDefault(require("../../../models/uniqueNutrient"));
 const RecycledIngredient_1 = __importDefault(require("../../../models/RecycledIngredient"));
+const mapToBlend_1 = __importDefault(require("../../../models/mapToBlend"));
+const blendNutrient_1 = __importDefault(require("../../../models/blendNutrient"));
 const EditIngredients_1 = __importDefault(require("./input-type/EditIngredients"));
 const EditNutrient_1 = __importDefault(require("./input-type/EditNutrient"));
 const createIngredient_1 = __importDefault(require("./input-type/createIngredient"));
@@ -149,54 +151,56 @@ let MemberResolver = class MemberResolver {
         }
         return 'done';
     }
-    async databaseShifting() {
-        let foods = fs_1.default.readFileSync('./temp/food.json', 'utf-8');
-        foods = JSON.parse(foods);
-        for (let i = 0; i < foods.length; i++) {
-            let findFood = await ingredient_1.default.findOne({
-                refDatabaseId: foods[i]._id,
-            });
-            if (!findFood) {
-                let food = {
-                    nutrients: [],
-                    portions: [],
-                    refDatabaseId: foods[i]._id,
-                    ingredientName: foods[i].name,
-                    ingredientId: '',
-                    category: '',
-                    blendStatus: 'Review',
-                    classType: '',
-                    source: foods[i].data_type,
-                    description: foods[i].description,
-                    sourceId: foods[i].NDB_number
-                        ? foods[i].NDB_number
-                        : foods[i].foodCode,
-                    sourceCategory: foods[i].categoryId.description,
-                    publication_date: foods[i].publication_date,
-                };
-                for (let j = 0; j < foods[i].nutrients.length; j++) {
-                    let newNutrient = {
-                        value: foods[i].nutrients[j].amount,
-                        sourceId: foods[i].nutrients[j].id,
-                        uniqueNutrientRefference: foods[i].nutrients[j].nutrientDescription._id,
-                    };
-                    food.nutrients.push(newNutrient);
-                }
-                for (let k = 0; k < foods[i].portions.length; k++) {
-                    let newPortion = {
-                        measurement: foods[i].portions[k].modifier,
-                        measurement2: foods[i].portions[k].measureUnitName,
-                        meausermentWeight: foods[i].portions[k].gram_weight,
-                        sourceId: foods[i].portions[k].id,
-                    };
-                    //@ts-ignore
-                    food.portions.push(newPortion);
-                }
-                await ingredient_1.default.create(food);
-            }
-        }
-        return 'done';
-    }
+    // @Query(() => String)
+    // async databaseShifting() {
+    //   let foods: any = fs.readFileSync('./temp/food.json', 'utf-8');
+    //   foods = JSON.parse(foods);
+    //   for (let i = 0; i < foods.length; i++) {
+    //     let findFood = await FoodSrcModel.findOne({
+    //       refDatabaseId: foods[i]._id,
+    //     });
+    //     if (!findFood) {
+    //       let food = {
+    //         nutrients: [] as NutrientValue[],
+    //         portions: [] as Portion[],
+    //         refDatabaseId: foods[i]._id,
+    //         ingredientName: foods[i].name,
+    //         ingredientId: '',
+    //         category: '',
+    //         blendStatus: 'Review',
+    //         classType: '',
+    //         source: foods[i].data_type,
+    //         description: foods[i].description,
+    //         sourceId: foods[i].NDB_number
+    //           ? foods[i].NDB_number
+    //           : foods[i].foodCode,
+    //         sourceCategory: foods[i].categoryId.description,
+    //         publication_date: foods[i].publication_date,
+    //       };
+    //       for (let j = 0; j < foods[i].nutrients.length; j++) {
+    //         let newNutrient = {
+    //           value: foods[i].nutrients[j].amount,
+    //           sourceId: foods[i].nutrients[j].id,
+    //           uniqueNutrientRefference:
+    //             foods[i].nutrients[j].nutrientDescription._id,
+    //         };
+    //         food.nutrients.push(newNutrient);
+    //       }
+    //       for (let k = 0; k < foods[i].portions.length; k++) {
+    //         let newPortion = {
+    //           measurement: foods[i].portions[k].modifier,
+    //           measurement2: foods[i].portions[k].measureUnitName,
+    //           meausermentWeight: foods[i].portions[k].gram_weight,
+    //           sourceId: foods[i].portions[k].id,
+    //         };
+    //         //@ts-ignore
+    //         food.portions.push(newPortion);
+    //       }
+    //       await FoodSrcModel.create(food);
+    //     }
+    //   }
+    //   return 'done';
+    // }
     // @Mutation(() => String)
     // async deleteFood() {
     //   await UniqueNutrientModel.deleteMany({});
@@ -411,8 +415,23 @@ let MemberResolver = class MemberResolver {
             }
             return acc;
         }, []);
-        console.log(returnNutrients[1]);
-        return returnNutrients;
+        let mappedReturnData = [];
+        for (let p = 0; p < returnNutrients.length; p++) {
+            let mapto = await mapToBlend_1.default.findOne({
+                srcUniqueNutrientId: returnNutrients[p].uniqueNutrientRefference._id,
+            });
+            if (!mapto) {
+                continue;
+            }
+            let blendData = await blendNutrient_1.default.findOne({
+                _id: mapto.blendNutrientId,
+            })
+                .populate('category')
+                .populate('parent');
+            returnNutrients[p].blendData = blendData;
+            mappedReturnData.push(returnNutrients[p]);
+        }
+        return mappedReturnData;
     }
     async removeIngredient(ingredientId) {
         let ingredient = await ingredient_1.default.findOne({ _id: ingredientId });
@@ -484,12 +503,6 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], MemberResolver.prototype, "storeAllUniqueNutrient", null);
-__decorate([
-    (0, type_graphql_1.Query)(() => String),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
-], MemberResolver.prototype, "databaseShifting", null);
 __decorate([
     (0, type_graphql_1.Query)(() => [Ingredient_1.default]),
     __param(0, (0, type_graphql_1.Arg)('searchTerm')),
@@ -580,6 +593,6 @@ exports.default = MemberResolver;
 //   ]
 // }
 // you
-// 2 
+// 2
 // me ()
 // 3

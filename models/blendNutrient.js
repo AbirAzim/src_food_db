@@ -6,8 +6,9 @@ const blendNutrient = new mongoose_1.Schema({
     nutrientName: String,
     altName: String,
     category: { type: mongoose_1.Schema.Types.ObjectId, ref: 'BlendNutrientCategory' },
-    status: { enum: ['active', 'review', 'archieve'], default: 'review' },
+    status: { enum: ['Active', 'Review', 'Archieve'] },
     parent: { type: mongoose_1.Schema.Types.ObjectId, ref: 'BlendNutrient' },
+    uniqueNutrientId: { type: mongoose_1.Schema.Types.ObjectId, ref: 'UniqueNutrient' },
     parentIsCategory: Boolean,
     rank: Number,
     unitName: String,
@@ -16,7 +17,7 @@ const blendNutrient = new mongoose_1.Schema({
     related_sources: [
         {
             source: String,
-            sourceId: { type: mongoose_1.Schema.Types.ObjectId, ref: 'UniqueNutrient' },
+            // sourceId: { type: Schema.Types.ObjectId, ref: 'UniqueNutrient' },
             sourceNutrientName: String,
             units: String,
         },

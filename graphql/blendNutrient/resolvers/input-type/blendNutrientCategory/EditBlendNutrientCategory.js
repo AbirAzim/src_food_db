@@ -13,27 +13,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
-const UniqueNutrient_1 = __importDefault(require("./UniqueNutrient"));
-const BlendNutrientData_1 = __importDefault(require("../../blendNutrient/schemas/BlendNutrientData"));
-let NutrientValue = class NutrientValue {
+const CreateEditBlendNutrientCategory_1 = __importDefault(require("./CreateEditBlendNutrientCategory"));
+let EditBlendNutrientCategory = class EditBlendNutrientCategory {
 };
 __decorate([
     (0, type_graphql_1.Field)(),
-    __metadata("design:type", BlendNutrientData_1.default)
-], NutrientValue.prototype, "blendData", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(),
     __metadata("design:type", String)
-], NutrientValue.prototype, "value", void 0);
+], EditBlendNutrientCategory.prototype, "editId", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(),
-    __metadata("design:type", String)
-], NutrientValue.prototype, "sourceId", void 0);
-__decorate([
-    (0, type_graphql_1.Field)((type) => UniqueNutrient_1.default),
-    __metadata("design:type", UniqueNutrient_1.default)
-], NutrientValue.prototype, "uniqueNutrientRefference", void 0);
-NutrientValue = __decorate([
-    (0, type_graphql_1.ObjectType)()
-], NutrientValue);
-exports.default = NutrientValue;
+    (0, type_graphql_1.Field)((type) => CreateEditBlendNutrientCategory_1.default),
+    __metadata("design:type", CreateEditBlendNutrientCategory_1.default)
+], EditBlendNutrientCategory.prototype, "editableObject", void 0);
+EditBlendNutrientCategory = __decorate([
+    (0, type_graphql_1.InputType)()
+], EditBlendNutrientCategory);
+exports.default = EditBlendNutrientCategory;
