@@ -23,7 +23,7 @@ const AdminCollectionResolver_1 = __importDefault(require("./graphql/admin/resol
 const UserNoteResolver_1 = __importDefault(require("./graphql/member/resolvers/UserNoteResolver"));
 const BlendNutrientCategoryResolver_1 = __importDefault(require("./graphql/blendNutrient/resolvers/BlendNutrientCategoryResolver"));
 const BlendNutrientResolver_1 = __importDefault(require("./graphql/blendNutrient/resolvers/BlendNutrientResolver"));
-const BlendIngredientsResolvers_1 = __importDefault(require("./graphql/blendIngredients/resolvers/BlendIngredientsResolvers"));
+// import BlendIngredientResolver from './graphql/blendIngredients/resolvers/BlendIngredientsResolvers';
 process.on('uncaughtException', (err) => {
     console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
     console.log(err.name, err.message);
@@ -57,7 +57,6 @@ async function bootstrap() {
                 UserNoteResolver_1.default,
                 BlendNutrientCategoryResolver_1.default,
                 BlendNutrientResolver_1.default,
-                BlendIngredientsResolvers_1.default,
             ],
         });
     }
