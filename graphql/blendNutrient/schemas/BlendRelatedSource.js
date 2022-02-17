@@ -1,4 +1,12 @@
 "use strict";
+// [
+//   {
+//     source: String,
+//     sourceId: { type: Schema.Types.ObjectId, ref: 'UniqueNutrient' },
+//     sourceNutrientName: String,
+//     units: String,
+//   },
+// ],
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -10,21 +18,25 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
-let AddOrRemoveRecipeFromCollectionInput = class AddOrRemoveRecipeFromCollectionInput {
+let BlendRelatedSource = class BlendRelatedSource {
 };
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
-], AddOrRemoveRecipeFromCollectionInput.prototype, "userEmail", void 0);
+], BlendRelatedSource.prototype, "source", void 0);
 __decorate([
-    (0, type_graphql_1.Field)((type) => [type_graphql_1.ID], { nullable: true }),
-    __metadata("design:type", Array)
-], AddOrRemoveRecipeFromCollectionInput.prototype, "addToTheseCollections", void 0);
-__decorate([
-    (0, type_graphql_1.Field)((type) => type_graphql_1.ID),
+    (0, type_graphql_1.Field)((type) => type_graphql_1.ID, { nullable: true }),
     __metadata("design:type", String)
-], AddOrRemoveRecipeFromCollectionInput.prototype, "recipe", void 0);
-AddOrRemoveRecipeFromCollectionInput = __decorate([
-    (0, type_graphql_1.InputType)()
-], AddOrRemoveRecipeFromCollectionInput);
-exports.default = AddOrRemoveRecipeFromCollectionInput;
+], BlendRelatedSource.prototype, "sourceId", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], BlendRelatedSource.prototype, "sourceNutrientName", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], BlendRelatedSource.prototype, "units", void 0);
+BlendRelatedSource = __decorate([
+    (0, type_graphql_1.ObjectType)()
+], BlendRelatedSource);
+exports.default = BlendRelatedSource;

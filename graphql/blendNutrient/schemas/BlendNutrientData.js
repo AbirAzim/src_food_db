@@ -15,6 +15,7 @@ var BlendNutrientData_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
 const BlendNutrientCategory_1 = __importDefault(require("./BlendNutrientCategory"));
+const BlendRelatedSource_1 = __importDefault(require("./BlendRelatedSource"));
 let BlendNutrientData = BlendNutrientData_1 = class BlendNutrientData {
 };
 __decorate([
@@ -53,6 +54,22 @@ __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", Number)
 ], BlendNutrientData.prototype, "rank", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], BlendNutrientData.prototype, "min_measure", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], BlendNutrientData.prototype, "unitName", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], BlendNutrientData.prototype, "units", void 0);
+__decorate([
+    (0, type_graphql_1.Field)((type) => [BlendRelatedSource_1.default], { nullable: true }),
+    __metadata("design:type", Array)
+], BlendNutrientData.prototype, "related_sources", void 0);
 BlendNutrientData = BlendNutrientData_1 = __decorate([
     (0, type_graphql_1.ObjectType)()
 ], BlendNutrientData);

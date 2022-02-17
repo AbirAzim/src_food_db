@@ -44,6 +44,18 @@ __decorate([
     (0, type_graphql_1.Field)(),
     __metadata("design:type", Number)
 ], AddNewBlendNutrient.prototype, "rank", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], AddNewBlendNutrient.prototype, "min_measure", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], AddNewBlendNutrient.prototype, "unitName", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], AddNewBlendNutrient.prototype, "units", void 0);
 AddNewBlendNutrient = __decorate([
     (0, type_graphql_1.InputType)()
 ], AddNewBlendNutrient);

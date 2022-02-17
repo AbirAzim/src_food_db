@@ -339,18 +339,22 @@ let UserRecipeAndCollectionResolver = class UserRecipeAndCollectionResolver {
     }
     async addOrRemoveRecipeFromCollection(data) {
         let user = await memberModel_1.default.findOne({ email: data.userEmail });
+        let pullFromUserCollections = user.collections;
+        console.log(pullFromUserCollections);
         if (!user) {
             return new AppError_1.default('User with that email not found', 404);
         }
-        await userCollection_1.default.updateMany({ _id: data.removeFromTheseCollections }, { $pull: { recipes: data.recipe } }, { $set: { updatedAt: Date.now() } });
         let collections = data.addToTheseCollections;
         let lastIndex = collections.length - 1;
         let addTotheseCollection = [];
         for (let i = 0; i < collections.length; i++) {
-            6;
             let collection = await userCollection_1.default.findOne({
                 _id: collections[i],
             });
+            console.log(typeof collection._id);
+            let index = pullFromUserCollections.indexOf(collection._id);
+            pullFromUserCollections.splice(index, 1);
+            console.log(pullFromUserCollections);
             let recipeString = data.recipe.toString();
             let id = new mongoose_1.default.Types.ObjectId(recipeString).valueOf();
             if (collection.recipes.indexOf(id) !== -1) {
@@ -360,6 +364,7 @@ let UserRecipeAndCollectionResolver = class UserRecipeAndCollectionResolver {
                 addTotheseCollection.push(collection._id);
             }
         }
+        await userCollection_1.default.updateMany({ _id: pullFromUserCollections }, { $pull: { recipes: data.recipe } }, { $set: { updatedAt: Date.now() } });
         await userCollection_1.default.updateMany({ _id: addTotheseCollection }, { $push: { recipes: data.recipe } }, { $set: { updatedAt: Date.now() } });
         let member = await memberModel_1.default.findOneAndUpdate({ _id: user._id }, { lastModifiedCollection: collections[lastIndex] }, { new: true }).populate({
             path: 'collections',
@@ -368,7 +373,6 @@ let UserRecipeAndCollectionResolver = class UserRecipeAndCollectionResolver {
                 model: 'Recipe',
             },
         });
-        console.log(member.collections);
         return member.collections;
     }
 };

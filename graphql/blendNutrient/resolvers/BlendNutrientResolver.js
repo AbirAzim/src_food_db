@@ -17,6 +17,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
 const blendNutrient_1 = __importDefault(require("../../../models/blendNutrient"));
+const uniqueNutrient_1 = __importDefault(require("../../../models/uniqueNutrient"));
 const AddNewBlendNutrient_1 = __importDefault(require("./input-type/blendNutrient/AddNewBlendNutrient"));
 const EditBlendNutrient_1 = __importDefault(require("./input-type/blendNutrient/EditBlendNutrient"));
 const BlendNutrientData_1 = __importDefault(require("../schemas/BlendNutrientData"));
@@ -48,6 +49,23 @@ let BlendNutrientResolver = class BlendNutrientResolver {
         await blendNutrient_1.default.findByIdAndUpdate(data.editId, data.editableObject);
         return 'BlendNutrient Updated';
     }
+    async littleChange() {
+        let blendNutrients = await blendNutrient_1.default.find();
+        for (let i = 0; i < blendNutrients.length; i++) {
+            let un = await uniqueNutrient_1.default.findOne({
+                _id: blendNutrients[i].uniqueNutrientId,
+            });
+            let relatedSrc = blendNutrients[i].related_sources;
+            relatedSrc[0].sourceId = un._id;
+            await blendNutrient_1.default.findByIdAndUpdate(blendNutrients[i]._id, {
+                related_sources: relatedSrc,
+                unitName: un.unitName,
+                units: '',
+                min_measure: '',
+            });
+        }
+        return 'Done';
+    }
 };
 __decorate([
     (0, type_graphql_1.Mutation)(() => String),
@@ -76,6 +94,12 @@ __decorate([
     __metadata("design:paramtypes", [EditBlendNutrient_1.default]),
     __metadata("design:returntype", Promise)
 ], BlendNutrientResolver.prototype, "editBlendNutrient", null);
+__decorate([
+    (0, type_graphql_1.Mutation)(() => String),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], BlendNutrientResolver.prototype, "littleChange", null);
 BlendNutrientResolver = __decorate([
     (0, type_graphql_1.Resolver)()
 ], BlendNutrientResolver);

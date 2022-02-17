@@ -21,7 +21,7 @@ const blendNutrient = new mongoose_1.Schema({
     related_sources: [
         {
             source: String,
-            // sourceId: { type: Schema.Types.ObjectId, ref: 'UniqueNutrient' },
+            sourceId: { type: mongoose_1.Schema.Types.ObjectId, ref: 'UniqueNutrient' },
             sourceNutrientName: String,
             units: String,
         },
