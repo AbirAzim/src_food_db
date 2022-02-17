@@ -18,8 +18,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
 const blendNutrient_1 = __importDefault(require("../../../models/blendNutrient"));
 const uniqueNutrient_1 = __importDefault(require("../../../models/uniqueNutrient"));
+const mapToBlend_1 = __importDefault(require("../../../models/mapToBlend"));
 const AddNewBlendNutrient_1 = __importDefault(require("./input-type/blendNutrient/AddNewBlendNutrient"));
 const EditBlendNutrient_1 = __importDefault(require("./input-type/blendNutrient/EditBlendNutrient"));
+const AddNewBlendNutrientFromSrc_1 = __importDefault(require("./input-type/blendNutrient/AddNewBlendNutrientFromSrc"));
 const BlendNutrientData_1 = __importDefault(require("../schemas/BlendNutrientData"));
 const AppError_1 = __importDefault(require("../../../utils/AppError"));
 let BlendNutrientResolver = class BlendNutrientResolver {
@@ -49,22 +51,40 @@ let BlendNutrientResolver = class BlendNutrientResolver {
         await blendNutrient_1.default.findByIdAndUpdate(data.editId, data.editableObject);
         return 'BlendNutrient Updated';
     }
-    async littleChange() {
-        let blendNutrients = await blendNutrient_1.default.find();
-        for (let i = 0; i < blendNutrients.length; i++) {
-            let un = await uniqueNutrient_1.default.findOne({
-                _id: blendNutrients[i].uniqueNutrientId,
-            });
-            let relatedSrc = blendNutrients[i].related_sources;
-            relatedSrc[0].sourceId = un._id;
-            await blendNutrient_1.default.findByIdAndUpdate(blendNutrients[i]._id, {
-                related_sources: relatedSrc,
-                unitName: un.unitName,
-                units: '',
-                min_measure: '',
-            });
+    async addNewBlendNutrientFromSrc(data) {
+        let un = await uniqueNutrient_1.default.findOne({
+            _id: data.srcNutrientId,
+        });
+        if (!un) {
+            return new AppError_1.default('Nutrient not found in source', 400);
         }
-        return 'Done';
+        let checkBlendId = await blendNutrient_1.default.findOne({
+            uniqueNutrientId: data.srcNutrientId,
+        });
+        if (checkBlendId) {
+            return new AppError_1.default('Unique Nutrient Id already exists', 400);
+        }
+        let newBlendNutrient = {
+            nutrientName: un.nutrientName,
+            altName: '',
+            category: null,
+            status: 'Review',
+            parent: '',
+            uniqueNutrientId: un._id,
+            parentIsCategory: false,
+            rank: un.rank,
+            unitName: un.unitName,
+            units: '',
+            min_measure: '',
+            related_sources: un.related_sources,
+        };
+        newBlendNutrient.related_sources[0].sourceId = un._id;
+        let newBlendNutrientData = await blendNutrient_1.default.create(newBlendNutrient);
+        await mapToBlend_1.default.create({
+            blendNutrientId: newBlendNutrientData._id,
+            srcUniqueNutrientId: un._id,
+        });
+        return 'BlendNutrient Created Successfull';
     }
 };
 __decorate([
@@ -96,10 +116,11 @@ __decorate([
 ], BlendNutrientResolver.prototype, "editBlendNutrient", null);
 __decorate([
     (0, type_graphql_1.Mutation)(() => String),
+    __param(0, (0, type_graphql_1.Arg)('data')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [AddNewBlendNutrientFromSrc_1.default]),
     __metadata("design:returntype", Promise)
-], BlendNutrientResolver.prototype, "littleChange", null);
+], BlendNutrientResolver.prototype, "addNewBlendNutrientFromSrc", null);
 BlendNutrientResolver = __decorate([
     (0, type_graphql_1.Resolver)()
 ], BlendNutrientResolver);
