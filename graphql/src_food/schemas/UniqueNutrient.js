@@ -65,6 +65,10 @@ __decorate([
     (0, type_graphql_1.Field)((type) => [RelatedSource_1.default], { nullable: true }),
     __metadata("design:type", Array)
 ], UniqueNutrient.prototype, "related_sources", void 0);
+__decorate([
+    (0, type_graphql_1.Field)((type) => type_graphql_1.ID, { nullable: true }),
+    __metadata("design:type", String)
+], UniqueNutrient.prototype, "mapTo", void 0);
 UniqueNutrient = UniqueNutrient_1 = __decorate([
     (0, type_graphql_1.ObjectType)()
 ], UniqueNutrient);

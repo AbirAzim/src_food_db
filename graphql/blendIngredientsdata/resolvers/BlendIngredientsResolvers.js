@@ -20,6 +20,7 @@ const ingredient_1 = __importDefault(require("../../../models/ingredient"));
 const blendIngredient_1 = __importDefault(require("../../../models/blendIngredient"));
 const mapToBlend_1 = __importDefault(require("../../../models/mapToBlend"));
 const AddBlendIngredient_1 = __importDefault(require("./input-type/AddBlendIngredient"));
+const IngredientFilter_1 = __importDefault(require("./input-type/IngredientFilter"));
 const BlendIngredientData_1 = __importDefault(require("../schemas/BlendIngredientData"));
 const AppError_1 = __importDefault(require("../../../utils/AppError"));
 let BlendIngredientResolver = class BlendIngredientResolver {
@@ -83,6 +84,27 @@ let BlendIngredientResolver = class BlendIngredientResolver {
         }
         return 'Added successfully';
     }
+    async filterIngredientByCategoryAndClass(data) {
+        let ingredients;
+        if (data.ingredientCategory === 'All') {
+            ingredients = await blendIngredient_1.default.find({
+                classType: 'Class - ' + data.IngredientClass,
+            }).populate({
+                path: 'blendNutrients.blendNutrientRefference',
+                model: 'BlendNutrient',
+            });
+        }
+        else {
+            ingredients = await blendIngredient_1.default.find({
+                category: data.ingredientCategory,
+                classType: 'Class - ' + data.IngredientClass,
+            }).populate({
+                path: 'blendNutrients.blendNutrientRefference',
+                model: 'BlendNutrient',
+            });
+        }
+        return ingredients;
+    }
 };
 __decorate([
     (0, type_graphql_1.Query)(() => [BlendIngredientData_1.default]),
@@ -118,6 +140,13 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], BlendIngredientResolver.prototype, "addNewBlendIngredientFromSrc", null);
+__decorate([
+    (0, type_graphql_1.Query)(() => [BlendIngredientData_1.default]),
+    __param(0, (0, type_graphql_1.Arg)('data')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [IngredientFilter_1.default]),
+    __metadata("design:returntype", Promise)
+], BlendIngredientResolver.prototype, "filterIngredientByCategoryAndClass", null);
 BlendIngredientResolver = __decorate([
     (0, type_graphql_1.Resolver)()
 ], BlendIngredientResolver);

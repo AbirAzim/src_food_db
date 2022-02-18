@@ -29,6 +29,16 @@ const recipeSchema = new mongoose_1.Schema({
             ],
         },
     ],
+    blendingIngredients: [
+        {
+            ingredientId: { type: mongoose_1.Schema.Types.ObjectId, ref: 'BlendIngredient' },
+            selectedPortion: { name: String, quantity: Number, gram: Number },
+            weightInGram: Number,
+            portions: [
+                { name: String, quantiy: Number, default: Boolean, gram: Number },
+            ],
+        },
+    ],
     testIngredient: [
         {
             quantity: String,

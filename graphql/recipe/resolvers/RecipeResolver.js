@@ -68,7 +68,6 @@ let RecipeResolver = class RecipeResolver {
     async getAllRecipes() {
         const recipes = await recipe_1.default.find()
             .populate('ingredients')
-            .populate('ingredients')
             .populate('brand')
             .populate('recipeBlendCategory');
         return recipes;
