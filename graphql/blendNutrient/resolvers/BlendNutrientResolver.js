@@ -65,7 +65,7 @@ let BlendNutrientResolver = class BlendNutrientResolver {
             return new AppError_1.default('Unique Nutrient Id already exists', 400);
         }
         let newBlendNutrient = {
-            nutrientName: un.nutrientName,
+            nutrientName: un.nutrient,
             altName: '',
             category: null,
             status: 'Review',

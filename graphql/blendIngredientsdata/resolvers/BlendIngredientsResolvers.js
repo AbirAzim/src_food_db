@@ -205,41 +205,36 @@ let BlendIngredientResolver = class BlendIngredientResolver {
         for (let i = 0; i < ingredients.length; i++) {
             nutrients.push(...ingredients[i].blendNutrients);
         }
-        console.log(nutrients);
-        return 'hello';
-        // //@ts-ignore
-        // let returnNutrients = nutrients.reduce((acc, nutrient) => {
-        //   //@ts-ignore
-        //   let obj = acc.find(
-        //     //@ts-ignore
-        //     (o) =>
-        //       String(o.uniqueNutrientRefference._id) ===
-        //       String(nutrient.uniqueNutrientRefference._id)
-        //   );
-        //   if (!obj) {
-        //     nutrient.count = 1;
-        //     acc.push(nutrient);
-        //   } else {
-        //     //@ts-ignore
-        //     const index = acc.findIndex((element, index) => {
-        //       if (
-        //         String(element.uniqueNutrientRefference._id) ===
-        //         String(obj.uniqueNutrientRefference._id)
-        //       ) {
-        //         return true;
-        //       }
-        //     });
-        //     acc[index].count++;
-        //     acc[index].value = +acc[index].value + +nutrient.value;
-        //     if (
-        //       String(acc[index].uniqueNutrientRefference._id) ===
-        //       '61c618813ced314894f2924a'
-        //     ) {
-        //       console.log(acc[index].value);
-        //     }
-        //   }
-        //   return acc;
-        // }, []);
+        //@ts-ignore
+        let returnNutrients = nutrients.reduce((acc, nutrient) => {
+            //@ts-ignore
+            let obj = acc.find(
+            //@ts-ignore
+            (o) => String(o.blendNutrientRefference._id) ===
+                String(nutrient.blendNutrientRefference._id));
+            if (!obj) {
+                nutrient.count = 1;
+                acc.push(nutrient);
+            }
+            else {
+                //@ts-ignore
+                const index = acc.findIndex((element, index) => {
+                    if (String(element.blendNutrientRefference._id) ===
+                        String(obj.blendNutrientRefference._id)) {
+                        return true;
+                    }
+                });
+                acc[index].count++;
+                acc[index].value = +acc[index].value + +nutrient.value;
+            }
+            return acc;
+        }, []);
+        console.log(returnNutrients.length);
+        let getRootNutrients = returnNutrients.filter(
+        //@ts-ignore
+        (rn) => rn.blendNutrientRefference.parentIsCategory);
+        console.log(getRootNutrients.length);
+        return JSON.stringify(getRootNutrients);
         // let mappedReturnData = [];
         // for (let p = 0; p < returnNutrients.length; p++) {
         //   let mapto: any = await MapToBlendModel.findOne({
