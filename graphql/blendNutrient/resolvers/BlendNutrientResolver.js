@@ -69,7 +69,7 @@ let BlendNutrientResolver = class BlendNutrientResolver {
             altName: '',
             category: null,
             status: 'Review',
-            parent: '',
+            parent: null,
             uniqueNutrientId: un._id,
             parentIsCategory: false,
             rank: un.rank,

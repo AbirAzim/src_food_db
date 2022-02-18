@@ -19,17 +19,17 @@ const recipeSchema = new mongoose_1.Schema({
     tempBlendCategory: String,
     brand: { type: mongoose_1.Schema.Types.ObjectId, ref: 'RecipeBrand' },
     foodCategories: [String],
+    // ingredients: [
+    //   {
+    //     ingredientId: { type: Schema.Types.ObjectId, ref: 'Ingredient' },
+    //     selectedPortion: { name: String, quantity: Number, gram: Number },
+    //     weightInGram: Number,
+    //     portions: [
+    //       { name: String, quantiy: Number, default: Boolean, gram: Number },
+    //     ],
+    //   },
+    // ],
     ingredients: [
-        {
-            ingredientId: { type: mongoose_1.Schema.Types.ObjectId, ref: 'Ingredient' },
-            selectedPortion: { name: String, quantity: Number, gram: Number },
-            weightInGram: Number,
-            portions: [
-                { name: String, quantiy: Number, default: Boolean, gram: Number },
-            ],
-        },
-    ],
-    blendingIngredients: [
         {
             ingredientId: { type: mongoose_1.Schema.Types.ObjectId, ref: 'BlendIngredient' },
             selectedPortion: { name: String, quantity: Number, gram: Number },

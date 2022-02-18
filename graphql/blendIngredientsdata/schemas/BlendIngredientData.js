@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
 const Ingredient_1 = __importDefault(require("../../src_food/schemas/Ingredient"));
 const NutrientValue_1 = __importDefault(require("../../src_food/schemas/NutrientValue"));
-const Portion_1 = __importDefault(require("../../src_food/schemas/Portion"));
+const BlendPortion_1 = __importDefault(require("./BlendPortion"));
 const BlendNutrient_1 = __importDefault(require("./BlendNutrient"));
 let BlendIngredientData = class BlendIngredientData {
 };
@@ -56,7 +56,7 @@ __decorate([
     __metadata("design:type", Array)
 ], BlendIngredientData.prototype, "notBlendNutrients", void 0);
 __decorate([
-    (0, type_graphql_1.Field)((type) => [Portion_1.default], { nullable: true }),
+    (0, type_graphql_1.Field)((type) => [BlendPortion_1.default], { nullable: true }),
     __metadata("design:type", Array)
 ], BlendIngredientData.prototype, "portions", void 0);
 __decorate([

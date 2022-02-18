@@ -530,7 +530,8 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], MemberResolver.prototype, "getIngredientInfoBasedOnDefaultPortion", null);
 __decorate([
-    (0, type_graphql_1.Query)(() => [NutrientValue_1.default]),
+    (0, type_graphql_1.Query)(() => [NutrientValue_1.default]) // wait
+    ,
     __param(0, (0, type_graphql_1.Arg)('ingredientsInfo', (type) => [IngredientInfo_1.default])),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Array]),

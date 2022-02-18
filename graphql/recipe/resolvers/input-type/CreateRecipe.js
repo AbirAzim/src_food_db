@@ -54,7 +54,7 @@ __decorate([
     __metadata("design:type", String)
 ], CreateRecipe.prototype, "recipeYield", void 0);
 __decorate([
-    (0, type_graphql_1.Field)((type) => [String]),
+    (0, type_graphql_1.Field)((type) => [String], { nullable: true }),
     __metadata("design:type", Array)
 ], CreateRecipe.prototype, "recipeIngredients", void 0);
 __decorate([
