@@ -21,7 +21,7 @@ const uniqueNutrient_1 = __importDefault(require("../../../models/uniqueNutrient
 const RecycledIngredient_1 = __importDefault(require("../../../models/RecycledIngredient"));
 const mapToBlend_1 = __importDefault(require("../../../models/mapToBlend"));
 const blendNutrient_1 = __importDefault(require("../../../models/blendNutrient"));
-const EditIngredients_1 = __importDefault(require("./input-type/EditIngredients"));
+const EditBlendIngredient_1 = __importDefault(require("../../blendIngredientsdata/resolvers/input-type/EditBlendIngredient"));
 const EditNutrient_1 = __importDefault(require("./input-type/EditNutrient"));
 const createIngredient_1 = __importDefault(require("./input-type/createIngredient"));
 const IngredientInfo_1 = __importDefault(require("./input-type/IngredientInfo"));
@@ -506,7 +506,7 @@ __decorate([
     (0, type_graphql_1.Mutation)(() => String),
     __param(0, (0, type_graphql_1.Arg)('data')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [EditIngredients_1.default]),
+    __metadata("design:paramtypes", [EditBlendIngredient_1.default]),
     __metadata("design:returntype", Promise)
 ], MemberResolver.prototype, "EditIngredient", null);
 __decorate([

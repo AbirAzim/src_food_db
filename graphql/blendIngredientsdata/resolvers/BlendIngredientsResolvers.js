@@ -23,16 +23,73 @@ const mapToBlend_1 = __importDefault(require("../../../models/mapToBlend"));
 const AddBlendIngredient_1 = __importDefault(require("./input-type/AddBlendIngredient"));
 const IngredientFilter_1 = __importDefault(require("./input-type/IngredientFilter"));
 const BlendIngredientInfo_1 = __importDefault(require("./input-type/BlendIngredientInfo"));
+const EditBlendIngredient_1 = __importDefault(require("./input-type/EditBlendIngredient"));
 const BlendIngredientData_1 = __importDefault(require("../schemas/BlendIngredientData"));
+const ReturnBlendIngredient_1 = __importDefault(require("../schemas/ReturnBlendIngredient"));
 const ReturnBlendIngredientBasedOnDefaultPortion_1 = __importDefault(require("../schemas/ReturnBlendIngredientBasedOnDefaultPortion"));
 const AppError_1 = __importDefault(require("../../../utils/AppError"));
 let BlendIngredientResolver = class BlendIngredientResolver {
     async getAllBlendIngredients() {
-        let blendIngredients = await blendIngredient_1.default.find().populate({
-            path: 'blendNutrients.blendNutrientRefference',
-            model: 'BlendNutrient',
-        });
-        return blendIngredients;
+        let blendIngredients = await blendIngredient_1.default.find();
+        let returnIngredients = [];
+        for (let i = 0; i < blendIngredients.length; i++) {
+            let returnIngredient = blendIngredients[i];
+            returnIngredient.nutrientCount =
+                blendIngredients[i].blendNutrients.length;
+            returnIngredient.notBlendNutrientCount =
+                blendIngredients[i].notBlendNutrients.length;
+            returnIngredient.imageCount = blendIngredients[i].images.length;
+            returnIngredients.push(returnIngredient);
+        }
+        return returnIngredients;
+    }
+    async EditIngredient(data) {
+        let food = await blendIngredient_1.default.findOne({ _id: data.editId });
+        if (!food) {
+            return new AppError_1.default('Ingredient not found', 404);
+        }
+        console.log(data.editableObject.defaultPortion);
+        if (data.editableObject.defaultPortion === '' ||
+            data.editableObject.defaultPortion === null ||
+            data.editableObject.defaultPortion === undefined) {
+            console.log('no default portion');
+            await blendIngredient_1.default.findOneAndUpdate({ _id: data.editId }, data.editableObject);
+        }
+        else {
+            let newData = food;
+            //@ts-ignore
+            let newPortions = [];
+            for (let i = 0; i < newData.portions.length; i++) {
+                // console.log(newData.portions[i]._id);
+                // console.log(data.editableObject.defaultPortion);
+                if (String(newData.portions[i]._id) ===
+                    String(data.editableObject.defaultPortion)) {
+                    console.log('matched');
+                    let changePortion = {
+                        measurement: newData.portions[i].measurement,
+                        measurement2: newData.portions[i].measurement2,
+                        meausermentWeight: newData.portions[i].meausermentWeight,
+                        default: true,
+                        _id: newData.portions[i]._id,
+                    };
+                    newPortions.push(changePortion);
+                }
+                else {
+                    let changePortion2 = {
+                        measurement: newData.portions[i].measurement,
+                        measurement2: newData.portions[i].measurement2,
+                        meausermentWeight: newData.portions[i].meausermentWeight,
+                        default: false,
+                        _id: newData.portions[i]._id,
+                    };
+                    newPortions.push(changePortion2);
+                }
+            }
+            newData.portions = newPortions;
+            await blendIngredient_1.default.findOneAndUpdate({ _id: data.editId }, newData);
+            await blendIngredient_1.default.findOneAndUpdate({ _id: data.editId }, data.editableObject);
+        }
+        return 'Successfully Edited';
     }
     async getBlendIngredientById(id) {
         let blendIngredient = await blendIngredient_1.default.findById(id).populate({
@@ -230,10 +287,21 @@ let BlendIngredientResolver = class BlendIngredientResolver {
             return acc;
         }, []);
         console.log(returnNutrients.length);
+        let childNutrients = [];
         let getRootNutrients = returnNutrients.filter(
         //@ts-ignore
-        (rn) => rn.blendNutrientRefference.parentIsCategory);
-        console.log(getRootNutrients.length);
+        (rn) => {
+            if (!rn.blendNutrientRefference.parentIsCategory) {
+                childNutrients.push(rn);
+            }
+            else
+                return true;
+        });
+        // for (let m = 0; m < childNutrients.length; m++) {
+        //   let parent = getRootNutrients.filter(
+        //     (e) => e._id === childNutrients[m]._id
+        //   )[0];
+        // }
         return JSON.stringify(getRootNutrients);
         // let mappedReturnData = [];
         // for (let p = 0; p < returnNutrients.length; p++) {
@@ -255,11 +323,18 @@ let BlendIngredientResolver = class BlendIngredientResolver {
     }
 };
 __decorate([
-    (0, type_graphql_1.Query)(() => [BlendIngredientData_1.default]),
+    (0, type_graphql_1.Query)(() => [ReturnBlendIngredient_1.default]),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], BlendIngredientResolver.prototype, "getAllBlendIngredients", null);
+__decorate([
+    (0, type_graphql_1.Mutation)(() => String),
+    __param(0, (0, type_graphql_1.Arg)('data')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [EditBlendIngredient_1.default]),
+    __metadata("design:returntype", Promise)
+], BlendIngredientResolver.prototype, "EditIngredient", null);
 __decorate([
     (0, type_graphql_1.Query)(() => BlendIngredientData_1.default),
     __param(0, (0, type_graphql_1.Arg)('id')),
