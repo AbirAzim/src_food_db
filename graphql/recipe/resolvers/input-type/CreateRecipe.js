@@ -94,7 +94,7 @@ __decorate([
     __metadata("design:type", String)
 ], CreateRecipe.prototype, "favicon", void 0);
 __decorate([
-    (0, type_graphql_1.Field)((type) => type_graphql_1.ID),
+    (0, type_graphql_1.Field)((type) => type_graphql_1.ID, { nullable: true }),
     __metadata("design:type", String)
 ], CreateRecipe.prototype, "userId", void 0);
 __decorate([

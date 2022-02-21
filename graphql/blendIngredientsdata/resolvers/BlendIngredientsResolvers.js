@@ -285,55 +285,62 @@ let BlendIngredientResolver = class BlendIngredientResolver {
             }
             return acc;
         }, []);
-        let childNutrients = [];
-        let getRootNutrients = returnNutrients.filter(
-        //@ts-ignore
-        (rn) => {
-            if (!rn.blendNutrientRefference.parentIsCategory) {
-                childNutrients.push(rn);
-            }
-            else
-                return true;
-        });
-        let nutrientCategories = [
-            {
-                _id: '6203a9061c100bd226c13c65',
-                categoryName: 'Calories',
-            },
-            {
-                _id: '6203a9381c100bd226c13c67',
-                categoryName: 'Energy',
-            },
-            {
-                _id: '6203a96e1c100bd226c13c69',
-                categoryName: 'Vitamins',
-            },
-            {
-                _id: '6203a98a1c100bd226c13c6b',
-                categoryName: 'Minerals',
-            },
-        ];
-        let outPut = {};
-        let childOutPut = {};
-        for (let i = 0; i < getRootNutrients.length; i++) {
-            let category = nutrientCategories.filter((nc) => nc._id ===
-                String(getRootNutrients[i].blendNutrientRefference.category))[0];
-            if (!outPut[category.categoryName]) {
-                outPut[category.categoryName] = {
-                    value: +getRootNutrients[i].value,
-                    data: [getRootNutrients[i].blendNutrientRefference],
-                };
-            }
-            else {
-                outPut[category.categoryName].value =
-                    +outPut[category.categoryName].value + +getRootNutrients[i].value;
-                outPut[category.categoryName].data.push(getRootNutrients[i].blendNutrientRefference);
-                //@ts-ignore
-                outPut[category.categoryName].data.sort((a, b) => a.rank - b.rank);
-            }
-        }
-        console.log(outPut.Energy.data);
-        return 'hello';
+        // for(let j = 0;j < returnNutrients.length;j++){
+        //   returnNutrients[j].category = await BlendNutrientCategoryModel.findOne({_id: returnNutrients[j].category});
+        //   returnNutrients[j].parent = returnNutrients[j].parent === null? null : await BlendNutrientModel.findOne({_id: returnNutrients[]})
+        // }
+        // let childNutrients: any = [];
+        // let getRootNutrients = returnNutrients.filter(
+        //   //@ts-ignore
+        //   (rn) => {
+        //     if (!rn.blendNutrientRefference.parentIsCategory) {
+        //       childNutrients.push(rn);
+        //     } else return true;
+        //   }
+        // );
+        // let nutrientCategories = [
+        //   {
+        //     _id: '6203a9061c100bd226c13c65',
+        //     categoryName: 'Calories',
+        //   },
+        //   {
+        //     _id: '6203a9381c100bd226c13c67',
+        //     categoryName: 'Energy',
+        //   },
+        //   {
+        //     _id: '6203a96e1c100bd226c13c69',
+        //     categoryName: 'Vitamins',
+        //   },
+        //   {
+        //     _id: '6203a98a1c100bd226c13c6b',
+        //     categoryName: 'Minerals',
+        //   },
+        // ];
+        // let outPut: any = {};
+        // let childOutPut: any = {};
+        // for (let i = 0; i < getRootNutrients.length; i++) {
+        //   let category = nutrientCategories.filter(
+        //     (nc) =>
+        //       nc._id ===
+        //       String(getRootNutrients[i].blendNutrientRefference.category)
+        //   )[0];
+        //   if (!outPut[category.categoryName]) {
+        //     outPut[category.categoryName] = {
+        //       value: +getRootNutrients[i].value,
+        //       data: [getRootNutrients[i].blendNutrientRefference],
+        //     };
+        //   } else {
+        //     outPut[category.categoryName].value =
+        //       +outPut[category.categoryName].value + +getRootNutrients[i].value;
+        //     outPut[category.categoryName].data.push(
+        //       getRootNutrients[i].blendNutrientRefference
+        //     );
+        //     //@ts-ignore
+        //     outPut[category.categoryName].data.sort((a, b) => a.rank - b.rank);
+        //   }
+        // }
+        // console.log(outPut);
+        return;
         // let mappedReturnData = [];
         // for (let p = 0; p < returnNutrients.length; p++) {
         //   let mapto: any = await MapToBlendModel.findOne({
