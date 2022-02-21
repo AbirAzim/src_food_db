@@ -19,7 +19,6 @@ const type_graphql_1 = require("type-graphql");
 const AppError_1 = __importDefault(require("../../../utils/AppError"));
 const recipe_1 = __importDefault(require("../../../models/recipe"));
 const recipeCategory_1 = __importDefault(require("../../../models/recipeCategory"));
-const ingredient_1 = __importDefault(require("../../../models/ingredient"));
 const memberModel_1 = __importDefault(require("../../../models/memberModel"));
 const userCollection_1 = __importDefault(require("../../../models/userCollection"));
 const blendIngredient_1 = __importDefault(require("../../../models/blendIngredient"));
@@ -99,7 +98,10 @@ let RecipeResolver = class RecipeResolver {
     }
     async getARecipe(recipeId) {
         const recipe = await recipe_1.default.findById(recipeId)
-            .populate('ingredients')
+            .populate({
+            path: 'ingredients.ingredientId',
+            model: 'BlendIngredient',
+        })
             .populate('brand')
             .populate('recipeBlendCategory');
         return recipe;
@@ -163,62 +165,70 @@ let RecipeResolver = class RecipeResolver {
         await recipe_1.default.findOneAndDelete({ _id: recipeId });
         return 'recipe deleted successfully';
     }
-    async addRecipeRecipeFromUser(data) {
-        let user = await memberModel_1.default.findOne({ _id: data.userId });
-        if (!user) {
-            return new AppError_1.default('User not found', 404);
-        }
-        let userDefaultCollection = user.lastModifiedCollection
-            ? user.defaultCollection
-            : user.lastModifiedCollection;
-        // let collection = await UserCollectionModel.findOne({
-        //   _id: userDefaultCollection,
-        // });
-        let newData = data;
-        newData.foodCategories = [];
-        for (let i = 0; i < newData.ingredients.length; i++) {
-            newData.ingredients[i].portions = [];
-            let ingredient = await ingredient_1.default.findOne({
-                _id: newData.ingredients[i].ingredientId,
-            });
-            let index = 0;
-            let selectedPortionIndex = 0;
-            for (let j = 0; j < ingredient.portions.length; j++) {
-                if (ingredient.portions[j].default === true) {
-                    index = j;
-                    console.log(index);
-                    break;
-                }
-            }
-            for (let k = 0; k < ingredient.portions.length; k++) {
-                if (ingredient.portions[k].measurement ===
-                    newData.ingredients[i].selectedPortionName) {
-                    selectedPortionIndex = k;
-                }
-                let portion = {
-                    name: ingredient.portions[k].measurement,
-                    quantity: newData.ingredients[i].weightInGram /
-                        +ingredient.portions[k].meausermentWeight,
-                    default: ingredient.portions[k].default,
-                    gram: ingredient.portions[k].meausermentWeight,
-                };
-                newData.ingredients[i].portions.push(portion);
-            }
-            newData.ingredients[i].selectedPortion = {
-                name: ingredient.portions[selectedPortionIndex].measurement,
-                quantity: newData.ingredients[i].weightInGram /
-                    +ingredient.portions[selectedPortionIndex].meausermentWeight,
-                gram: ingredient.portions[selectedPortionIndex].meausermentWeight,
-            };
-            newData.foodCategories.push(ingredient.category);
-        }
-        newData.foodCategories = [...new Set(newData.foodCategories)];
-        newData.global = false;
-        newData.userId = user._id;
-        let userRecipe = await recipe_1.default.create(newData);
-        await userCollection_1.default.findOneAndUpdate({ _id: userDefaultCollection }, { $push: { recipes: userRecipe._id } });
-        return newData;
-    }
+    // @Mutation((type) => Recipe)
+    // async addRecipeRecipeFromUser(@Arg('data') data: CreateRecipe) {
+    //   let user = await MemberModel.findOne({ _id: data.userId });
+    //   if (!user) {
+    //     return new AppError('User not found', 404);
+    //   }
+    //   let userDefaultCollection = user.lastModifiedCollection
+    //     ? user.defaultCollection
+    //     : user.lastModifiedCollection;
+    //   // let collection = await UserCollectionModel.findOne({
+    //   //   _id: userDefaultCollection,
+    //   // });
+    //   let newData: any = data;
+    //   newData.foodCategories = [];
+    //   for (let i = 0; i < newData.ingredients.length; i++) {
+    //     newData.ingredients[i].portions = [];
+    //     let ingredient = await FoodSrcModel.findOne({
+    //       _id: newData.ingredients[i].ingredientId,
+    //     });
+    //     let index = 0;
+    //     let selectedPortionIndex = 0;
+    //     for (let j = 0; j < ingredient.portions.length; j++) {
+    //       if (ingredient.portions[j].default === true) {
+    //         index = j;
+    //         console.log(index);
+    //         break;
+    //       }
+    //     }
+    //     for (let k = 0; k < ingredient.portions.length; k++) {
+    //       if (
+    //         ingredient.portions[k].measurement ===
+    //         newData.ingredients[i].selectedPortionName
+    //       ) {
+    //         selectedPortionIndex = k;
+    //       }
+    //       let portion = {
+    //         name: ingredient.portions[k].measurement,
+    //         quantity:
+    //           newData.ingredients[i].weightInGram /
+    //           +ingredient.portions[k].meausermentWeight,
+    //         default: ingredient.portions[k].default,
+    //         gram: ingredient.portions[k].meausermentWeight,
+    //       };
+    //       newData.ingredients[i].portions.push(portion);
+    //     }
+    //     newData.ingredients[i].selectedPortion = {
+    //       name: ingredient.portions[selectedPortionIndex].measurement,
+    //       quantity:
+    //         newData.ingredients[i].weightInGram /
+    //         +ingredient.portions[selectedPortionIndex].meausermentWeight,
+    //       gram: ingredient.portions[selectedPortionIndex].meausermentWeight,
+    //     };
+    //     newData.foodCategories.push(ingredient.category);
+    //   }
+    //   newData.foodCategories = [...new Set(newData.foodCategories)];
+    //   newData.global = false;
+    //   newData.userId = user._id;
+    //   let userRecipe = await RecipeModel.create(newData);
+    //   await UserCollectionModel.findOneAndUpdate(
+    //     { _id: userDefaultCollection },
+    //     { $push: { recipes: userRecipe._id } }
+    //   );
+    //   return newData;
+    // }
     async addRecipeFromUser(data) {
         let user = await memberModel_1.default.findOne({ _id: data.userId });
         if (!user) {
@@ -342,13 +352,6 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], RecipeResolver.prototype, "deleteARecipe", null);
-__decorate([
-    (0, type_graphql_1.Mutation)((type) => Recipe_1.default),
-    __param(0, (0, type_graphql_1.Arg)('data')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [CreateRecipe_1.default]),
-    __metadata("design:returntype", Promise)
-], RecipeResolver.prototype, "addRecipeRecipeFromUser", null);
 __decorate([
     (0, type_graphql_1.Mutation)((type) => Recipe_1.default),
     __param(0, (0, type_graphql_1.Arg)('data')),

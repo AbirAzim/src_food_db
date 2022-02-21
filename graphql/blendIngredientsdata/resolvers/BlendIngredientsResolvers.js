@@ -236,7 +236,6 @@ let BlendIngredientResolver = class BlendIngredientResolver {
         let data = ingredientsInfo;
         // @ts-ignore
         let hello = data.map((x) => new mongoose_1.default.mongo.ObjectId(x.ingredientId));
-        console.log(hello);
         let ingredients = await blendIngredient_1.default.find({
             _id: { $in: hello },
         }).populate({
@@ -286,7 +285,6 @@ let BlendIngredientResolver = class BlendIngredientResolver {
             }
             return acc;
         }, []);
-        console.log(returnNutrients.length);
         let childNutrients = [];
         let getRootNutrients = returnNutrients.filter(
         //@ts-ignore
@@ -297,12 +295,45 @@ let BlendIngredientResolver = class BlendIngredientResolver {
             else
                 return true;
         });
-        // for (let m = 0; m < childNutrients.length; m++) {
-        //   let parent = getRootNutrients.filter(
-        //     (e) => e._id === childNutrients[m]._id
-        //   )[0];
-        // }
-        return JSON.stringify(getRootNutrients);
+        let nutrientCategories = [
+            {
+                _id: '6203a9061c100bd226c13c65',
+                categoryName: 'Calories',
+            },
+            {
+                _id: '6203a9381c100bd226c13c67',
+                categoryName: 'Energy',
+            },
+            {
+                _id: '6203a96e1c100bd226c13c69',
+                categoryName: 'Vitamins',
+            },
+            {
+                _id: '6203a98a1c100bd226c13c6b',
+                categoryName: 'Minerals',
+            },
+        ];
+        let outPut = {};
+        let childOutPut = {};
+        for (let i = 0; i < getRootNutrients.length; i++) {
+            let category = nutrientCategories.filter((nc) => nc._id ===
+                String(getRootNutrients[i].blendNutrientRefference.category))[0];
+            if (!outPut[category.categoryName]) {
+                outPut[category.categoryName] = {
+                    value: +getRootNutrients[i].value,
+                    data: [getRootNutrients[i].blendNutrientRefference],
+                };
+            }
+            else {
+                outPut[category.categoryName].value =
+                    +outPut[category.categoryName].value + +getRootNutrients[i].value;
+                outPut[category.categoryName].data.push(getRootNutrients[i].blendNutrientRefference);
+                //@ts-ignore
+                outPut[category.categoryName].data.sort((a, b) => a.rank - b.rank);
+            }
+        }
+        console.log(outPut.Energy.data);
+        return 'hello';
         // let mappedReturnData = [];
         // for (let p = 0; p < returnNutrients.length; p++) {
         //   let mapto: any = await MapToBlendModel.findOne({
