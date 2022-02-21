@@ -25,11 +25,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
 const SelectedPortion_1 = __importDefault(require("./SelectedPortion"));
 const ReturnPortion_1 = __importDefault(require("./ReturnPortion"));
+const BlendIngredientData_1 = __importDefault(require("../../blendIngredientsdata/schemas/BlendIngredientData"));
 let IngredientData = class IngredientData {
 };
 __decorate([
-    (0, type_graphql_1.Field)((type) => type_graphql_1.ID),
-    __metadata("design:type", String)
+    (0, type_graphql_1.Field)((type) => BlendIngredientData_1.default),
+    __metadata("design:type", BlendIngredientData_1.default)
 ], IngredientData.prototype, "ingredientId", void 0);
 __decorate([
     (0, type_graphql_1.Field)(),

@@ -104,6 +104,7 @@ let RecipeResolver = class RecipeResolver {
         })
             .populate('brand')
             .populate('recipeBlendCategory');
+        console.log(recipe.ingredients[0]);
         return recipe;
     }
     async addNewRecipe(data) {

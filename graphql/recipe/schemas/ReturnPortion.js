@@ -18,7 +18,7 @@ __decorate([
     __metadata("design:type", String)
 ], ReturnPortion.prototype, "name", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", Number)
 ], ReturnPortion.prototype, "quantity", void 0);
 __decorate([
