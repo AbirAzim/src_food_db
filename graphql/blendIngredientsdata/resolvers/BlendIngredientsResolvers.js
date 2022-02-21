@@ -295,14 +295,15 @@ let BlendIngredientResolver = class BlendIngredientResolver {
             return acc;
         }, []);
         for (let j = 0; j < returnNutrients.length; j++) {
-            returnNutrients[j].category = await blendNutrientCategory_1.default.findOne({
-                _id: returnNutrients[j].category,
-            });
-            returnNutrients[j].parent =
-                returnNutrients[j].parent === null
+            returnNutrients[j].blendNutrientRefference.category =
+                await blendNutrientCategory_1.default.findOne({
+                    _id: returnNutrients[j].blendNutrientRefference.category,
+                });
+            returnNutrients[j].blendNutrientRefference.parent =
+                returnNutrients[j].blendNutrientRefference.parent === null
                     ? null
                     : await blendNutrient_1.default.findOne({
-                        _id: returnNutrients[j].parent,
+                        _id: returnNutrients[j].blendNutrientRefference.parent,
                     });
         }
         console.log(returnNutrients[0]);

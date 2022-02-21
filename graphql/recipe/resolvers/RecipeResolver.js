@@ -283,7 +283,7 @@ let RecipeResolver = class RecipeResolver {
         newData.userId = user._id;
         let userRecipe = await recipe_1.default.create(newData);
         await userCollection_1.default.findOneAndUpdate({ _id: userDefaultCollection }, { $push: { recipes: userRecipe._id } });
-        return newData;
+        return userRecipe;
     }
 };
 __decorate([
