@@ -442,7 +442,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], BlendIngredientResolver.prototype, "searchBlendIngredients", null);
 __decorate([
-    (0, type_graphql_1.Query)(() => BlendNutrient_1.default) // wait
+    (0, type_graphql_1.Query)(() => [BlendNutrient_1.default]) // wait
     ,
     __param(0, (0, type_graphql_1.Arg)('ingredientsInfo', (type) => [BlendIngredientInfo_1.default])),
     __metadata("design:type", Function),
