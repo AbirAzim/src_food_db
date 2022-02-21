@@ -20,6 +20,8 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const ingredient_1 = __importDefault(require("../../../models/ingredient"));
 const blendIngredient_1 = __importDefault(require("../../../models/blendIngredient"));
 const mapToBlend_1 = __importDefault(require("../../../models/mapToBlend"));
+const blendNutrient_1 = __importDefault(require("../../../models/blendNutrient"));
+const blendNutrientCategory_1 = __importDefault(require("../../../models/blendNutrientCategory"));
 const AddBlendIngredient_1 = __importDefault(require("./input-type/AddBlendIngredient"));
 const IngredientFilter_1 = __importDefault(require("./input-type/IngredientFilter"));
 const BlendIngredientInfo_1 = __importDefault(require("./input-type/BlendIngredientInfo"));
@@ -28,6 +30,7 @@ const BlendIngredientData_1 = __importDefault(require("../schemas/BlendIngredien
 const ReturnBlendIngredient_1 = __importDefault(require("../schemas/ReturnBlendIngredient"));
 const ReturnBlendIngredientBasedOnDefaultPortion_1 = __importDefault(require("../schemas/ReturnBlendIngredientBasedOnDefaultPortion"));
 const AppError_1 = __importDefault(require("../../../utils/AppError"));
+const BlendNutrient_1 = __importDefault(require("../schemas/BlendNutrient"));
 let BlendIngredientResolver = class BlendIngredientResolver {
     async getAllBlendIngredients() {
         let blendIngredients = await blendIngredient_1.default.find();
@@ -92,10 +95,16 @@ let BlendIngredientResolver = class BlendIngredientResolver {
         return 'Successfully Edited';
     }
     async getBlendIngredientById(id) {
-        let blendIngredient = await blendIngredient_1.default.findById(id).populate({
+        let blendIngredient = await blendIngredient_1.default.findById(id)
+            .populate({
             path: 'blendNutrients.blendNutrientRefference',
             model: 'BlendNutrient',
-        });
+            populate: {
+                path: 'category',
+                model: 'BlendNutrientCategory',
+            },
+        })
+            .populate('srcFoodReference');
         return blendIngredient;
     }
     async removeABlendIngredient(id) {
@@ -285,10 +294,19 @@ let BlendIngredientResolver = class BlendIngredientResolver {
             }
             return acc;
         }, []);
-        // for(let j = 0;j < returnNutrients.length;j++){
-        //   returnNutrients[j].category = await BlendNutrientCategoryModel.findOne({_id: returnNutrients[j].category});
-        //   returnNutrients[j].parent = returnNutrients[j].parent === null? null : await BlendNutrientModel.findOne({_id: returnNutrients[]})
-        // }
+        for (let j = 0; j < returnNutrients.length; j++) {
+            returnNutrients[j].category = await blendNutrientCategory_1.default.findOne({
+                _id: returnNutrients[j].category,
+            });
+            returnNutrients[j].parent =
+                returnNutrients[j].parent === null
+                    ? null
+                    : await blendNutrient_1.default.findOne({
+                        _id: returnNutrients[j].parent,
+                    });
+        }
+        console.log(returnNutrients[0]);
+        return returnNutrients;
         // let childNutrients: any = [];
         // let getRootNutrients = returnNutrients.filter(
         //   //@ts-ignore
@@ -340,7 +358,7 @@ let BlendIngredientResolver = class BlendIngredientResolver {
         //   }
         // }
         // console.log(outPut);
-        return;
+        // return;
         // let mappedReturnData = [];
         // for (let p = 0; p < returnNutrients.length; p++) {
         //   let mapto: any = await MapToBlendModel.findOne({
@@ -423,7 +441,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], BlendIngredientResolver.prototype, "searchBlendIngredients", null);
 __decorate([
-    (0, type_graphql_1.Query)(() => String) // wait
+    (0, type_graphql_1.Query)(() => BlendNutrient_1.default) // wait
     ,
     __param(0, (0, type_graphql_1.Arg)('ingredientsInfo', (type) => [BlendIngredientInfo_1.default])),
     __metadata("design:type", Function),
