@@ -81,6 +81,10 @@ __decorate([
     (0, type_graphql_1.Field)(() => [type_graphql_1.ID], { nullable: true }),
     __metadata("design:type", Array)
 ], Ingredient.prototype, "collections", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Boolean)
+], Ingredient.prototype, "addedToBlend", void 0);
 Ingredient = __decorate([
     (0, type_graphql_1.ObjectType)()
 ], Ingredient);

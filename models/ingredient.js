@@ -40,6 +40,7 @@ const ingredientSchema = new mongoose_1.Schema({
             ref: 'AdminCollection',
         },
     ],
+    addedToBlend: Boolean,
 });
 const Ingredient = (0, mongoose_1.model)('Ingredient', ingredientSchema);
 exports.default = Ingredient;

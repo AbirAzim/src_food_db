@@ -104,7 +104,11 @@ let BlendIngredientResolver = class BlendIngredientResolver {
                 model: 'BlendNutrientCategory',
             },
         })
-            .populate('srcFoodReference');
+            .populate('srcFoodReference')
+            .populate({
+            path: 'notBlendNutrients.uniqueNutrientRefference',
+            model: 'UniqueNutrient',
+        });
         return blendIngredient;
     }
     async removeABlendIngredient(id) {
@@ -347,75 +351,13 @@ let BlendIngredientResolver = class BlendIngredientResolver {
             Vitamins,
             Minerals,
         };
-        // let childNutrients: any = [];
-        // let getRootNutrients = returnNutrients.filter(
-        //   //@ts-ignore
-        //   (rn) => {
-        //     if (!rn.blendNutrientRefference.parentIsCategory) {
-        //       childNutrients.push(rn);
-        //     } else return true;
-        //   }
-        // );
-        // let nutrientCategories = [
-        //   {
-        //     _id: '6203a9061c100bd226c13c65',
-        //     categoryName: 'Calories',
-        //   },
-        //   {
-        //     _id: '6203a9381c100bd226c13c67',
-        //     categoryName: 'Energy',
-        //   },
-        //   {
-        //     _id: '6203a96e1c100bd226c13c69',
-        //     categoryName: 'Vitamins',
-        //   },
-        //   {
-        //     _id: '6203a98a1c100bd226c13c6b',
-        //     categoryName: 'Minerals',
-        //   },
-        // ];
-        // let outPut: any = {};
-        // let childOutPut: any = {};
-        // for (let i = 0; i < getRootNutrients.length; i++) {
-        //   let category = nutrientCategories.filter(
-        //     (nc) =>
-        //       nc._id ===
-        //       String(getRootNutrients[i].blendNutrientRefference.category)
-        //   )[0];
-        //   if (!outPut[category.categoryName]) {
-        //     outPut[category.categoryName] = {
-        //       value: +getRootNutrients[i].value,
-        //       data: [getRootNutrients[i].blendNutrientRefference],
-        //     };
-        //   } else {
-        //     outPut[category.categoryName].value =
-        //       +outPut[category.categoryName].value + +getRootNutrients[i].value;
-        //     outPut[category.categoryName].data.push(
-        //       getRootNutrients[i].blendNutrientRefference
-        //     );
-        //     //@ts-ignore
-        //     outPut[category.categoryName].data.sort((a, b) => a.rank - b.rank);
-        //   }
-        // }
-        // console.log(outPut);
-        // return;
-        // let mappedReturnData = [];
-        // for (let p = 0; p < returnNutrients.length; p++) {
-        //   let mapto: any = await MapToBlendModel.findOne({
-        //     srcUniqueNutrientId: returnNutrients[p].uniqueNutrientRefference._id,
-        //   });
-        //   if (!mapto) {
-        //     continue;
-        //   }
-        //   let blendData = await BlendNutrientModel.findOne({
-        //     _id: mapto.blendNutrientId,
-        //   })
-        //     .populate('category')
-        //     .populate('parent');
-        //   returnNutrients[p].blendData = blendData;
-        //   mappedReturnData.push(returnNutrients[p]);
-        // }
-        // return mappedReturnData;
+    }
+    async xcv() {
+        let blendIngeidents = await blendIngredient_1.default.find({});
+        for (let i = 0; i < blendIngeidents.length; i++) {
+            await ingredient_1.default.findOneAndUpdate({ _id: blendIngeidents[i].srcFoodReference }, { addedToBlend: true });
+        }
+        return 'done';
     }
 };
 __decorate([
@@ -488,6 +430,12 @@ __decorate([
     __metadata("design:paramtypes", [Array]),
     __metadata("design:returntype", Promise)
 ], BlendIngredientResolver.prototype, "getBlendNutritionBasedOnRecipe", null);
+__decorate([
+    (0, type_graphql_1.Query)(() => String),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], BlendIngredientResolver.prototype, "xcv", null);
 BlendIngredientResolver = __decorate([
     (0, type_graphql_1.Resolver)()
 ], BlendIngredientResolver);
