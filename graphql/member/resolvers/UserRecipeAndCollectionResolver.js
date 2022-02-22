@@ -177,6 +177,10 @@ let UserRecipeAndCollectionResolver = class UserRecipeAndCollectionResolver {
             populate: {
                 path: 'recipes',
                 model: 'Recipe',
+                populate: {
+                    path: 'ingredients.ingredientId',
+                    model: 'BlendIngredient',
+                },
             },
         });
         let returnRecipe = [];
