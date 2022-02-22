@@ -311,24 +311,24 @@ let BlendIngredientResolver = class BlendIngredientResolver {
                     });
         }
         // return returnNutrients;
-        let nutrientCategories = [
-            {
-                _id: '6203a9061c100bd226c13c65',
-                categoryName: 'Calories',
-            },
-            {
-                _id: '6203a9381c100bd226c13c67',
-                categoryName: 'Energy',
-            },
-            {
-                _id: '6203a96e1c100bd226c13c69',
-                categoryName: 'Vitamins',
-            },
-            {
-                _id: '6203a98a1c100bd226c13c6b',
-                categoryName: 'Minerals',
-            },
-        ];
+        // let nutrientCategories = [
+        //   {
+        //     _id: '6203a9061c100bd226c13c65',
+        //     categoryName: 'Calories',
+        //   },
+        //   {
+        //     _id: '6203a9381c100bd226c13c67',
+        //     categoryName: 'Energy',
+        //   },
+        //   {
+        //     _id: '6203a96e1c100bd226c13c69',
+        //     categoryName: 'Vitamins',
+        //   },
+        //   {
+        //     _id: '6203a98a1c100bd226c13c6b',
+        //     categoryName: 'Minerals',
+        //   },
+        // ];
         let Calories = returnNutrients.filter(
         //@ts-ignore
         (rn) => String(rn.blendNutrientRefference.category._id) ===
