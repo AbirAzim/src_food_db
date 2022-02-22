@@ -56,12 +56,24 @@ let RecipeResolver = class RecipeResolver {
             recipes = await recipe_1.default.find({
                 recipeBlendCategory: { $in: data.blendTypes },
                 'ingredients.ingredientId': { $in: data.includeIngredientIds },
-            });
+            })
+                .populate({
+                path: 'ingredients.ingredientId',
+                model: 'BlendIngredient',
+            })
+                .populate('brand')
+                .populate('recipeBlendCategory');
         }
         else {
             recipes = await recipe_1.default.find({
                 recipeBlendCategory: { $in: data.blendTypes },
-            });
+            })
+                .populate({
+                path: 'ingredients.ingredientId',
+                model: 'BlendIngredient',
+            })
+                .populate('brand')
+                .populate('recipeBlendCategory');
         }
         return recipes;
     }
