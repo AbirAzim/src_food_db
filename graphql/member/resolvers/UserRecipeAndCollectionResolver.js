@@ -83,6 +83,11 @@ let UserRecipeAndCollectionResolver = class UserRecipeAndCollectionResolver {
         }
         return foundRecipeInCollection;
     }
+    async removeRecipesxccc() {
+        await userCollection_1.default.updateMany({}, { $set: { recipes: [] } });
+        await recipe_1.default.deleteMany({});
+        return 'successfull';
+    }
     // @Mutation(() => [CollectionType])
     // async addExistingRecipeToACollectionX(@Arg('data') data: NewUserRecipeInput) {
     //   let user = await MemberModel.findOne({ email: data.userEmail });
@@ -390,6 +395,12 @@ __decorate([
     __metadata("design:paramtypes", [AddExistingRecipeInput_1.default]),
     __metadata("design:returntype", Promise)
 ], UserRecipeAndCollectionResolver.prototype, "checkForRecipeExistenceInCollection", null);
+__decorate([
+    (0, type_graphql_1.Mutation)(() => String),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], UserRecipeAndCollectionResolver.prototype, "removeRecipesxccc", null);
 __decorate([
     (0, type_graphql_1.Query)(() => Collection_1.default),
     __param(0, (0, type_graphql_1.Arg)('userEmail')),

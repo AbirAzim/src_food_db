@@ -54,13 +54,13 @@ let RecipeResolver = class RecipeResolver {
         //@ts-ignore
         if (data.includeIngredientIds.length > 0) {
             recipes = await recipe_1.default.find({
-                tempBlendCategory: { $in: data.blendTypes },
+                recipeBlendCategory: { $in: data.blendTypes },
                 'ingredients.ingredientId': { $in: data.includeIngredientIds },
             });
         }
         else {
             recipes = await recipe_1.default.find({
-                tempBlendCategory: { $in: data.blendTypes },
+                recipeBlendCategory: { $in: data.blendTypes },
             });
         }
         return recipes;
