@@ -30,7 +30,7 @@ const BlendIngredientData_1 = __importDefault(require("../schemas/BlendIngredien
 const ReturnBlendIngredient_1 = __importDefault(require("../schemas/ReturnBlendIngredient"));
 const ReturnBlendIngredientBasedOnDefaultPortion_1 = __importDefault(require("../schemas/ReturnBlendIngredientBasedOnDefaultPortion"));
 const AppError_1 = __importDefault(require("../../../utils/AppError"));
-const BlendNutrient_1 = __importDefault(require("../schemas/BlendNutrient"));
+const ReturnIngredientByCategory_1 = __importDefault(require("../schemas/ReturnIngredientByCategory"));
 let BlendIngredientResolver = class BlendIngredientResolver {
     async getAllBlendIngredients() {
         let blendIngredients = await blendIngredient_1.default.find();
@@ -306,8 +306,47 @@ let BlendIngredientResolver = class BlendIngredientResolver {
                         _id: returnNutrients[j].blendNutrientRefference.parent,
                     });
         }
-        console.log(returnNutrients[0]);
-        return returnNutrients;
+        // return returnNutrients;
+        let nutrientCategories = [
+            {
+                _id: '6203a9061c100bd226c13c65',
+                categoryName: 'Calories',
+            },
+            {
+                _id: '6203a9381c100bd226c13c67',
+                categoryName: 'Energy',
+            },
+            {
+                _id: '6203a96e1c100bd226c13c69',
+                categoryName: 'Vitamins',
+            },
+            {
+                _id: '6203a98a1c100bd226c13c6b',
+                categoryName: 'Minerals',
+            },
+        ];
+        let Calories = returnNutrients.filter(
+        //@ts-ignore
+        (rn) => String(rn.blendNutrientRefference.category._id) ===
+            '6203a9061c100bd226c13c65');
+        let Energy = returnNutrients.filter(
+        //@ts-ignore
+        (rn) => String(rn.blendNutrientRefference.category._id) ===
+            '6203a9381c100bd226c13c67');
+        let Vitamins = returnNutrients.filter(
+        //@ts-ignore
+        (rn) => String(rn.blendNutrientRefference.category._id) ===
+            '6203a96e1c100bd226c13c69');
+        let Minerals = returnNutrients.filter(
+        //@ts-ignore
+        (rn) => String(rn.blendNutrientRefference.category._id) ===
+            '6203a98a1c100bd226c13c6b');
+        return {
+            Calories,
+            Energy,
+            Vitamins,
+            Minerals,
+        };
         // let childNutrients: any = [];
         // let getRootNutrients = returnNutrients.filter(
         //   //@ts-ignore
@@ -442,7 +481,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], BlendIngredientResolver.prototype, "searchBlendIngredients", null);
 __decorate([
-    (0, type_graphql_1.Query)(() => [BlendNutrient_1.default]) // wait
+    (0, type_graphql_1.Query)(() => ReturnIngredientByCategory_1.default) // wait
     ,
     __param(0, (0, type_graphql_1.Arg)('ingredientsInfo', (type) => [BlendIngredientInfo_1.default])),
     __metadata("design:type", Function),

@@ -67,7 +67,10 @@ let RecipeResolver = class RecipeResolver {
     }
     async getAllRecipes() {
         const recipes = await recipe_1.default.find()
-            .populate('ingredients')
+            .populate({
+            path: 'ingredients.ingredientId',
+            model: 'BlendIngredient',
+        })
             .populate('brand')
             .populate('recipeBlendCategory');
         return recipes;
@@ -75,7 +78,10 @@ let RecipeResolver = class RecipeResolver {
     }
     async getAllrecomendedRecipes() {
         const recipes = await recipe_1.default.find()
-            .populate('ingredients')
+            .populate({
+            path: 'ingredients.ingredientId',
+            model: 'BlendIngredient',
+        })
             .populate('brand')
             .populate('recipeBlendCategory');
         return recipes;
@@ -83,7 +89,10 @@ let RecipeResolver = class RecipeResolver {
     async getAllpopularRecipes() {
         const recipes = await recipe_1.default.find()
             .limit(4)
-            .populate('ingredients')
+            .populate({
+            path: 'ingredients.ingredientId',
+            model: 'BlendIngredient',
+        })
             .populate('brand')
             .populate('recipeBlendCategory');
         return recipes;
@@ -91,7 +100,10 @@ let RecipeResolver = class RecipeResolver {
     async getAllLatestRecipes() {
         const recipes = await recipe_1.default.find()
             .sort({ datePublished: -1 })
-            .populate('ingredients')
+            .populate({
+            path: 'ingredients.ingredientId',
+            model: 'BlendIngredient',
+        })
             .populate('brand')
             .populate('recipeBlendCategory');
         return recipes;
