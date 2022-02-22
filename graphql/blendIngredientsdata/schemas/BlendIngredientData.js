@@ -64,6 +64,10 @@ __decorate([
     __metadata("design:type", String)
 ], BlendIngredientData.prototype, "featuredImage", void 0);
 __decorate([
+    (0, type_graphql_1.Field)(),
+    __metadata("design:type", String)
+], BlendIngredientData.prototype, "sourceName", void 0);
+__decorate([
     (0, type_graphql_1.Field)(() => [String], { nullable: true }),
     __metadata("design:type", Array)
 ], BlendIngredientData.prototype, "images", void 0);

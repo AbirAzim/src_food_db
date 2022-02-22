@@ -69,6 +69,10 @@ __decorate([
     __metadata("design:type", Array)
 ], ReturnBlendIngredientData.prototype, "images", void 0);
 __decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], ReturnBlendIngredientData.prototype, "sourceName", void 0);
+__decorate([
     (0, type_graphql_1.Field)(() => [type_graphql_1.ID], { nullable: true }),
     __metadata("design:type", Array)
 ], ReturnBlendIngredientData.prototype, "collections", void 0);

@@ -352,13 +352,6 @@ let BlendIngredientResolver = class BlendIngredientResolver {
             Minerals,
         };
     }
-    async xcv() {
-        let blendIngeidents = await blendIngredient_1.default.find({});
-        for (let i = 0; i < blendIngeidents.length; i++) {
-            await ingredient_1.default.findOneAndUpdate({ _id: blendIngeidents[i].srcFoodReference }, { addedToBlend: true });
-        }
-        return 'done';
-    }
 };
 __decorate([
     (0, type_graphql_1.Query)(() => [ReturnBlendIngredient_1.default]),
@@ -430,12 +423,6 @@ __decorate([
     __metadata("design:paramtypes", [Array]),
     __metadata("design:returntype", Promise)
 ], BlendIngredientResolver.prototype, "getBlendNutritionBasedOnRecipe", null);
-__decorate([
-    (0, type_graphql_1.Query)(() => String),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
-], BlendIngredientResolver.prototype, "xcv", null);
 BlendIngredientResolver = __decorate([
     (0, type_graphql_1.Resolver)()
 ], BlendIngredientResolver);

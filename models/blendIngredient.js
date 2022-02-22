@@ -46,6 +46,7 @@ const blendIngredientSchema = new mongoose_1.Schema({
     ],
     createdAt: { type: Date, default: Date.now },
     modifiedAt: { type: Date, default: Date.now },
+    sourceName: String,
 });
 const BlendIngredient = (0, mongoose_1.model)('BlendIngredient', blendIngredientSchema);
 exports.default = BlendIngredient;
