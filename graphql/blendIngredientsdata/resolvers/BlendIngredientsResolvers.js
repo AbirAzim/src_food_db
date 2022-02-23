@@ -30,7 +30,6 @@ const BlendIngredientData_1 = __importDefault(require("../schemas/BlendIngredien
 const ReturnBlendIngredient_1 = __importDefault(require("../schemas/ReturnBlendIngredient"));
 const ReturnBlendIngredientBasedOnDefaultPortion_1 = __importDefault(require("../schemas/ReturnBlendIngredientBasedOnDefaultPortion"));
 const AppError_1 = __importDefault(require("../../../utils/AppError"));
-const ReturnIngredientByCategory_1 = __importDefault(require("../schemas/ReturnIngredientByCategory"));
 let BlendIngredientResolver = class BlendIngredientResolver {
     async getAllBlendIngredients() {
         let blendIngredients = await blendIngredient_1.default.find();
@@ -329,28 +328,136 @@ let BlendIngredientResolver = class BlendIngredientResolver {
         //     categoryName: 'Minerals',
         //   },
         // ];
-        let Calories = returnNutrients.filter(
-        //@ts-ignore
-        (rn) => String(rn.blendNutrientRefference.category._id) ===
-            '6203a9061c100bd226c13c65');
-        let Energy = returnNutrients.filter(
-        //@ts-ignore
-        (rn) => String(rn.blendNutrientRefference.category._id) ===
-            '6203a9381c100bd226c13c67');
-        let Vitamins = returnNutrients.filter(
-        //@ts-ignore
-        (rn) => String(rn.blendNutrientRefference.category._id) ===
-            '6203a96e1c100bd226c13c69');
-        let Minerals = returnNutrients.filter(
-        //@ts-ignore
-        (rn) => String(rn.blendNutrientRefference.category._id) ===
-            '6203a98a1c100bd226c13c6b');
-        return {
-            Calories,
-            Energy,
-            Vitamins,
-            Minerals,
+        // console.log(returnNutrients[0]);
+        let res = await this.architect(returnNutrients);
+        console.log(res);
+        let a = JSON.stringify(res);
+        console.log(a);
+        return a;
+        // console.log(res);
+        // let Calories = returnNutrients.filter(
+        //   //@ts-ignore
+        //   (rn) =>
+        //     String(rn.blendNutrientRefference.category._id) ===
+        //     '6203a9061c100bd226c13c65'
+        // );
+        // // console.log(Calories);
+        // let Energy = returnNutrients.filter(
+        //   //@ts-ignore
+        //   (rn) =>
+        //     String(rn.blendNutrientRefference.category._id) ===
+        //     '6203a9381c100bd226c13c67'
+        // );
+        // let Vitamins = returnNutrients.filter(
+        //   //@ts-ignore
+        //   (rn) =>
+        //     String(rn.blendNutrientRefference.category._id) ===
+        //     '6203a96e1c100bd226c13c69'
+        // );
+        // let Minerals = returnNutrients.filter(
+        //   //@ts-ignore
+        //   (rn) =>
+        //     String(rn.blendNutrientRefference.category._id) ===
+        //     '6203a98a1c100bd226c13c6b'
+        // );
+        // return {
+        //   Calories,
+        //   Energy,
+        //   Vitamins,
+        //   Minerals,
+        // };
+    }
+    async architect(arr) {
+        let data = {};
+        arr.forEach((item) => {
+            var _a;
+            const name = (_a = item.blendNutrientRefference.nutrientName) === null || _a === void 0 ? void 0 : _a.toLowerCase();
+            data[name] = {
+                value: item.value,
+                blendNutrientRefference: item.blendNutrientRefference,
+            };
+        });
+        let carbohydrates = {
+            ...data.carbohydrate,
+            dietryFibre: {
+                ...data['dietary fiber'],
+                childs: {
+                    fiberSoluable: data['Fiber, soluble'],
+                    fiberInsoluble: data['Fiber, insoluble'],
+                },
+            },
+            sugars: {
+                ...data.sugars,
+                childs: {
+                    sucrose: data.sucrose,
+                    glucose: data.glucose,
+                    fructose: data.fructose,
+                    lactose: data.lactose,
+                    maltose: data.maltose,
+                    galactose: data.galactose,
+                },
+            },
+            starch: data.starch,
         };
+        // const sugarChild = new Map();
+        // sugarChild.set('sucrose', data.sucrose);
+        // sugarChild.set('glucose', data.glucose);
+        // sugarChild.set('fructose', data.fructose);
+        // sugarChild.set('lactose', data.lactose);
+        // sugarChild.set('maltose', data.maltose);
+        // sugarChild.set('galactose', data.galactose);
+        // console.log(sugarChild.get('sucrose'));
+        // const vitamins = new Map();
+        // vitamins.set('vitaminC', data['vitamin c']);
+        let energy = {
+            childs: {
+                protien: data.protein,
+                fats: data.fats,
+                carbohydrates,
+            },
+        };
+        let vitamins = {
+            childs: {
+                vitaminC: data['vitamin c'],
+                thiamin: data.thiamin,
+                riboflavin: data.riboflavin,
+                niacin: data.niacin,
+                pantothenicAcid: data['pantothenic acid'],
+                vitaminB6: data['vitamin b-6'],
+                biotin: data.biotin,
+                folate: data.folate,
+                choline: data.choline,
+                betaine: data.betaine,
+                vitaminB12: data['vitamin b-12'],
+                vitaminA: data['vitamin a'],
+                vitaminE: data['vitamin e'],
+                vitaminD: data['vitamin d'],
+                vitaminK: data['vitamin k'],
+            },
+        };
+        let calories = data.calorie;
+        let minerals = {
+            childs: {
+                calcium: data.calcium,
+                iron: data.iron,
+                magnesium: data.magnesium,
+                phosphorus: data.phosphorus,
+                potassium: data.potassium,
+                sodium: data.sodium,
+                zinc: data.zinc,
+                copper: data.copper,
+                manganese: data.manganese,
+                iodine: data.iodine,
+                salenium: data.salenium,
+                sulfur: data.sulfur,
+                nickel: data.nickel,
+                molybdenum: data.molybdenum,
+                colbalt: data.colbalt,
+                boron: data.boron,
+                fluoride: data.fluoride,
+            },
+        };
+        return { calories, energy, vitamins, minerals };
     }
 };
 __decorate([
@@ -416,7 +523,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], BlendIngredientResolver.prototype, "searchBlendIngredients", null);
 __decorate([
-    (0, type_graphql_1.Query)(() => ReturnIngredientByCategory_1.default) // wait
+    (0, type_graphql_1.Query)(() => String) // wait
     ,
     __param(0, (0, type_graphql_1.Arg)('ingredientsInfo', (type) => [BlendIngredientInfo_1.default])),
     __metadata("design:type", Function),
