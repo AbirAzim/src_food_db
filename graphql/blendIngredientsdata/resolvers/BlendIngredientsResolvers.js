@@ -137,6 +137,15 @@ let BlendIngredientResolver = class BlendIngredientResolver {
             srcFoodReference: srcFood._id,
             portions: srcFood.portions,
         };
+        if (srcFood.source === 'sr_legacy_food') {
+            newBlendIngredient.sourceName = 'USDA-Legacy';
+        }
+        else if (srcFood.source === 'foundation_food') {
+            newBlendIngredient.sourceName = 'survey_fndds_food';
+        }
+        else {
+            newBlendIngredient.sourceName = 'USDA-survey';
+        }
         newBlendIngredient.notBlendNutrients = [];
         newBlendIngredient.blendNutrients = [];
         for (let i = 0; i < srcFood.nutrients.length; i++) {
@@ -154,6 +163,7 @@ let BlendIngredientResolver = class BlendIngredientResolver {
                 newBlendIngredient.blendNutrients.push(nutrient);
             }
         }
+        await blendIngredient_1.default.create(newBlendIngredient);
         return 'Added successfully';
     }
     async filterIngredientByCategoryAndClass(data) {
@@ -495,7 +505,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], BlendIngredientResolver.prototype, "addNewBlendIngredient", null);
 __decorate([
-    (0, type_graphql_1.Mutation)(() => BlendIngredientData_1.default),
+    (0, type_graphql_1.Mutation)(() => String),
     __param(0, (0, type_graphql_1.Arg)('srcId')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
