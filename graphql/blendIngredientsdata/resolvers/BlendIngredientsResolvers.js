@@ -164,6 +164,7 @@ let BlendIngredientResolver = class BlendIngredientResolver {
             }
         }
         await blendIngredient_1.default.create(newBlendIngredient);
+        await ingredient_1.default.findByIdAndUpdate(srcId, { addedToBlend: true });
         return 'Added successfully';
     }
     async filterIngredientByCategoryAndClass(data) {
