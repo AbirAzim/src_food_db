@@ -71,6 +71,18 @@ let MemberResolver = class MemberResolver {
         });
         return user;
     }
+    async getASingleUserById(id) {
+        let user = await memberModel_1.default.findOne({ _id: id })
+            .populate('configuration')
+            .populate({
+            path: 'collections',
+            populate: {
+                path: 'recipes',
+                model: 'Recipe',
+            },
+        });
+        return user;
+    }
     async createNewCollection(data) {
         let user = await memberModel_1.default.findOne({ email: data.userEmail }).populate('collections');
         if (!user)
@@ -123,6 +135,13 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], MemberResolver.prototype, "getASingleUserByEmail", null);
+__decorate([
+    (0, type_graphql_1.Query)(() => Member_1.default),
+    __param(0, (0, type_graphql_1.Arg)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], MemberResolver.prototype, "getASingleUserById", null);
 __decorate([
     (0, type_graphql_1.Mutation)(() => Collection_1.default),
     __param(0, (0, type_graphql_1.Arg)('data')),
