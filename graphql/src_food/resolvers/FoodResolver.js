@@ -35,10 +35,12 @@ const fs_1 = __importDefault(require("fs"));
 const mongoose_1 = __importDefault(require("mongoose"));
 let MemberResolver = class MemberResolver {
     async getAllTheIngredients() {
-        let ingredients = await ingredient_1.default.find({}).populate({
+        let ingredients = await ingredient_1.default.find({})
+            .populate({
             path: 'nutrients.uniqueNutrientRefference',
             model: 'UniqueNutrient',
-        });
+        })
+            .limit(1000);
         let returnIngredients = [];
         for (let i = 0; i < ingredients.length; i++) {
             let returnIngredient = ingredients[i];
@@ -158,56 +160,57 @@ let MemberResolver = class MemberResolver {
         }
         return 'done';
     }
-    // @Query(() => String)
-    // async databaseShifting() {
-    //   let foods: any = fs.readFileSync('./temp/food.json', 'utf-8');
-    //   foods = JSON.parse(foods);
-    //   for (let i = 0; i < foods.length; i++) {
-    //     let findFood = await FoodSrcModel.findOne({
-    //       refDatabaseId: foods[i]._id,
-    //     });
-    //     if (!findFood) {
-    //       let food = {
-    //         nutrients: [] as NutrientValue[],
-    //         portions: [] as Portion[],
-    //         refDatabaseId: foods[i]._id,
-    //         ingredientName: foods[i].name,
-    //         ingredientId: '',
-    //         category: '',
-    //         blendStatus: 'Review',
-    //         classType: '',
-    //         source: foods[i].data_type,
-    //         description: foods[i].description,
-    //         sourceId: foods[i].NDB_number
-    //           ? foods[i].NDB_number
-    //           : foods[i].foodCode,
-    //         sourceCategory: foods[i].categoryId.description,
-    //         publication_date: foods[i].publication_date,
-    //       };
-    //       for (let j = 0; j < foods[i].nutrients.length; j++) {
-    //         let newNutrient = {
-    //           value: foods[i].nutrients[j].amount,
-    //           sourceId: foods[i].nutrients[j].id,
-    //           uniqueNutrientRefference:
-    //             foods[i].nutrients[j].nutrientDescription._id,
-    //         };
-    //         food.nutrients.push(newNutrient);
-    //       }
-    //       for (let k = 0; k < foods[i].portions.length; k++) {
-    //         let newPortion = {
-    //           measurement: foods[i].portions[k].modifier,
-    //           measurement2: foods[i].portions[k].measureUnitName,
-    //           meausermentWeight: foods[i].portions[k].gram_weight,
-    //           sourceId: foods[i].portions[k].id,
-    //         };
-    //         //@ts-ignore
-    //         food.portions.push(newPortion);
-    //       }
-    //       await FoodSrcModel.create(food);
-    //     }
-    //   }
-    //   return 'done';
-    // }
+    async databaseShifting() {
+        let foods = fs_1.default.readFileSync('./newData/finalfood2.json', 'utf-8');
+        foods = JSON.parse(foods);
+        for (let i = 0; i < foods.length; i++) {
+            let findFood = await ingredient_1.default.findOne({
+                refDatabaseId: foods[i]._id,
+            });
+            if (!findFood) {
+                let food = {
+                    nutrients: [],
+                    portions: [],
+                    refDatabaseId: foods[i]._id,
+                    ingredientName: foods[i].name,
+                    ingredientId: '',
+                    category: '',
+                    blendStatus: 'Review',
+                    classType: '',
+                    source: foods[i].data_type,
+                    description: foods[i].description,
+                    sourceId: foods[i].NDB_number
+                        ? foods[i].NDB_number
+                        : foods[i].foodCode,
+                    addedToBlend: false,
+                    images: [],
+                    sourceCategory: foods[i].categoryId.description,
+                    publication_date: foods[i].publication_date,
+                    new: true,
+                };
+                for (let j = 0; j < foods[i].nutrients.length; j++) {
+                    let newNutrient = {
+                        value: foods[i].nutrients[j].amount,
+                        sourceId: foods[i].nutrients[j].id,
+                        uniqueNutrientRefference: foods[i].nutrients[j].nutrientDescription._id,
+                    };
+                    food.nutrients.push(newNutrient);
+                }
+                for (let k = 0; k < foods[i].portions.length; k++) {
+                    let newPortion = {
+                        measurement: foods[i].portions[k].modifier,
+                        measurement2: foods[i].portions[k].measureUnitName,
+                        meausermentWeight: foods[i].portions[k].gram_weight,
+                        sourceId: foods[i].portions[k].id,
+                    };
+                    //@ts-ignore
+                    food.portions.push(newPortion);
+                }
+                await ingredient_1.default.create(food);
+            }
+        }
+        return 'done';
+    }
     // @Mutation(() => String)
     // async deleteFood() {
     //   await UniqueNutrientModel.deleteMany({});
@@ -515,6 +518,12 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], MemberResolver.prototype, "storeAllUniqueNutrient", null);
+__decorate([
+    (0, type_graphql_1.Query)(() => String),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], MemberResolver.prototype, "databaseShifting", null);
 __decorate([
     (0, type_graphql_1.Query)(() => [Ingredient_1.default]),
     __param(0, (0, type_graphql_1.Arg)('searchTerm')),

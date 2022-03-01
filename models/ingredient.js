@@ -41,6 +41,7 @@ const ingredientSchema = new mongoose_1.Schema({
         },
     ],
     addedToBlend: Boolean,
+    new: Boolean,
 });
 const Ingredient = (0, mongoose_1.model)('Ingredient', ingredientSchema);
 exports.default = Ingredient;
