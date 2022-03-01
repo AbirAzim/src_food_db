@@ -40,7 +40,7 @@ let MemberResolver = class MemberResolver {
             path: 'nutrients.uniqueNutrientRefference',
             model: 'UniqueNutrient',
         })
-            .limit(2000);
+            .limit(1000);
         let returnIngredients = [];
         for (let i = 0; i < ingredients.length; i++) {
             let returnIngredient = ingredients[i];
