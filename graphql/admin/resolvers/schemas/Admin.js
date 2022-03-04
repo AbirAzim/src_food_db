@@ -8,8 +8,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
+const Role_1 = __importDefault(require("./Role"));
 let Admin = class Admin {
 };
 __decorate([
@@ -57,8 +61,8 @@ __decorate([
     __metadata("design:type", String)
 ], Admin.prototype, "image", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(() => type_graphql_1.ID),
-    __metadata("design:type", String)
+    (0, type_graphql_1.Field)(() => Role_1.default),
+    __metadata("design:type", Role_1.default)
 ], Admin.prototype, "role", void 0);
 __decorate([
     (0, type_graphql_1.Field)(() => Date),

@@ -26,11 +26,11 @@ let AdminResolver = class AdminResolver {
         return admin;
     }
     async getASingleAdmin(adminId) {
-        let admin = await Admin_2.default.findOne({ _id: adminId });
+        let admin = await Admin_2.default.findOne({ _id: adminId }).populate('role');
         return admin;
     }
     async getAllAdmin() {
-        const admins = await Admin_2.default.find();
+        const admins = await Admin_2.default.find().populate('role');
         return admins;
     }
     async removeAdmin(email) {

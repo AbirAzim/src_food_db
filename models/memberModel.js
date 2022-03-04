@@ -19,6 +19,7 @@ const memberSchema = new mongoose_1.Schema({
         required: [true, 'email is required'],
         unique: true,
     },
+    phone: String,
     location: String,
     orderHistoty: [String],
     myCart: [String],
@@ -29,7 +30,10 @@ const memberSchema = new mongoose_1.Schema({
         ref: 'MemberConfiguiration',
     },
     defaultCollection: { type: mongoose_1.Schema.Types.ObjectId, ref: 'UserCollection' },
-    lastModifiedCollection: { type: mongoose_1.Schema.Types.ObjectId, ref: 'UserCollection' },
+    lastModifiedCollection: {
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: 'UserCollection',
+    },
     collections: [{ type: mongoose_1.Schema.Types.ObjectId, ref: 'UserCollection' }],
 });
 const Member = (0, mongoose_1.model)('User', memberSchema);

@@ -56,6 +56,10 @@ __decorate([
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
+], Member.prototype, "phone", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
 ], Member.prototype, "location", void 0);
 __decorate([
     (0, type_graphql_1.Field)((type) => [String], { nullable: true }),
