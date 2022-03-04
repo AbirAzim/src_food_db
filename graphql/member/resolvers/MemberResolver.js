@@ -34,6 +34,10 @@ let MemberResolver = class MemberResolver {
             populate: {
                 path: 'recipes',
                 model: 'Recipe',
+                // populate: {
+                //   path: 'ingredients.ingredientId',
+                //   model: 'BlendIngredient',
+                // },
             },
         });
         if (!user) {
@@ -53,6 +57,10 @@ let MemberResolver = class MemberResolver {
                 populate: {
                     path: 'recipes',
                     model: 'Recipe',
+                    // populate: {
+                    //   path: 'ingredients.ingredientId',
+                    //   model: 'BlendIngredient',
+                    // },
                 },
             });
             return user3;
@@ -67,6 +75,10 @@ let MemberResolver = class MemberResolver {
             populate: {
                 path: 'recipes',
                 model: 'Recipe',
+                // populate: {
+                //   path: 'ingredients.ingredientId',
+                //   model: 'BlendIngredient',
+                // },
             },
         });
         return user;
