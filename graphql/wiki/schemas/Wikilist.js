@@ -41,6 +41,10 @@ __decorate([
     __metadata("design:type", Date)
 ], wikiList.prototype, "publishDate", void 0);
 __decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], wikiList.prototype, "description", void 0);
+__decorate([
     (0, type_graphql_1.Field)(),
     __metadata("design:type", String)
 ], wikiList.prototype, "publishedBy", void 0);

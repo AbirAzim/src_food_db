@@ -40,6 +40,7 @@ let WikiResolver = class WikiResolver {
                 category: blendNutrients[i].category.categoryName,
                 status: blendNutrients[i].status,
                 publishDate: new Date(),
+                description: '',
                 image: '',
                 publishedBy: 'g. braun',
             };
@@ -58,6 +59,7 @@ let WikiResolver = class WikiResolver {
                 status: blendIngredients[i].blendStatus,
                 publishDate: blendIngredients[i].createdAt,
                 image: blendIngredients[i].featuredImage,
+                description: blendIngredients[i].description,
                 publishedBy: 'g. braun',
             };
             if (!data.title) {
