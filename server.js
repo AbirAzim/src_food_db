@@ -24,6 +24,7 @@ const UserNoteResolver_1 = __importDefault(require("./graphql/member/resolvers/U
 const BlendNutrientCategoryResolver_1 = __importDefault(require("./graphql/blendNutrient/resolvers/BlendNutrientCategoryResolver"));
 const BlendNutrientResolver_1 = __importDefault(require("./graphql/blendNutrient/resolvers/BlendNutrientResolver"));
 const BlendIngredientsResolvers_1 = __importDefault(require("./graphql/blendIngredientsdata/resolvers/BlendIngredientsResolvers"));
+const WikiResolver_1 = __importDefault(require("./graphql/wiki/resolver/WikiResolver"));
 process.on('uncaughtException', (err) => {
     console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
     console.log(err.name, err.message);
@@ -58,6 +59,7 @@ async function bootstrap() {
                 BlendNutrientCategoryResolver_1.default,
                 BlendNutrientResolver_1.default,
                 BlendIngredientsResolvers_1.default,
+                WikiResolver_1.default,
             ],
         });
     }
