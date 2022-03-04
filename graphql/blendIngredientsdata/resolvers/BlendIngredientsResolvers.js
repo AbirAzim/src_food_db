@@ -482,7 +482,7 @@ let BlendIngredientResolver = class BlendIngredientResolver {
         let ingredients;
         if (data.category === 'All') {
             ingredients = await blendIngredient_1.default.find({
-                // classType: 'Class - 1',
+                classType: 'Class - 1',
                 blendStatus: 'Active',
             }).select('-srcFoodReference -description -classType -blendStatus -category -sourceName -portions -notBlendNutrients');
         }
