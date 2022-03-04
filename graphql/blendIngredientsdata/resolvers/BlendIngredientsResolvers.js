@@ -26,11 +26,9 @@ const AddBlendIngredient_1 = __importDefault(require("./input-type/AddBlendIngre
 const IngredientFilter_1 = __importDefault(require("./input-type/IngredientFilter"));
 const BlendIngredientInfo_1 = __importDefault(require("./input-type/BlendIngredientInfo"));
 const EditBlendIngredient_1 = __importDefault(require("./input-type/EditBlendIngredient"));
-const GetIngredientsFromNutrition_1 = __importDefault(require("./input-type/GetIngredientsFromNutrition"));
 const BlendIngredientData_1 = __importDefault(require("../schemas/BlendIngredientData"));
 const ReturnBlendIngredient_1 = __importDefault(require("../schemas/ReturnBlendIngredient"));
 const ReturnBlendIngredientBasedOnDefaultPortion_1 = __importDefault(require("../schemas/ReturnBlendIngredientBasedOnDefaultPortion"));
-const IngredientsFromNutrition_1 = __importDefault(require("../schemas/IngredientsFromNutrition"));
 const AppError_1 = __importDefault(require("../../../utils/AppError"));
 let BlendIngredientResolver = class BlendIngredientResolver {
     async getAllBlendIngredients() {
@@ -472,60 +470,6 @@ let BlendIngredientResolver = class BlendIngredientResolver {
         };
         return { calories, energy, vitamins, minerals };
     }
-    async getAllIngredientsBasedOnNutrition(data) {
-        // let ingredients = await BlendIngredientModel.find({
-        //   'blendNutrients.blendNutrientRefference': nutritionID,
-        //   classType: 'Class - 1',
-        // });
-        // console.log(ingredients[0].blendNutrients);
-        // console.log(ingredients.length);
-        let ingredients;
-        if (data.category === 'All') {
-            ingredients = await blendIngredient_1.default.find({
-                classType: 'Class - 1',
-                blendStatus: 'Active',
-            }).select('-srcFoodReference -description -classType -blendStatus -category -sourceName -portions -notBlendNutrients');
-        }
-        else {
-            ingredients = await blendIngredient_1.default.find({
-                classType: 'Class - 1',
-                blendStatus: 'Active',
-                category: data.category,
-            }).select('-srcFoodReference -description -classType -blendStatus -category -sourceName -portions -notBlendNutrients');
-        }
-        console.log(ingredients.length);
-        let returnIngredients = {};
-        for (let i = 0; i < ingredients.length; i++) {
-            for (let j = 0; j < ingredients[i].blendNutrients.length; j++) {
-                if (String(ingredients[i].blendNutrients[j].blendNutrientRefference) ===
-                    data.nutritionID) {
-                    if (!returnIngredients[ingredients[i].ingredientName]) {
-                        returnIngredients[ingredients[i].ingredientName] = {
-                            ingredientId: ingredients[i]._id,
-                            name: ingredients[i].ingredientName,
-                            value: parseInt(ingredients[i].blendNutrients[j].value),
-                        };
-                    }
-                    else {
-                        returnIngredients[ingredients[i].ingredientName] = {
-                            ingredientId: ingredients[i]._id,
-                            name: ingredients[i].ingredientName,
-                            value: parseInt(returnIngredients[ingredients[i].ingredientName].value) + parseInt(ingredients[i].blendNutrients[j].value),
-                        };
-                    }
-                }
-            }
-        }
-        let sortArray = [];
-        Object.keys(returnIngredients).forEach((key) => {
-            sortArray.push(returnIngredients[key]);
-        });
-        //@ts-ignore
-        let result = sortArray.sort((a, b) => {
-            return b.value - a.value;
-        });
-        return result.slice(0, 10);
-    }
 };
 __decorate([
     (0, type_graphql_1.Query)(() => [ReturnBlendIngredient_1.default]),
@@ -597,13 +541,6 @@ __decorate([
     __metadata("design:paramtypes", [Array]),
     __metadata("design:returntype", Promise)
 ], BlendIngredientResolver.prototype, "getBlendNutritionBasedOnRecipe", null);
-__decorate([
-    (0, type_graphql_1.Query)(() => [IngredientsFromNutrition_1.default]),
-    __param(0, (0, type_graphql_1.Arg)('data')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [GetIngredientsFromNutrition_1.default]),
-    __metadata("design:returntype", Promise)
-], BlendIngredientResolver.prototype, "getAllIngredientsBasedOnNutrition", null);
 BlendIngredientResolver = __decorate([
     (0, type_graphql_1.Resolver)()
 ], BlendIngredientResolver);

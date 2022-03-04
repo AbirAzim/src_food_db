@@ -26,6 +26,10 @@ const blendNutrient = new mongoose_1.Schema({
             units: String,
         },
     ],
+    wikiCoverImages: [String],
+    wikiFeatureImage: String,
+    bodies: [String],
+    createdAt: { type: Date, default: Date.now },
 });
 const BlendNutrient = (0, mongoose_1.model)('BlendNutrient', blendNutrient);
 exports.default = BlendNutrient;
