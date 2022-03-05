@@ -18,7 +18,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
 const AppError_1 = __importDefault(require("../../../utils/AppError"));
 const recipe_1 = __importDefault(require("../../../models/recipe"));
-const recipeCategory_1 = __importDefault(require("../../../models/recipeCategory"));
 const memberModel_1 = __importDefault(require("../../../models/memberModel"));
 const userCollection_1 = __importDefault(require("../../../models/userCollection"));
 const blendIngredient_1 = __importDefault(require("../../../models/blendIngredient"));
@@ -179,10 +178,10 @@ let RecipeResolver = class RecipeResolver {
     }
     async editARecipe(data) {
         let updatedData = data.editableObject;
-        let recipeBlendCategory = await recipeCategory_1.default.findOne({
-            _id: data.editableObject.recipeBlendCategory,
-        });
-        updatedData.tempBlendCategory = recipeBlendCategory.name;
+        // let recipeBlendCategory = await CategoryModel.findOne({
+        //   _id: data.editableObject.recipeBlendCategory,
+        // });
+        // updatedData.tempBlendCategory = recipeBlendCategory.name;
         await recipe_1.default.findOneAndUpdate({ _id: data.editId }, updatedData);
         return 'recipe updated successfully';
     }
