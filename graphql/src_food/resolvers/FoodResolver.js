@@ -42,7 +42,7 @@ let MemberResolver = class MemberResolver {
             return new AppError_1.default('Rows per page must be between 0 and 300', 400);
         }
         let limit = filter.rowsPerPage ? filter.rowsPerPage : 500;
-        let pageCount = +filter.page - 1;
+        let pageCount = +filter.page + 1;
         let skip = filter.page ? pageCount * +limit : 0;
         let ingredients = await ingredient_1.default.find({})
             .populate({
@@ -174,7 +174,7 @@ let MemberResolver = class MemberResolver {
         return 'done';
     }
     async databaseShifting() {
-        let foods = fs_1.default.readFileSync('./newData/finalfood2.json', 'utf-8');
+        let foods = fs_1.default.readFileSync('./newData/finalfood5.json', 'utf-8');
         foods = JSON.parse(foods);
         for (let i = 0; i < foods.length; i++) {
             let findFood = await ingredient_1.default.findOne({
