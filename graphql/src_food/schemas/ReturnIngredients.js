@@ -19,11 +19,11 @@ let RetrurnIngredients = class RetrurnIngredients {
 __decorate([
     (0, type_graphql_1.Field)(() => [ReturnIngredient_1.default]),
     __metadata("design:type", Array)
-], RetrurnIngredients.prototype, "returnIngredients", void 0);
+], RetrurnIngredients.prototype, "ingredients", void 0);
 __decorate([
     (0, type_graphql_1.Field)(),
     __metadata("design:type", Number)
-], RetrurnIngredients.prototype, "totalIngredients", void 0);
+], RetrurnIngredients.prototype, "totalIngredientsCount", void 0);
 RetrurnIngredients = __decorate([
     (0, type_graphql_1.ObjectType)()
 ], RetrurnIngredients);

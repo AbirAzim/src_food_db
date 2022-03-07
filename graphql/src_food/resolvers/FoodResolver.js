@@ -28,7 +28,7 @@ const IngredientInfo_1 = __importDefault(require("./input-type/IngredientInfo"))
 const StructureIngredientsData_1 = __importDefault(require("./input-type/StructureIngredientsData"));
 const Ingredient_1 = __importDefault(require("../schemas/Ingredient"));
 const NutrientValue_1 = __importDefault(require("../schemas/NutrientValue"));
-const ReturnIngredient_1 = __importDefault(require("../schemas/ReturnIngredient"));
+const ReturnIngredients_1 = __importDefault(require("../schemas/ReturnIngredients"));
 const UniqueNutrient_1 = __importDefault(require("../schemas/UniqueNutrient"));
 const ReurnIngredientBasedOnDefaultPortion_1 = __importDefault(require("../schemas/ReurnIngredientBasedOnDefaultPortion"));
 const AppError_1 = __importDefault(require("../../../utils/AppError"));
@@ -59,8 +59,10 @@ let MemberResolver = class MemberResolver {
             returnIngredient.imageCount = ingredients[i].images.length;
             returnIngredients.push(returnIngredient);
         }
-        returnIngredients.totalIngredients = totalIngredients;
-        return returnIngredients;
+        return {
+            ingredients: returnIngredients,
+            totalIngredientsCount: totalIngredients,
+        };
     }
     async getALlUniqueNutrientList() {
         let nutrients = await uniqueNutrient_1.default.find({});
@@ -477,7 +479,7 @@ let MemberResolver = class MemberResolver {
     }
 };
 __decorate([
-    (0, type_graphql_1.Query)(() => [ReturnIngredient_1.default]),
+    (0, type_graphql_1.Query)(() => ReturnIngredients_1.default),
     __param(0, (0, type_graphql_1.Arg)('filter')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [StructureIngredientsData_1.default]),
