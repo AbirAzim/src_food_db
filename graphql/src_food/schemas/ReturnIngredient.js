@@ -97,6 +97,10 @@ __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", Boolean)
 ], RetrurnIngredient.prototype, "addedToBlend", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Number)
+], RetrurnIngredient.prototype, "totalIngredients", void 0);
 RetrurnIngredient = __decorate([
     (0, type_graphql_1.ObjectType)()
 ], RetrurnIngredient);

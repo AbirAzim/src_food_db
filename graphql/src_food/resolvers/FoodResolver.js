@@ -25,6 +25,7 @@ const EditBlendIngredient_1 = __importDefault(require("../../blendIngredientsdat
 const EditNutrient_1 = __importDefault(require("./input-type/EditNutrient"));
 const createIngredient_1 = __importDefault(require("./input-type/createIngredient"));
 const IngredientInfo_1 = __importDefault(require("./input-type/IngredientInfo"));
+const StructureIngredientsData_1 = __importDefault(require("./input-type/StructureIngredientsData"));
 const Ingredient_1 = __importDefault(require("../schemas/Ingredient"));
 const NutrientValue_1 = __importDefault(require("../schemas/NutrientValue"));
 const ReturnIngredient_1 = __importDefault(require("../schemas/ReturnIngredient"));
@@ -34,13 +35,22 @@ const AppError_1 = __importDefault(require("../../../utils/AppError"));
 const fs_1 = __importDefault(require("fs"));
 const mongoose_1 = __importDefault(require("mongoose"));
 let MemberResolver = class MemberResolver {
-    async getAllTheIngredients() {
+    async getAllTheIngredients(filter) {
+        let totalIngredients = await ingredient_1.default.countDocuments({});
+        console.log(totalIngredients);
+        if (filter.rowsPerPage > 1000 || filter.rowsPerPage < 0) {
+            return new AppError_1.default('Rows per page must be between 0 and 300', 400);
+        }
+        let limit = filter.rowsPerPage ? filter.rowsPerPage : 500;
+        let pageCount = +filter.page - 1;
+        let skip = filter.page ? pageCount * +limit : 0;
         let ingredients = await ingredient_1.default.find({})
             .populate({
             path: 'nutrients.uniqueNutrientRefference',
             model: 'UniqueNutrient',
         })
-            .limit(1000);
+            .skip(skip)
+            .limit(+limit);
         let returnIngredients = [];
         for (let i = 0; i < ingredients.length; i++) {
             let returnIngredient = ingredients[i];
@@ -49,6 +59,7 @@ let MemberResolver = class MemberResolver {
             returnIngredient.imageCount = ingredients[i].images.length;
             returnIngredients.push(returnIngredient);
         }
+        returnIngredients.totalIngredients = totalIngredients;
         return returnIngredients;
     }
     async getALlUniqueNutrientList() {
@@ -467,8 +478,9 @@ let MemberResolver = class MemberResolver {
 };
 __decorate([
     (0, type_graphql_1.Query)(() => [ReturnIngredient_1.default]),
+    __param(0, (0, type_graphql_1.Arg)('filter')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [StructureIngredientsData_1.default]),
     __metadata("design:returntype", Promise)
 ], MemberResolver.prototype, "getAllTheIngredients", null);
 __decorate([
