@@ -49,7 +49,7 @@ let MemberResolver = class MemberResolver {
         let pageCount = +filter.page - 1;
         let skip = filter.page ? pageCount * +limit : 0;
         let ingredients;
-        if (!filter.sort) {
+        if (filter.sort === '') {
             ingredients = await ingredient_1.default.find({})
                 .populate({
                 path: 'nutrients.uniqueNutrientRefference',
