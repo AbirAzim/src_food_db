@@ -20,6 +20,14 @@ __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", Number)
 ], StructureIngredientsData.prototype, "page", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Number)
+], StructureIngredientsData.prototype, "sortType", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], StructureIngredientsData.prototype, "sortBy", void 0);
 StructureIngredientsData = __decorate([
     (0, type_graphql_1.InputType)()
 ], StructureIngredientsData);
