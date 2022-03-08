@@ -140,6 +140,7 @@ let WikiResolver = class WikiResolver {
         console.log(res);
         let a = JSON.stringify(res);
         let returnData = {
+            portions: ingredients[0].portions,
             ingredientName: ingredients[0].ingredientName,
             wikiCoverImages: ingredients[0].wikiCoverImages,
             wikiFeatureImage: ingredients[0].wikiFeatureImage,
