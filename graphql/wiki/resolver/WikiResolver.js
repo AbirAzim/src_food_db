@@ -27,7 +27,7 @@ const blendNutrient_1 = __importDefault(require("../../../models/blendNutrient")
 const blendIngredient_1 = __importDefault(require("../../../models/blendIngredient"));
 const blendNutrientCategory_1 = __importDefault(require("../../../models/blendNutrientCategory"));
 let WikiResolver = class WikiResolver {
-    async getWikiList() {
+    async z() {
         let returnData = [];
         let blendNutrients = await blendNutrient_1.default.find()
             .populate('category')
@@ -58,6 +58,7 @@ let WikiResolver = class WikiResolver {
                 category: blendIngredients[i].category,
                 status: blendIngredients[i].blendStatus,
                 publishDate: blendIngredients[i].createdAt,
+                portions: blendIngredients[i].portions,
                 image: blendIngredients[i].featuredImage,
                 description: blendIngredients[i].description,
                 publishedBy: 'g. braun',
@@ -140,7 +141,6 @@ let WikiResolver = class WikiResolver {
         console.log(res);
         let a = JSON.stringify(res);
         let returnData = {
-            portions: ingredients[0].portions,
             ingredientName: ingredients[0].ingredientName,
             wikiCoverImages: ingredients[0].wikiCoverImages,
             wikiFeatureImage: ingredients[0].wikiFeatureImage,
@@ -301,7 +301,7 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
-], WikiResolver.prototype, "getWikiList", null);
+], WikiResolver.prototype, "z", null);
 __decorate([
     (0, type_graphql_1.Query)(() => NutrientsFromIngredient_1.default) // wait
     ,
