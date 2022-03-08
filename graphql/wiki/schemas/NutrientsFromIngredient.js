@@ -13,6 +13,10 @@ const type_graphql_1 = require("type-graphql");
 let NutritionFromIngredient = class NutritionFromIngredient {
 };
 __decorate([
+    (0, type_graphql_1.Field)(),
+    __metadata("design:type", String)
+], NutritionFromIngredient.prototype, "ingredientName", void 0);
+__decorate([
     (0, type_graphql_1.Field)((type) => [String], { nullable: true }),
     __metadata("design:type", Array)
 ], NutritionFromIngredient.prototype, "wikiCoverImages", void 0);
