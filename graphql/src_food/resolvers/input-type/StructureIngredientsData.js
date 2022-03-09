@@ -24,6 +24,10 @@ __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
 ], StructureIngredientsData.prototype, "sort", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], StructureIngredientsData.prototype, "search", void 0);
 StructureIngredientsData = __decorate([
     (0, type_graphql_1.InputType)()
 ], StructureIngredientsData);

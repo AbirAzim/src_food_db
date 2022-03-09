@@ -37,7 +37,7 @@ const mongoose_1 = __importDefault(require("mongoose"));
 let MemberResolver = class MemberResolver {
     async getAllTheIngredients(filter) {
         let totalIngredients = await ingredient_1.default.countDocuments({});
-        console.log(totalIngredients);
+        // console.log(totalIngredients);
         if (filter.rowsPerPage > 1000 || filter.rowsPerPage < 0) {
             return new AppError_1.default('Rows per page must be between 0 and 300', 400);
         }
@@ -49,8 +49,13 @@ let MemberResolver = class MemberResolver {
         let pageCount = +filter.page - 1;
         let skip = filter.page ? pageCount * +limit : 0;
         let ingredients;
+        if (filter.search === undefined) {
+            filter.search = '';
+        }
         if (filter.sort === '' || filter.sort === undefined) {
-            ingredients = await ingredient_1.default.find({})
+            ingredients = await ingredient_1.default.find({
+                ingredientName: { $regex: filter.search, $options: 'i' },
+            })
                 .populate({
                 path: 'nutrients.uniqueNutrientRefference',
                 model: 'UniqueNutrient',
@@ -59,7 +64,9 @@ let MemberResolver = class MemberResolver {
                 .limit(+limit);
         }
         else {
-            ingredients = await ingredient_1.default.find({})
+            ingredients = await ingredient_1.default.find({
+                ingredientName: { $regex: filter.search, $options: 'i' },
+            })
                 .populate({
                 path: 'nutrients.uniqueNutrientRefference',
                 model: 'UniqueNutrient',
@@ -68,16 +75,16 @@ let MemberResolver = class MemberResolver {
                 .skip(skip)
                 .limit(+limit);
         }
-        let returnIngredients = [];
-        for (let i = 0; i < ingredients.length; i++) {
-            let returnIngredient = ingredients[i];
-            returnIngredient.nutrientCount = ingredients[i].nutrients.length;
-            returnIngredient.portionCount = ingredients[i].portions.length;
-            returnIngredient.imageCount = ingredients[i].images.length;
-            returnIngredients.push(returnIngredient);
-        }
+        // let returnIngredients: any = [];
+        // for (let i = 0; i < ingredients.length; i++) {
+        //   let returnIngredient = ingredients[i];
+        //   returnIngredient.nutrientCount = ingredients[i].nutrients.length;
+        //   returnIngredient.portionCount = ingredients[i].portions.length;
+        //   returnIngredient.imageCount = ingredients[i].images.length;
+        //   returnIngredients.push(returnIngredient);
+        // }
         return {
-            ingredients: returnIngredients,
+            ingredients: ingredients,
             totalIngredientsCount: totalIngredients,
         };
     }
@@ -494,6 +501,20 @@ let MemberResolver = class MemberResolver {
         await ingredient_1.default.findOneAndDelete({ _id: ingredientId });
         return 'done';
     }
+    async updateSrcIngredient(page) {
+        let skip = (+page - 1) * 500;
+        let data = await ingredient_1.default.find().skip(skip).limit(500);
+        for (let i = 0; i < data.length; i++) {
+            let nutrientCount = data[i].nutrients.length;
+            let portionCount = data[i].portions.length;
+            await ingredient_1.default.findOneAndUpdate({ _id: data[i]._id }, {
+                nutrientCount: nutrientCount,
+                portionCount: portionCount,
+            });
+            console.log(i);
+        }
+        return 'done';
+    }
 };
 __decorate([
     (0, type_graphql_1.Query)(() => ReturnIngredients_1.default),
@@ -584,6 +605,13 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], MemberResolver.prototype, "removeIngredient", null);
+__decorate([
+    (0, type_graphql_1.Mutation)(() => String),
+    __param(0, (0, type_graphql_1.Arg)('page')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", Promise)
+], MemberResolver.prototype, "updateSrcIngredient", null);
 MemberResolver = __decorate([
     (0, type_graphql_1.Resolver)()
 ], MemberResolver);
