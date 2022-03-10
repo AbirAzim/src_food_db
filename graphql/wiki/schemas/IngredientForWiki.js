@@ -8,8 +8,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
+const Portion_1 = __importDefault(require("../../src_food/schemas/Portion"));
 let IngredientForWiki = class IngredientForWiki {
 };
 __decorate([
@@ -28,6 +32,10 @@ __decorate([
     (0, type_graphql_1.Field)(),
     __metadata("design:type", String)
 ], IngredientForWiki.prototype, "units", void 0);
+__decorate([
+    (0, type_graphql_1.Field)((type) => Portion_1.default),
+    __metadata("design:type", Portion_1.default)
+], IngredientForWiki.prototype, "portion", void 0);
 IngredientForWiki = __decorate([
     (0, type_graphql_1.ObjectType)()
 ], IngredientForWiki);

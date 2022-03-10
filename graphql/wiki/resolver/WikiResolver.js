@@ -240,7 +240,7 @@ let WikiResolver = class WikiResolver {
                 classType: 'Class - 1',
                 blendStatus: 'Active',
             })
-                .select('-srcFoodReference -description -classType -blendStatus -category -sourceName -portions -notBlendNutrients')
+                .select('-srcFoodReference -description -classType -blendStatus -category -sourceName -notBlendNutrients')
                 .populate('blendNutrients.blendNutrientRefference');
         }
         else {
@@ -249,7 +249,7 @@ let WikiResolver = class WikiResolver {
                 blendStatus: 'Active',
                 category: data.category,
             })
-                .select('-srcFoodReference -description -classType -blendStatus -category -sourceName -portions -notBlendNutrients')
+                .select('-srcFoodReference -description -classType -blendStatus -category -sourceName -notBlendNutrients')
                 .populate('blendNutrients.blendNutrientRefference');
         }
         console.log(ingredients.length);
@@ -263,27 +263,27 @@ let WikiResolver = class WikiResolver {
                         //   unit: ingredients[i].blendNutrients[j].blendNutrientRefference
                         //     .units,
                         // });
+                        let defaultPortion = ingredients[i].portions.filter(
+                        //@ts-ignore
+                        (a) => a.default === true)[0];
                         returnIngredients[ingredients[i].ingredientName] = {
                             ingredientId: ingredients[i]._id,
                             name: ingredients[i].ingredientName,
-                            value: parseInt(ingredients[i].blendNutrients[j].value),
+                            value: parseFloat(ingredients[i].blendNutrients[j].value),
                             units: ingredients[i].blendNutrients[j].blendNutrientRefference.units,
+                            portion: defaultPortion,
                         };
                     }
                     else {
-                        // let value = await this.convertToGram({
-                        //   amount:
-                        //     parseInt(
-                        //       returnIngredients[ingredients[i].ingredientName].value
-                        //     ) + parseInt(ingredients[i].blendNutrients[j].value),
-                        //   unit: ingredients[i].blendNutrients[j].blendNutrientRefference
-                        //     .units,
-                        // });
+                        let defaultPortion = ingredients[i].portions.filter(
+                        //@ts-ignore
+                        (a) => a.default === true)[0];
                         returnIngredients[ingredients[i].ingredientName] = {
                             ingredientId: ingredients[i]._id,
                             name: ingredients[i].ingredientName,
-                            value: parseInt(returnIngredients[ingredients[i].ingredientName].value) + parseInt(ingredients[i].blendNutrients[j].value),
+                            value: parseFloat(returnIngredients[ingredients[i].ingredientName].value) + parseFloat(ingredients[i].blendNutrients[j].value),
                             units: ingredients[i].blendNutrients[j].blendNutrientRefference.units,
+                            portion: defaultPortion,
                         };
                     }
                 }
