@@ -26,6 +26,7 @@ const NutrientsFromIngredient_1 = __importDefault(require("../schemas/NutrientsF
 const blendNutrient_1 = __importDefault(require("../../../models/blendNutrient"));
 const blendIngredient_1 = __importDefault(require("../../../models/blendIngredient"));
 const blendNutrientCategory_1 = __importDefault(require("../../../models/blendNutrientCategory"));
+const GramConversion_1 = __importDefault(require("./input-type/GramConversion"));
 let WikiResolver = class WikiResolver {
     async getWikiList() {
         let returnData = [];
@@ -238,33 +239,51 @@ let WikiResolver = class WikiResolver {
             ingredients = await blendIngredient_1.default.find({
                 classType: 'Class - 1',
                 blendStatus: 'Active',
-            }).select('-srcFoodReference -description -classType -blendStatus -category -sourceName -portions -notBlendNutrients');
+            })
+                .select('-srcFoodReference -description -classType -blendStatus -category -sourceName -portions -notBlendNutrients')
+                .populate('blendNutrients.blendNutrientRefference');
         }
         else {
             ingredients = await blendIngredient_1.default.find({
                 classType: 'Class - 1',
                 blendStatus: 'Active',
                 category: data.category,
-            }).select('-srcFoodReference -description -classType -blendStatus -category -sourceName -portions -notBlendNutrients');
+            })
+                .select('-srcFoodReference -description -classType -blendStatus -category -sourceName -portions -notBlendNutrients')
+                .populate('blendNutrients.blendNutrientRefference');
         }
         console.log(ingredients.length);
         let returnIngredients = {};
         for (let i = 0; i < ingredients.length; i++) {
             for (let j = 0; j < ingredients[i].blendNutrients.length; j++) {
-                if (String(ingredients[i].blendNutrients[j].blendNutrientRefference) ===
-                    data.nutritionID) {
+                if (String(ingredients[i].blendNutrients[j].blendNutrientRefference._id) === data.nutritionID) {
                     if (!returnIngredients[ingredients[i].ingredientName]) {
+                        // let value = await this.convertToGram({
+                        //   amount: parseInt(ingredients[i].blendNutrients[j].value),
+                        //   unit: ingredients[i].blendNutrients[j].blendNutrientRefference
+                        //     .units,
+                        // });
                         returnIngredients[ingredients[i].ingredientName] = {
                             ingredientId: ingredients[i]._id,
                             name: ingredients[i].ingredientName,
                             value: parseInt(ingredients[i].blendNutrients[j].value),
+                            units: ingredients[i].blendNutrients[j].blendNutrientRefference.units,
                         };
                     }
                     else {
+                        // let value = await this.convertToGram({
+                        //   amount:
+                        //     parseInt(
+                        //       returnIngredients[ingredients[i].ingredientName].value
+                        //     ) + parseInt(ingredients[i].blendNutrients[j].value),
+                        //   unit: ingredients[i].blendNutrients[j].blendNutrientRefference
+                        //     .units,
+                        // });
                         returnIngredients[ingredients[i].ingredientName] = {
                             ingredientId: ingredients[i]._id,
                             name: ingredients[i].ingredientName,
                             value: parseInt(returnIngredients[ingredients[i].ingredientName].value) + parseInt(ingredients[i].blendNutrients[j].value),
+                            units: ingredients[i].blendNutrients[j].blendNutrientRefference.units,
                         };
                     }
                 }
@@ -294,6 +313,54 @@ let WikiResolver = class WikiResolver {
     async editNutrientWiki(data) {
         await blendNutrient_1.default.findOneAndUpdate({ _id: data.editId }, data.editableObject);
         return 'success';
+    }
+    async convertToGram(data) {
+        // [ 'kJ', 'G', 'MG', 'UG', 'IU' ]
+        let gram;
+        console.log('data', data);
+        if (data.unit === 'kJ') {
+            gram = +data.amount * 238.90295761862;
+            return gram;
+        }
+        if (data.unit === 'G') {
+            return data.amount;
+        }
+        if (data.unit === 'MG') {
+            gram = +data.amount * 0.001;
+            return gram;
+        }
+        if (data.unit === 'UG') {
+            gram = +data.amount * 0.000001;
+            return gram;
+        }
+        if (data.unit === 'IU') {
+            gram = +data.amount * 0.000001059322033898305;
+            return gram;
+        }
+    }
+    async convertGramToUnit(data) {
+        // [ 'kJ', 'G', 'MG', 'UG', 'IU' ]
+        let gram;
+        console.log('data', data);
+        if (data.unit === 'kJ') {
+            gram = +data.amount * 238.90295761862;
+            return gram;
+        }
+        if (data.unit === 'G') {
+            return data.amount;
+        }
+        if (data.unit === 'MG') {
+            gram = +data.amount * 0.001;
+            return gram;
+        }
+        if (data.unit === 'UG') {
+            gram = +data.amount * 0.000001;
+            return gram;
+        }
+        if (data.unit === 'IU') {
+            gram = +data.amount * 0.000001059322033898305;
+            return gram;
+        }
     }
 };
 __decorate([
@@ -331,6 +398,20 @@ __decorate([
     __metadata("design:paramtypes", [EditIngredientAndNutrientWiki_1.default]),
     __metadata("design:returntype", Promise)
 ], WikiResolver.prototype, "editNutrientWiki", null);
+__decorate([
+    (0, type_graphql_1.Query)(() => Number),
+    __param(0, (0, type_graphql_1.Arg)('data')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [GramConversion_1.default]),
+    __metadata("design:returntype", Promise)
+], WikiResolver.prototype, "convertToGram", null);
+__decorate([
+    (0, type_graphql_1.Query)(() => Number),
+    __param(0, (0, type_graphql_1.Arg)('data')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [GramConversion_1.default]),
+    __metadata("design:returntype", Promise)
+], WikiResolver.prototype, "convertGramToUnit", null);
 WikiResolver = __decorate([
     (0, type_graphql_1.Resolver)()
 ], WikiResolver);
