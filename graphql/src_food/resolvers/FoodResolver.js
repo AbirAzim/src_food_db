@@ -36,7 +36,6 @@ const fs_1 = __importDefault(require("fs"));
 const mongoose_1 = __importDefault(require("mongoose"));
 let MemberResolver = class MemberResolver {
     async getAllTheIngredients(filter) {
-        let totalIngredients = await ingredient_1.default.countDocuments({});
         // console.log(totalIngredients);
         if (filter.rowsPerPage > 1000 || filter.rowsPerPage < 0) {
             return new AppError_1.default('Rows per page must be between 0 and 300', 400);
@@ -85,7 +84,7 @@ let MemberResolver = class MemberResolver {
         // }
         return {
             ingredients: ingredients,
-            totalIngredientsCount: totalIngredients,
+            totalIngredientsCount: ingredients.length,
         };
     }
     async getALlUniqueNutrientList() {
