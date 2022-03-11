@@ -67,13 +67,12 @@ let MemberResolver = class MemberResolver {
         if (filter.sort === '' || filter.sort === undefined) {
             ingredients = await ingredient_1.default.find({
                 ingredientName: { $regex: filter.search, $options: 'i' },
-            })
-                .populate({
+            }).populate({
                 path: 'nutrients.uniqueNutrientRefference',
                 model: 'UniqueNutrient',
-            })
-                .skip(skip)
-                .limit(+limit);
+            });
+            // .skip(skip)
+            // .limit(+limit);
         }
         else {
             ingredients = await ingredient_1.default.find({
@@ -83,10 +82,11 @@ let MemberResolver = class MemberResolver {
                 path: 'nutrients.uniqueNutrientRefference',
                 model: 'UniqueNutrient',
             })
-                .sort(JSON.parse(filter.sort.toString()))
-                .skip(skip)
-                .limit(+limit);
+                .sort(JSON.parse(filter.sort.toString()));
+            // .skip(skip)
+            // .limit(+limit);
         }
+        ingredients = ingredients.slice(skip, skip + +limit);
         // let returnIngredients: any = [];
         // for (let i = 0; i < ingredients.length; i++) {
         //   let returnIngredient = ingredients[i];
@@ -97,7 +97,7 @@ let MemberResolver = class MemberResolver {
         // }
         return {
             ingredients: ingredients,
-            totalIngredientsCount: totalIngredients,
+            totalIngredientsCount: ingredients.length,
         };
     }
     async getALlUniqueNutrientList() {
