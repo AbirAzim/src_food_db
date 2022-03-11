@@ -36,7 +36,7 @@ const fs_1 = __importDefault(require("fs"));
 const mongoose_1 = __importDefault(require("mongoose"));
 let MemberResolver = class MemberResolver {
     async getAllTheIngredients(filter) {
-        // let totalIngredients = await FoodSrcModel.countDocuments({});
+        let totalIngredients = await ingredient_1.default.countDocuments({});
         if (filter.page === undefined) {
             filter.page = 1;
         }
@@ -58,21 +58,22 @@ let MemberResolver = class MemberResolver {
         if (filter.search === undefined || filter.search === '') {
             filter.search = '';
         }
-        // } else {
-        //   let ingredientsForTotalCounting = await FoodSrcModel.find({
-        //     ingredientName: { $regex: filter.search, $options: 'i' },
-        //   });
-        //   totalIngredients = ingredientsForTotalCounting.length;
-        // }
+        else {
+            let ingredientsForTotalCounting = await ingredient_1.default.find({
+                ingredientName: { $regex: filter.search, $options: 'i' },
+            });
+            totalIngredients = ingredientsForTotalCounting.length;
+        }
         if (filter.sort === '' || filter.sort === undefined) {
             ingredients = await ingredient_1.default.find({
                 ingredientName: { $regex: filter.search, $options: 'i' },
-            }).populate({
+            })
+                .populate({
                 path: 'nutrients.uniqueNutrientRefference',
                 model: 'UniqueNutrient',
-            });
-            // .skip(skip)
-            // .limit(+limit);
+            })
+                .skip(skip)
+                .limit(+limit);
         }
         else {
             ingredients = await ingredient_1.default.find({
@@ -82,11 +83,10 @@ let MemberResolver = class MemberResolver {
                 path: 'nutrients.uniqueNutrientRefference',
                 model: 'UniqueNutrient',
             })
-                .sort(JSON.parse(filter.sort.toString()));
-            // .skip(skip)
-            // .limit(+limit);
+                .sort(JSON.parse(filter.sort.toString()))
+                .skip(skip)
+                .limit(+limit);
         }
-        let returnIngredients = ingredients.slice(skip, skip + +limit);
         // let returnIngredients: any = [];
         // for (let i = 0; i < ingredients.length; i++) {
         //   let returnIngredient = ingredients[i];
@@ -96,8 +96,8 @@ let MemberResolver = class MemberResolver {
         //   returnIngredients.push(returnIngredient);
         // }
         return {
-            ingredients: returnIngredients,
-            totalIngredientsCount: ingredients.length,
+            ingredients: ingredients,
+            totalIngredientsCount: totalIngredients,
         };
     }
     async getALlUniqueNutrientList() {
