@@ -130,7 +130,7 @@ let BlendIngredientResolver = class BlendIngredientResolver {
             return new AppError_1.default('BlendIngredient already exists with that ID', 404);
         }
         let portions;
-        if (srcFood.portion.length === 0) {
+        if (srcFood.portions.length === 0) {
             portions = [
                 {
                     measurement: 'cup',
@@ -142,7 +142,7 @@ let BlendIngredientResolver = class BlendIngredientResolver {
         }
         else {
             //@ts-ignore
-            portions = srcFood.portion.map((portion) => {
+            portions = srcFood.portions.map((portion) => {
                 return {
                     measurement: portion.measurement,
                     measurement2: portion.measurement2,
