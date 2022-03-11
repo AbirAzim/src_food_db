@@ -129,13 +129,35 @@ let BlendIngredientResolver = class BlendIngredientResolver {
         if (blendIngredientWithTheSrcId) {
             return new AppError_1.default('BlendIngredient already exists with that ID', 404);
         }
+        let portions;
+        if (srcFood.portion.length === 0) {
+            portions = [
+                {
+                    measurement: 'cup',
+                    measurement2: 'undetermined',
+                    meausermentWeight: '100',
+                    default: true,
+                },
+            ];
+        }
+        else {
+            //@ts-ignore
+            portions = srcFood.portion.map((portion) => {
+                return {
+                    measurement: portion.measurement,
+                    measurement2: portion.measurement2,
+                    meausermentWeight: portion.meausermentWeight,
+                    default: false,
+                };
+            });
+        }
         let newBlendIngredient = {
-            ingredientName: srcFood.name,
+            ingredientName: srcFood.description,
             blendStatus: 'Review',
             classType: '',
-            description: '',
+            description: srcFood.description,
             srcFoodReference: srcFood._id,
-            portions: srcFood.portions,
+            portions: portions,
         };
         if (srcFood.source === 'sr_legacy_food') {
             newBlendIngredient.sourceName = 'USDA-Legacy';
@@ -470,6 +492,18 @@ let BlendIngredientResolver = class BlendIngredientResolver {
         };
         return { calories, energy, vitamins, minerals };
     }
+    async dsdsd() {
+        let t = await blendIngredient_1.default.find(); //
+        for (let i = 0; i < t.length; i++) {
+            for (let j = 0; j < t[i].portions.length; j++) {
+                if (t[i].portions[j].default === null) {
+                    console.log(t[i]._id);
+                    break;
+                }
+            }
+        }
+        return 'done';
+    }
 };
 __decorate([
     (0, type_graphql_1.Query)(() => [ReturnBlendIngredient_1.default]),
@@ -541,6 +575,12 @@ __decorate([
     __metadata("design:paramtypes", [Array]),
     __metadata("design:returntype", Promise)
 ], BlendIngredientResolver.prototype, "getBlendNutritionBasedOnRecipe", null);
+__decorate([
+    (0, type_graphql_1.Query)(() => String),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], BlendIngredientResolver.prototype, "dsdsd", null);
 BlendIngredientResolver = __decorate([
     (0, type_graphql_1.Resolver)()
 ], BlendIngredientResolver);

@@ -25,7 +25,7 @@ __decorate([
     __metadata("design:type", String)
 ], BlendPortion.prototype, "meausermentWeight", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", Boolean)
 ], BlendPortion.prototype, "default", void 0);
 __decorate([
