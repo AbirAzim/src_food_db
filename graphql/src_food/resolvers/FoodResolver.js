@@ -36,6 +36,13 @@ const fs_1 = __importDefault(require("fs"));
 const mongoose_1 = __importDefault(require("mongoose"));
 let MemberResolver = class MemberResolver {
     async getAllTheIngredients(filter) {
+        let totalIngredients = await ingredient_1.default.countDocuments({});
+        if (filter.page === undefined) {
+            filter.page = 1;
+        }
+        if (filter.rowsPerPage === undefined) {
+            filter.rowsPerPage = 300;
+        }
         // console.log(totalIngredients);
         if (filter.rowsPerPage > 1000 || filter.rowsPerPage < 0) {
             return new AppError_1.default('Rows per page must be between 0 and 300', 400);
@@ -48,8 +55,14 @@ let MemberResolver = class MemberResolver {
         let pageCount = +filter.page - 1;
         let skip = filter.page ? pageCount * +limit : 0;
         let ingredients;
-        if (filter.search === undefined) {
+        if (filter.search === undefined || filter.search === '') {
             filter.search = '';
+        }
+        else {
+            let ingredientsForTotalCounting = await ingredient_1.default.find({
+                ingredientName: { $regex: filter.search, $options: 'i' },
+            });
+            totalIngredients = ingredientsForTotalCounting.length;
         }
         if (filter.sort === '' || filter.sort === undefined) {
             ingredients = await ingredient_1.default.find({
@@ -84,7 +97,7 @@ let MemberResolver = class MemberResolver {
         // }
         return {
             ingredients: ingredients,
-            totalIngredientsCount: ingredients.length,
+            totalIngredientsCount: totalIngredients,
         };
     }
     async getALlUniqueNutrientList() {
