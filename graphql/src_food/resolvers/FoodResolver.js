@@ -36,7 +36,7 @@ const fs_1 = __importDefault(require("fs"));
 const mongoose_1 = __importDefault(require("mongoose"));
 let MemberResolver = class MemberResolver {
     async getAllTheIngredients(filter) {
-        let totalIngredients = await ingredient_1.default.countDocuments({});
+        // let totalIngredients = await FoodSrcModel.countDocuments({});
         if (filter.page === undefined) {
             filter.page = 1;
         }
@@ -58,12 +58,12 @@ let MemberResolver = class MemberResolver {
         if (filter.search === undefined || filter.search === '') {
             filter.search = '';
         }
-        else {
-            let ingredientsForTotalCounting = await ingredient_1.default.find({
-                ingredientName: { $regex: filter.search, $options: 'i' },
-            });
-            totalIngredients = ingredientsForTotalCounting.length;
-        }
+        // } else {
+        //   let ingredientsForTotalCounting = await FoodSrcModel.find({
+        //     ingredientName: { $regex: filter.search, $options: 'i' },
+        //   });
+        //   totalIngredients = ingredientsForTotalCounting.length;
+        // }
         if (filter.sort === '' || filter.sort === undefined) {
             ingredients = await ingredient_1.default.find({
                 ingredientName: { $regex: filter.search, $options: 'i' },
@@ -86,7 +86,7 @@ let MemberResolver = class MemberResolver {
             // .skip(skip)
             // .limit(+limit);
         }
-        ingredients = ingredients.slice(skip, skip + +limit);
+        let returnIngredients = ingredients.slice(skip, skip + +limit);
         // let returnIngredients: any = [];
         // for (let i = 0; i < ingredients.length; i++) {
         //   let returnIngredient = ingredients[i];
@@ -96,7 +96,7 @@ let MemberResolver = class MemberResolver {
         //   returnIngredients.push(returnIngredient);
         // }
         return {
-            ingredients: ingredients,
+            ingredients: returnIngredients,
             totalIngredientsCount: ingredients.length,
         };
     }
