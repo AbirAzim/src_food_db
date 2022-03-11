@@ -50,6 +50,13 @@ let BlendIngredientResolver = class BlendIngredientResolver {
         if (!food) {
             return new AppError_1.default('Ingredient not found', 404);
         }
+        if (data.editableObject.blendStatus === 'Archived') {
+            await blendIngredient_1.default.findByIdAndRemove(data.editId);
+            await ingredient_1.default.findByIdAndUpdate(data.editId, {
+                addedToBlend: false,
+            });
+            return 'Archieved Successfully';
+        }
         console.log(data.editableObject.defaultPortion);
         if (data.editableObject.defaultPortion === '' ||
             data.editableObject.defaultPortion === null ||
