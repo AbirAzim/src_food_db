@@ -38,17 +38,20 @@ let WikiResolver = class WikiResolver {
                 _id: blendNutrients[i]._id,
                 title: blendNutrients[i].nutrientName,
                 type: 'Nutrient',
-                category: blendNutrients[i].category.categoryName,
+                category: blendNutrients[i].category.categoryName
+                    ? blendNutrients[i].category.categoryName
+                    : '',
                 status: blendNutrients[i].status,
                 publishDate: new Date(),
                 description: '',
                 image: '',
                 publishedBy: 'g. braun',
             };
-            if (!data.title) {
-                console.log(data);
-            }
-            returnData.push(data);
+            // if (!data.category) {
+            //   console.log('n', data._id);
+            //   continue;
+            // }
+            returnData.push(data._id);
         }
         let blendIngredients = await blendIngredient_1.default.find();
         for (let i = 0; i < blendIngredients.length; i++) {
@@ -56,7 +59,9 @@ let WikiResolver = class WikiResolver {
                 _id: blendIngredients[i]._id,
                 title: blendIngredients[i].ingredientName,
                 type: 'Ingredient',
-                category: blendIngredients[i].category,
+                category: blendIngredients[i].category
+                    ? blendIngredients[i].category
+                    : '',
                 status: blendIngredients[i].blendStatus,
                 publishDate: blendIngredients[i].createdAt,
                 portions: blendIngredients[i].portions,
@@ -64,9 +69,10 @@ let WikiResolver = class WikiResolver {
                 description: blendIngredients[i].description,
                 publishedBy: 'g. braun',
             };
-            if (!data.title) {
-                console.log(data);
-            }
+            // if (!data.category) {
+            //   console.log('i', data._id);
+            //   continue;
+            // }
             returnData.push(data);
         }
         return returnData;

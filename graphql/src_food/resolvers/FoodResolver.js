@@ -66,7 +66,7 @@ let MemberResolver = class MemberResolver {
         }
         if (filter.sort === '' || filter.sort === undefined) {
             ingredients = await ingredient_1.default.find({
-                ingredientName: { $regex: filter.search, $options: 'i' },
+                description: { $regex: filter.search, $options: 'i' },
             })
                 .populate({
                 path: 'nutrients.uniqueNutrientRefference',
@@ -77,7 +77,7 @@ let MemberResolver = class MemberResolver {
         }
         else {
             ingredients = await ingredient_1.default.find({
-                ingredientName: { $regex: filter.search, $options: 'i' },
+                description: { $regex: filter.search, $options: 'i' },
             })
                 .populate({
                 path: 'nutrients.uniqueNutrientRefference',
@@ -210,9 +210,10 @@ let MemberResolver = class MemberResolver {
         return 'done';
     }
     async databaseShifting() {
-        let foods = fs_1.default.readFileSync('./newData/finalfood7.json', 'utf-8');
+        let foods = fs_1.default.readFileSync('./newData/finalFood8.json', 'utf-8');
         foods = JSON.parse(foods);
         for (let i = 0; i < foods.length; i++) {
+            console.log(i);
             let findFood = await ingredient_1.default.findOne({
                 refDatabaseId: foods[i]._id,
             });
@@ -236,6 +237,9 @@ let MemberResolver = class MemberResolver {
                     sourceCategory: foods[i].categoryId.description,
                     publication_date: foods[i].publication_date,
                     new: true,
+                    new2: true,
+                    nutrientCount: 0,
+                    portionCount: 0,
                 };
                 for (let j = 0; j < foods[i].nutrients.length; j++) {
                     let newNutrient = {
@@ -245,6 +249,7 @@ let MemberResolver = class MemberResolver {
                     };
                     food.nutrients.push(newNutrient);
                 }
+                food.nutrientCount = food.nutrients.length;
                 for (let k = 0; k < foods[i].portions.length; k++) {
                     let newPortion = {
                         measurement: foods[i].portions[k].modifier,
@@ -255,6 +260,7 @@ let MemberResolver = class MemberResolver {
                     //@ts-ignore
                     food.portions.push(newPortion);
                 }
+                food.portionCount = food.portions.length;
                 await ingredient_1.default.create(food);
             }
         }

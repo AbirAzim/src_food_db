@@ -42,6 +42,7 @@ const ingredientSchema = new mongoose_1.Schema({
     ],
     addedToBlend: Boolean,
     new: Boolean,
+    new2: Boolean,
     nutrientCount: Number,
     portionCount: Number,
 });

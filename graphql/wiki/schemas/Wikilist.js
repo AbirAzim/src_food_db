@@ -29,7 +29,7 @@ __decorate([
     __metadata("design:type", String)
 ], wikiList.prototype, "type", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
 ], wikiList.prototype, "category", void 0);
 __decorate([

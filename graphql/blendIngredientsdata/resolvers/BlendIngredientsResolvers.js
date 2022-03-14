@@ -17,6 +17,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
 const mongoose_1 = __importDefault(require("mongoose"));
+const fs_1 = __importDefault(require("fs"));
 const ingredient_1 = __importDefault(require("../../../models/ingredient"));
 const blendIngredient_1 = __importDefault(require("../../../models/blendIngredient"));
 const mapToBlend_1 = __importDefault(require("../../../models/mapToBlend"));
@@ -511,6 +512,11 @@ let BlendIngredientResolver = class BlendIngredientResolver {
         }
         return 'done';
     }
+    async start() {
+        let fpoot = await ingredient_1.default.find({ source: 'sr_legacy_food' }).select('-_id refDatabaseId');
+        fs_1.default.writeFileSync('./temp/sx2.json', JSON.stringify(fpoot));
+        return 'done';
+    }
 };
 __decorate([
     (0, type_graphql_1.Query)(() => [ReturnBlendIngredient_1.default]),
@@ -588,6 +594,12 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], BlendIngredientResolver.prototype, "dsdsd", null);
+__decorate([
+    (0, type_graphql_1.Query)(() => String),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], BlendIngredientResolver.prototype, "start", null);
 BlendIngredientResolver = __decorate([
     (0, type_graphql_1.Resolver)()
 ], BlendIngredientResolver);
