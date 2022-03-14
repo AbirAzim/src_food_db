@@ -21,11 +21,11 @@ __decorate([
     __metadata("design:type", String)
 ], wikiList.prototype, "_id", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
 ], wikiList.prototype, "title", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
 ], wikiList.prototype, "type", void 0);
 __decorate([
@@ -37,7 +37,7 @@ __decorate([
     __metadata("design:type", String)
 ], wikiList.prototype, "image", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
 ], wikiList.prototype, "status", void 0);
 __decorate([
@@ -45,7 +45,7 @@ __decorate([
     __metadata("design:type", Array)
 ], wikiList.prototype, "portions", void 0);
 __decorate([
-    (0, type_graphql_1.Field)((type) => Date),
+    (0, type_graphql_1.Field)((type) => Date, { nullable: true }),
     __metadata("design:type", Date)
 ], wikiList.prototype, "publishDate", void 0);
 __decorate([

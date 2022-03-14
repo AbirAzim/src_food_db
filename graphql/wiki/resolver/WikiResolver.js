@@ -51,13 +51,15 @@ let WikiResolver = class WikiResolver {
             //   console.log('n', data._id);
             //   continue;
             // }
-            returnData.push(data._id);
+            returnData.push(data);
         }
         let blendIngredients = await blendIngredient_1.default.find();
         for (let i = 0; i < blendIngredients.length; i++) {
             let data = {
                 _id: blendIngredients[i]._id,
-                title: blendIngredients[i].ingredientName,
+                title: blendIngredients[i].ingredientName
+                    ? blendIngredients[i].ingredientName
+                    : '',
                 type: 'Ingredient',
                 category: blendIngredients[i].category
                     ? blendIngredients[i].category
