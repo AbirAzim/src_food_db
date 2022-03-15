@@ -46,6 +46,8 @@ const blendIngredientSchema = new mongoose_1.Schema({
     ],
     wikiCoverImages: [String],
     wikiFeatureImage: String,
+    wikiTitle: String,
+    wikiDescription: String,
     bodies: [String],
     createdAt: { type: Date, default: Date.now },
     modifiedAt: { type: Date, default: Date.now },

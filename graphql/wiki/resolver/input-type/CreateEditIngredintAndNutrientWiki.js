@@ -13,6 +13,14 @@ const type_graphql_1 = require("type-graphql");
 let CreateEditIngreidntAndNutrientWiki = class CreateEditIngreidntAndNutrientWiki {
 };
 __decorate([
+    (0, type_graphql_1.Field)(),
+    __metadata("design:type", String)
+], CreateEditIngreidntAndNutrientWiki.prototype, "wikiTitle", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(),
+    __metadata("design:type", String)
+], CreateEditIngreidntAndNutrientWiki.prototype, "wikiDescription", void 0);
+__decorate([
     (0, type_graphql_1.Field)((type) => [String], { nullable: true }),
     __metadata("design:type", Array)
 ], CreateEditIngreidntAndNutrientWiki.prototype, "wikiCoverImages", void 0);

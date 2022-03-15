@@ -36,7 +36,12 @@ let WikiResolver = class WikiResolver {
         for (let i = 0; i < blendNutrients.length; i++) {
             let data = {
                 _id: blendNutrients[i]._id,
-                title: blendNutrients[i].nutrientName,
+                wikiTitle: blendNutrients[i].wikiTitle
+                    ? blendNutrients[i].wikiTitle
+                    : blendNutrients[i].nutrientName,
+                wikiDescription: blendNutrients[i].wikiDescription
+                    ? blendNutrients[i].wikiDescription
+                    : ' ',
                 type: 'Nutrient',
                 category: blendNutrients[i].category.categoryName
                     ? blendNutrients[i].category.categoryName
@@ -57,9 +62,12 @@ let WikiResolver = class WikiResolver {
         for (let i = 0; i < blendIngredients.length; i++) {
             let data = {
                 _id: blendIngredients[i]._id,
-                title: blendIngredients[i].ingredientName
-                    ? blendIngredients[i].ingredientName
-                    : '',
+                wikiTitle: blendIngredients[i].wikiTitle
+                    ? blendIngredients[i].wikiTitle
+                    : blendIngredients[i].ingredientName,
+                wikiDescription: blendIngredients[i].wikiDescription
+                    ? blendIngredients[i].wikiDescription
+                    : ' ',
                 type: 'Ingredient',
                 category: blendIngredients[i].category
                     ? blendIngredients[i].category
