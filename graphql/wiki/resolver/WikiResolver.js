@@ -158,6 +158,8 @@ let WikiResolver = class WikiResolver {
         console.log(res);
         let a = JSON.stringify(res);
         let returnData = {
+            wikiTitle: ingredients[0].wikiTitle,
+            wikiDescription: ingredients[0].wikiDescription,
             ingredientName: ingredients[0].ingredientName,
             wikiCoverImages: ingredients[0].wikiCoverImages,
             wikiFeatureImage: ingredients[0].wikiFeatureImage,
@@ -314,6 +316,8 @@ let WikiResolver = class WikiResolver {
             return b.value - a.value;
         });
         let returnData = {
+            wikiTitle: nutrient.wikiTitle,
+            wikiDescription: nutrient.wikiDescription,
             nutrientName: nutrient.nutrientName,
             wikiCoverImages: nutrient.wikiCoverImages,
             wikiFeatureImage: nutrient.wikiFeatureImage,

@@ -17,6 +17,14 @@ const IngredientForWiki_1 = __importDefault(require("./IngredientForWiki"));
 let IngredientFromNutrition = class IngredientFromNutrition {
 };
 __decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], IngredientFromNutrition.prototype, "wikiTitle", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], IngredientFromNutrition.prototype, "wikiDescription", void 0);
+__decorate([
     (0, type_graphql_1.Field)(),
     __metadata("design:type", String)
 ], IngredientFromNutrition.prototype, "nutrientName", void 0);
