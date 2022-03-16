@@ -76,6 +76,12 @@ const recipeSchema = new mongoose_1.Schema({
     totalRating: { type: Number, default: 0 },
     totalViews: { type: Number, default: 0 },
     averageRating: { type: Number, default: 0 },
+    seoTitle: String,
+    seoSlug: String,
+    seoCanonicalURL: String,
+    seoSiteMapPriority: Number,
+    seoKeywords: [String],
+    seoMetaDescription: String,
 });
 const Recipe = (0, mongoose_1.model)('Recipe', recipeSchema);
 exports.default = Recipe;

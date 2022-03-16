@@ -105,6 +105,7 @@ let WikiResolver = class WikiResolver {
             path: 'blendNutrients.blendNutrientRefference',
             model: 'BlendNutrient',
         });
+        console.log(ingredients);
         for (let i = 0; i < ingredients.length; i++) {
             let value = data.filter(
             // @ts-ignore
@@ -155,8 +156,9 @@ let WikiResolver = class WikiResolver {
                     });
         }
         let res = await this.architect(returnNutrients);
-        console.log(res);
         let a = JSON.stringify(res);
+        // console.log(ingredients[0].wikiTitle)
+        // console.log(ingredients[0].wikiDescription)
         let returnData = {
             wikiTitle: ingredients[0].wikiTitle,
             wikiDescription: ingredients[0].wikiDescription,
@@ -166,6 +168,7 @@ let WikiResolver = class WikiResolver {
             bodies: ingredients[0].bodies,
             nutrients: a,
         };
+        console.log(returnData);
         return returnData;
     }
     async architect(arr) {

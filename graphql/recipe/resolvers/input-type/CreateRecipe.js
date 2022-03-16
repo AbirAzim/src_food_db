@@ -101,6 +101,30 @@ __decorate([
     (0, type_graphql_1.Field)((type) => type_graphql_1.ID, { nullable: true }),
     __metadata("design:type", String)
 ], CreateRecipe.prototype, "adminId", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], CreateRecipe.prototype, "seoTitle", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], CreateRecipe.prototype, "seoSlug", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], CreateRecipe.prototype, "seoCanonicalURL", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Number)
+], CreateRecipe.prototype, "seoSiteMapPriority", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(type => [String], { nullable: true }),
+    __metadata("design:type", Array)
+], CreateRecipe.prototype, "seoKeywords", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], CreateRecipe.prototype, "seoMetaDescription", void 0);
 CreateRecipe = __decorate([
     (0, type_graphql_1.InputType)()
 ], CreateRecipe);

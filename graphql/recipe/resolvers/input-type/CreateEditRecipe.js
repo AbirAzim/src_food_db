@@ -93,6 +93,30 @@ __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
 ], CreateEditRecipe.prototype, "favicon", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], CreateEditRecipe.prototype, "seoTitle", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], CreateEditRecipe.prototype, "seoSlug", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], CreateEditRecipe.prototype, "seoCanonicalURL", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Number)
+], CreateEditRecipe.prototype, "seoSiteMapPriority", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(type => [String], { nullable: true }),
+    __metadata("design:type", Array)
+], CreateEditRecipe.prototype, "seoKeywords", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], CreateEditRecipe.prototype, "seoMetaDescription", void 0);
 CreateEditRecipe = __decorate([
     (0, type_graphql_1.InputType)()
 ], CreateEditRecipe);
