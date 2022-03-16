@@ -51,6 +51,7 @@ let WikiResolver = class WikiResolver {
                 description: '',
                 image: '',
                 publishedBy: 'g. braun',
+                isPublished: blendNutrients[i].isPublished,
             };
             // if (!data.category) {
             //   console.log('n', data._id);
@@ -78,6 +79,7 @@ let WikiResolver = class WikiResolver {
                 image: blendIngredients[i].featuredImage,
                 description: blendIngredients[i].description,
                 publishedBy: 'g. braun',
+                isPublished: blendIngredients[i].isPublished,
             };
             // if (!data.category) {
             //   console.log('i', data._id);
@@ -105,7 +107,6 @@ let WikiResolver = class WikiResolver {
             path: 'blendNutrients.blendNutrientRefference',
             model: 'BlendNutrient',
         });
-        console.log(ingredients);
         for (let i = 0; i < ingredients.length; i++) {
             let value = data.filter(
             // @ts-ignore
@@ -167,8 +168,17 @@ let WikiResolver = class WikiResolver {
             wikiFeatureImage: ingredients[0].wikiFeatureImage,
             bodies: ingredients[0].bodies,
             nutrients: a,
+            type: 'Ingredient',
+            category: ingredients[0].category ? ingredients[0].category : '',
+            publishedBy: 'g. Braun',
+            seoTitle: ingredients[0].seoTitle,
+            seoSlug: ingredients[0].seoSlug,
+            seoCanonicalURL: ingredients[0].seoCanonicalURL,
+            seoSiteMapPriority: ingredients[0].seoSiteMapPriority,
+            seoKeywords: ingredients[0].seoKeywords,
+            seoMetaDescription: ingredients[0].seoMetaDescription,
+            isPublished: ingredients[0].isPublished,
         };
-        console.log(returnData);
         return returnData;
     }
     async architect(arr) {
@@ -254,7 +264,9 @@ let WikiResolver = class WikiResolver {
         return { calories, energy, vitamins, minerals };
     }
     async getAllIngredientsBasedOnNutrition(data) {
-        let nutrient = await blendNutrient_1.default.findOne({ _id: data.nutritionID });
+        let nutrient = await blendNutrient_1.default.findOne({
+            _id: data.nutritionID,
+        }).populate('category');
         let ingredients;
         if (data.category === 'All') {
             ingredients = await blendIngredient_1.default.find({
@@ -326,6 +338,16 @@ let WikiResolver = class WikiResolver {
             wikiFeatureImage: nutrient.wikiFeatureImage,
             bodies: nutrient.bodies,
             ingredients: result.slice(0, 10),
+            type: 'Nutrient',
+            category: nutrient.category.categoryName,
+            publishedBy: 'g. Braun',
+            seoTitle: nutrient.seoTitle,
+            seoSlug: nutrient.seoSlug,
+            seoCanonicalURL: nutrient.seoCanonicalURL,
+            seoSiteMapPriority: nutrient.seoSiteMapPriority,
+            seoKeywords: nutrient.seoKeywords,
+            seoMetaDescription: nutrient.seoMetaDescription,
+            isPublished: nutrient.isPublished,
         };
         return returnData;
     }

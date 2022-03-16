@@ -51,7 +51,14 @@ const blendIngredientSchema = new mongoose_1.Schema({
     bodies: [String],
     createdAt: { type: Date, default: Date.now },
     modifiedAt: { type: Date, default: Date.now },
+    seoTitle: String,
+    seoSlug: String,
+    seoCanonicalURL: String,
+    seoSiteMapPriority: Number,
+    seoKeywords: [String],
+    seoMetaDescription: String,
     sourceName: String,
+    isPublished: Boolean,
 });
 const BlendIngredient = (0, mongoose_1.model)('BlendIngredient', blendIngredientSchema);
 exports.default = BlendIngredient;

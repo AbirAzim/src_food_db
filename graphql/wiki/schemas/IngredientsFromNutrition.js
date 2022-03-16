@@ -44,6 +44,46 @@ __decorate([
     (0, type_graphql_1.Field)((type) => [IngredientForWiki_1.default], { nullable: true }),
     __metadata("design:type", Array)
 ], IngredientFromNutrition.prototype, "ingredients", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], IngredientFromNutrition.prototype, "type", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], IngredientFromNutrition.prototype, "category", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], IngredientFromNutrition.prototype, "publishedBy", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], IngredientFromNutrition.prototype, "seoTitle", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], IngredientFromNutrition.prototype, "seoSlug", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], IngredientFromNutrition.prototype, "seoCanonicalURL", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Number)
+], IngredientFromNutrition.prototype, "seoSiteMapPriority", void 0);
+__decorate([
+    (0, type_graphql_1.Field)((type) => [String], { nullable: true }),
+    __metadata("design:type", Array)
+], IngredientFromNutrition.prototype, "seoKeywords", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], IngredientFromNutrition.prototype, "seoMetaDescription", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Boolean)
+], IngredientFromNutrition.prototype, "isPublished", void 0);
 IngredientFromNutrition = __decorate([
     (0, type_graphql_1.ObjectType)()
 ], IngredientFromNutrition);

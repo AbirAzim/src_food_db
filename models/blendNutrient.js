@@ -31,7 +31,14 @@ const blendNutrient = new mongoose_1.Schema({
     bodies: [String],
     wikiTitle: String,
     wikiDescription: String,
+    seoTitle: String,
+    seoSlug: String,
+    seoCanonicalURL: String,
+    seoSiteMapPriority: Number,
+    seoKeywords: [String],
+    seoMetaDescription: String,
     createdAt: { type: Date, default: Date.now },
+    isPublished: Boolean,
 });
 const BlendNutrient = (0, mongoose_1.model)('BlendNutrient', blendNutrient);
 exports.default = BlendNutrient;
