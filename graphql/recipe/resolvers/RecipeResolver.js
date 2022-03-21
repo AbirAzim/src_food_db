@@ -308,6 +308,17 @@ let RecipeResolver = class RecipeResolver {
         await userCollection_1.default.findOneAndUpdate({ _id: userDefaultCollection }, { $push: { recipes: userRecipe._id } });
         return userRecipe;
     }
+    async rmvUnnc() {
+        let count = 0;
+        let recipes = await recipe_1.default.find({});
+        for (let i = 0; i < recipes.length; i++) {
+            if (recipes[i].ingredients.length === 0) {
+                await recipe_1.default.deleteOne({ _id: recipes[i]._id });
+                count++;
+            }
+        }
+        return count;
+    }
 };
 __decorate([
     (0, type_graphql_1.Query)((type) => [Recipe_1.default]) // not sure yet
@@ -382,6 +393,12 @@ __decorate([
     __metadata("design:paramtypes", [CreateRecipe_1.default]),
     __metadata("design:returntype", Promise)
 ], RecipeResolver.prototype, "addRecipeFromUser", null);
+__decorate([
+    (0, type_graphql_1.Mutation)((type) => Number),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], RecipeResolver.prototype, "rmvUnnc", null);
 RecipeResolver = __decorate([
     (0, type_graphql_1.Resolver)()
 ], RecipeResolver);

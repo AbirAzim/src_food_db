@@ -48,6 +48,9 @@ let BlendNutrientResolver = class BlendNutrientResolver {
         return blendNutrient;
     }
     async editBlendNutrient(data) {
+        if (data.editableObject.category === null) {
+            return new AppError_1.default('Category can not be null.', 400);
+        }
         await blendNutrient_1.default.findByIdAndUpdate(data.editId, data.editableObject);
         return 'BlendNutrient Updated';
     }
