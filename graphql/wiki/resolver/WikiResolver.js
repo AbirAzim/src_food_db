@@ -32,17 +32,16 @@ let WikiResolver = class WikiResolver {
         let returnData = [];
         let blendNutrients = await blendNutrient_1.default.find()
             .populate('category')
-            .select('-__v -uniqueNutrientId -related_sources -parent');
+            .select('-__v -uniqueNutrientId -related_sources -parent -bodies')
+            .limit(100);
         for (let i = 0; i < blendNutrients.length; i++) {
-            let categoryName;
-            if (!blendNutrients[i].category) {
-                categoryName = null;
-            }
-            else {
-                categoryName = blendNutrients[i].category.categoryName
-                    ? blendNutrients[i].category.categoryName
-                    : '';
-            }
+            // let categoryName;
+            // if (!blendNutrients[i].category) {
+            //   categoryName = null;
+            // } else {
+            //   categoryName = blendNutrients[i].category.categoryName? blendNutrients[i].category.categoryName
+            //     : '';
+            // }
             let data = {
                 _id: blendNutrients[i]._id,
                 wikiTitle: blendNutrients[i].wikiTitle
@@ -52,7 +51,9 @@ let WikiResolver = class WikiResolver {
                     ? blendNutrients[i].wikiDescription
                     : ' ',
                 type: 'Nutrient',
-                category: categoryName,
+                category: blendNutrients[i].category.categoryName
+                    ? blendNutrients[i].category.categoryName
+                    : '',
                 status: blendNutrients[i].status,
                 publishDate: new Date(),
                 description: '',
@@ -66,7 +67,7 @@ let WikiResolver = class WikiResolver {
             // }
             returnData.push(data);
         }
-        let blendIngredients = await blendIngredient_1.default.find();
+        let blendIngredients = await blendIngredient_1.default.find().select('-bodies');
         for (let i = 0; i < blendIngredients.length; i++) {
             let data = {
                 _id: blendIngredients[i]._id,
@@ -414,6 +415,11 @@ let WikiResolver = class WikiResolver {
             return gram;
         }
     }
+    async bodyTest() {
+        await blendIngredient_1.default.updateMany({}, { bodies: [] });
+        await blendNutrient_1.default.updateMany({}, { bodies: [] });
+        return 'done';
+    }
 };
 __decorate([
     (0, type_graphql_1.Query)(() => [Wikilist_1.default]),
@@ -464,6 +470,12 @@ __decorate([
     __metadata("design:paramtypes", [GramConversion_1.default]),
     __metadata("design:returntype", Promise)
 ], WikiResolver.prototype, "convertGramToUnit", null);
+__decorate([
+    (0, type_graphql_1.Query)(() => String),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], WikiResolver.prototype, "bodyTest", null);
 WikiResolver = __decorate([
     (0, type_graphql_1.Resolver)()
 ], WikiResolver);

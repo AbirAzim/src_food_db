@@ -33,7 +33,7 @@ const ReturnBlendIngredientBasedOnDefaultPortion_1 = __importDefault(require("..
 const AppError_1 = __importDefault(require("../../../utils/AppError"));
 let BlendIngredientResolver = class BlendIngredientResolver {
     async getAllBlendIngredients() {
-        let blendIngredients = await blendIngredient_1.default.find();
+        let blendIngredients = await blendIngredient_1.default.find().limit(100);
         let returnIngredients = [];
         for (let i = 0; i < blendIngredients.length; i++) {
             let returnIngredient = blendIngredients[i];
@@ -44,7 +44,7 @@ let BlendIngredientResolver = class BlendIngredientResolver {
             returnIngredient.imageCount = blendIngredients[i].images.length;
             returnIngredients.push(returnIngredient);
         }
-        return returnIngredients;
+        return blendIngredients;
     }
     async EditIngredient(data) {
         let food = await blendIngredient_1.default.findOne({ _id: data.editId });
