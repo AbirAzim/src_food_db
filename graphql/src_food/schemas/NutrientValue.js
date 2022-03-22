@@ -18,7 +18,7 @@ const BlendNutrientData_1 = __importDefault(require("../../blendNutrient/schemas
 let NutrientValue = class NutrientValue {
 };
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", BlendNutrientData_1.default)
 ], NutrientValue.prototype, "blendData", void 0);
 __decorate([
