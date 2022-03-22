@@ -8,7 +8,7 @@ const blendNutrient = new mongoose_1.Schema({
     category: { type: mongoose_1.Schema.Types.ObjectId, ref: 'BlendNutrientCategory' },
     status: {
         type: String,
-        enum: ['Active', 'Review', 'Archive'],
+        enum: ['Active', 'Review', 'Archived'],
         default: 'Active',
     },
     parent: { type: mongoose_1.Schema.Types.ObjectId, ref: 'BlendNutrient' },

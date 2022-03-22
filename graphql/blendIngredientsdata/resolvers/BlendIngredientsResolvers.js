@@ -51,10 +51,17 @@ let BlendIngredientResolver = class BlendIngredientResolver {
         if (!food) {
             return new AppError_1.default('Ingredient not found', 404);
         }
-        if (data.editableObject.blendStatus === 'Archived') {
-            await blendIngredient_1.default.findByIdAndRemove(data.editId);
-            await ingredient_1.default.findByIdAndUpdate(data.editId, {
+        // if (data.editableObject.blendStatus === 'Archived') {
+        //   await FoodSrcModel.findByIdAndUpdate(food.srcFoodReference, {
+        //     addedToBlend: false,
+        //   });
+        //   return 'Archieved Successfully';
+        // }
+        if (data.editableObject.blendStatus) {
+            // await BlendIngredientModel.findByIdAndRemove(data.editId);
+            await ingredient_1.default.findByIdAndUpdate(food.srcFoodReference, {
                 addedToBlend: false,
+                blendStatus: data.editableObject.blendStatus,
             });
             return 'Archieved Successfully';
         }
@@ -118,8 +125,31 @@ let BlendIngredientResolver = class BlendIngredientResolver {
         });
         return blendIngredient;
     }
+    async removeBlendIngredientFromSrc(id) {
+        let blendIngredient = await blendIngredient_1.default.findOne({
+            srcFoodReference: id,
+        });
+        if (!blendIngredient) {
+            return new AppError_1.default('This Ingredient not found in Blend Database', 404);
+        }
+        await blendIngredient_1.default.findOneAndRemove({ _id: blendIngredient._id });
+        await ingredient_1.default.findByIdAndUpdate(id, {
+            addedToBlend: false,
+        });
+        return 'Success';
+    }
     async removeABlendIngredient(id) {
-        await blendIngredient_1.default.findByIdAndRemove(id);
+        let food = await blendIngredient_1.default.findOne({ _id: id });
+        if (!food) {
+            return new AppError_1.default('Ingredient not found', 404);
+        }
+        if (food.blendStatus !== 'Archived') {
+            return new AppError_1.default('you can not remove Review or Active Ingredient', 404);
+        }
+        await ingredient_1.default.findByIdAndUpdate(food.srcFoodReference, {
+            addedToBlend: false,
+        });
+        await blendIngredient_1.default.findOneAndRemove({ _id: id });
         return 'BlendIngredient removed';
     }
     async addNewBlendIngredient(data) {
@@ -271,20 +301,29 @@ let BlendIngredientResolver = class BlendIngredientResolver {
         });
         return ingredients;
     }
-    // [
-    //  {
-    //   ingredientd: "",
-    //   value: "",
-    // },
-    //  {
-    //   ingredientd: "",
-    //   value: "",
-    // },
-    //  {
-    //   ingredientd: "",
-    //   value: "",
-    // },
-    // ]
+    async updateStatusInSrc() {
+        let ingredients = await blendIngredient_1.default.find({});
+        for (let i = 0; i < ingredients.length; i++) {
+            await ingredient_1.default.findByIdAndUpdate(ingredients[i].srcFoodReference, {
+                blendStatus: ingredients[i].blendStatus,
+            });
+        }
+        return 'Updated successfully';
+    }
+    async updateStatusInSrc3() {
+        await blendIngredient_1.default.updateMany({ blendStatus: 'Archieved' }, { blendStatus: 'Archived' });
+        return 'Updated successfully';
+    }
+    async updateStatusInSrc2() {
+        let ingredients = await blendIngredient_1.default.find({}).select('srcFoodReference -_id');
+        let ids = [];
+        for (let i = 0; i < ingredients.length; i++) {
+            ids.push(String(ingredients[i].srcFoodReference));
+        }
+        console.log(ids);
+        await ingredient_1.default.updateMany({ $nin: ids }, { blendStatus: 'Archived' });
+        return 'Updated successfully';
+    }
     async getBlendNutritionBasedOnRecipe(ingredientsInfo) {
         let data = ingredientsInfo;
         // @ts-ignore
@@ -540,6 +579,12 @@ __decorate([
 ], BlendIngredientResolver.prototype, "getBlendIngredientById", null);
 __decorate([
     (0, type_graphql_1.Mutation)(() => String),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], BlendIngredientResolver.prototype, "removeBlendIngredientFromSrc", null);
+__decorate([
+    (0, type_graphql_1.Mutation)(() => String),
     __param(0, (0, type_graphql_1.Arg)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -580,6 +625,24 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], BlendIngredientResolver.prototype, "searchBlendIngredients", null);
+__decorate([
+    (0, type_graphql_1.Mutation)(() => String),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], BlendIngredientResolver.prototype, "updateStatusInSrc", null);
+__decorate([
+    (0, type_graphql_1.Mutation)(() => String),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], BlendIngredientResolver.prototype, "updateStatusInSrc3", null);
+__decorate([
+    (0, type_graphql_1.Mutation)(() => String),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], BlendIngredientResolver.prototype, "updateStatusInSrc2", null);
 __decorate([
     (0, type_graphql_1.Query)(() => String) // wait
     ,
