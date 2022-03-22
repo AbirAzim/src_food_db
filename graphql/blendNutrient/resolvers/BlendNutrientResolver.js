@@ -32,6 +32,15 @@ let BlendNutrientResolver = class BlendNutrientResolver {
         if (checkBlendId) {
             return new AppError_1.default('Blend Id already exists', 400);
         }
+        if (!data.parent || data.parent === '') {
+            data.parent = null;
+            data.parentIsCategory = true;
+            let searchBlendNutrient = await blendNutrient_1.default.find({
+                category: data.category,
+                parentIsCategory: true,
+            });
+            data.rank = searchBlendNutrient.length + 1;
+        }
         await blendNutrient_1.default.create(data);
         return 'BlendNutrient Created Successfull';
     }

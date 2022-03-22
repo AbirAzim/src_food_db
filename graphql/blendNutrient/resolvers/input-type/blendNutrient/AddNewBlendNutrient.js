@@ -37,11 +37,11 @@ __decorate([
     __metadata("design:type", String)
 ], AddNewBlendNutrient.prototype, "parent", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", Boolean)
 ], AddNewBlendNutrient.prototype, "parentIsCategory", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", Number)
 ], AddNewBlendNutrient.prototype, "rank", void 0);
 __decorate([
