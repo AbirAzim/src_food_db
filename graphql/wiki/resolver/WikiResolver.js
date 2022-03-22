@@ -34,6 +34,15 @@ let WikiResolver = class WikiResolver {
             .populate('category')
             .select('-__v -uniqueNutrientId -related_sources -parent');
         for (let i = 0; i < blendNutrients.length; i++) {
+            let categoryName;
+            if (!blendNutrients[i].category) {
+                categoryName = null;
+            }
+            else {
+                categoryName = blendNutrients[i].category.categoryName
+                    ? blendNutrients[i].category.categoryName
+                    : '';
+            }
             let data = {
                 _id: blendNutrients[i]._id,
                 wikiTitle: blendNutrients[i].wikiTitle
@@ -43,9 +52,7 @@ let WikiResolver = class WikiResolver {
                     ? blendNutrients[i].wikiDescription
                     : ' ',
                 type: 'Nutrient',
-                category: blendNutrients[i].category.categoryName
-                    ? blendNutrients[i].category.categoryName
-                    : '',
+                category: categoryName,
                 status: blendNutrients[i].status,
                 publishDate: new Date(),
                 description: '',

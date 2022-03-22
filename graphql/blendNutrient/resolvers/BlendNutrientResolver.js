@@ -76,8 +76,8 @@ let BlendNutrientResolver = class BlendNutrientResolver {
             uniqueNutrientId: un._id,
             parentIsCategory: false,
             rank: un.rank,
-            unitName: un.unitName,
-            units: '',
+            unitName: '',
+            units: un.unitName,
             min_measure: '',
             related_sources: un.related_sources,
         };
