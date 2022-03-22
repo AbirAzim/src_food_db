@@ -579,6 +579,7 @@ __decorate([
 ], BlendIngredientResolver.prototype, "getBlendIngredientById", null);
 __decorate([
     (0, type_graphql_1.Mutation)(() => String),
+    __param(0, (0, type_graphql_1.Arg)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
