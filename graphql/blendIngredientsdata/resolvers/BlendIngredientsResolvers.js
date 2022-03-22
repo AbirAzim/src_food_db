@@ -33,7 +33,9 @@ const ReturnBlendIngredientBasedOnDefaultPortion_1 = __importDefault(require("..
 const AppError_1 = __importDefault(require("../../../utils/AppError"));
 let BlendIngredientResolver = class BlendIngredientResolver {
     async getAllBlendIngredients() {
-        let blendIngredients = await blendIngredient_1.default.find().limit(100);
+        let blendIngredients = await blendIngredient_1.default.find()
+            .select('-wikiCoverImages -wikiFeatureImage -wikiTitle -wikiDescription -bodies -seoTitle -seoSlug -seoCanonicalURL -seoSiteMapPriority -seoKeywords -seoMetaDescription -sourceName -isPublished')
+            .limit(100);
         let returnIngredients = [];
         for (let i = 0; i < blendIngredients.length; i++) {
             let returnIngredient = blendIngredients[i];

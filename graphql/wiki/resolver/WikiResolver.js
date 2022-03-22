@@ -67,7 +67,7 @@ let WikiResolver = class WikiResolver {
             returnData.push(data);
         }
         let blendIngredients = await blendIngredient_1.default.find()
-            .select('-bodies')
+            .select('-wikiCoverImages -wikiFeatureImage -wikiTitle -wikiDescription -bodies -seoTitle -seoSlug -seoCanonicalURL -seoSiteMapPriority -seoKeywords -seoMetaDescription -sourceName -isPublished')
             .limit(100);
         for (let i = 0; i < blendIngredients.length; i++) {
             let data = {
@@ -417,9 +417,8 @@ let WikiResolver = class WikiResolver {
         }
     }
     async bodyTest() {
-        await blendIngredient_1.default.updateMany({}, { bodies: [] });
-        await blendNutrient_1.default.updateMany({}, { bodies: [] });
-        return 'done';
+        let description = await blendIngredient_1.default.find({}).select('wikiCoverImages wikiFeatureImage wikiTitle wikiDescription bodies seoTitle seoSlug seoCanonicalURL seoSiteMapPriority seoKeywords seoMetaDescription sourceName isPublished');
+        return JSON.stringify(description);
     }
 };
 __decorate([
