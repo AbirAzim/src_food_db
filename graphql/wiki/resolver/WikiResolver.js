@@ -32,8 +32,7 @@ let WikiResolver = class WikiResolver {
         let returnData = [];
         let blendNutrients = await blendNutrient_1.default.find()
             .populate('category')
-            .select('-__v -uniqueNutrientId -related_sources -parent -bodies')
-            .limit(100);
+            .select('-uniqueNutrientId -related_sources -parent -bodies');
         for (let i = 0; i < blendNutrients.length; i++) {
             // let categoryName;
             // if (!blendNutrients[i].category) {
@@ -67,7 +66,9 @@ let WikiResolver = class WikiResolver {
             // }
             returnData.push(data);
         }
-        let blendIngredients = await blendIngredient_1.default.find().select('-bodies');
+        let blendIngredients = await blendIngredient_1.default.find()
+            .select('-bodies')
+            .limit(100);
         for (let i = 0; i < blendIngredients.length; i++) {
             let data = {
                 _id: blendIngredients[i]._id,
