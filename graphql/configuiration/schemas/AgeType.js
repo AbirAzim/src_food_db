@@ -13,15 +13,15 @@ const type_graphql_1 = require("type-graphql");
 let AgeType = class AgeType {
 };
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", Number)
 ], AgeType.prototype, "quantity", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", Boolean)
 ], AgeType.prototype, "years", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", Boolean)
 ], AgeType.prototype, "months", void 0);
 AgeType = __decorate([
