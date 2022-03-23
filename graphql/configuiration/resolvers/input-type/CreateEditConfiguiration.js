@@ -8,8 +8,13 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
+const Age_1 = __importDefault(require("./Age"));
+const Height_1 = __importDefault(require("./Height"));
 let CreateEditConfiguration = class CreateEditConfiguration {
 };
 __decorate([
@@ -21,12 +26,12 @@ __decorate([
     __metadata("design:type", Number)
 ], CreateEditConfiguration.prototype, "weight", void 0);
 __decorate([
-    (0, type_graphql_1.Field)({ nullable: true }),
-    __metadata("design:type", Number)
+    (0, type_graphql_1.Field)((type) => Age_1.default, { nullable: true }),
+    __metadata("design:type", Age_1.default)
 ], CreateEditConfiguration.prototype, "age", void 0);
 __decorate([
-    (0, type_graphql_1.Field)({ nullable: true }),
-    __metadata("design:type", Number)
+    (0, type_graphql_1.Field)((type) => Height_1.default, { nullable: true }),
+    __metadata("design:type", Height_1.default)
 ], CreateEditConfiguration.prototype, "height", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),

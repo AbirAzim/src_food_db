@@ -46,6 +46,21 @@ let BlendIngredientResolver = class BlendIngredientResolver {
         }
         return blendIngredients;
     }
+    async getALlBlendIngredients2() {
+        const allPlayers = [];
+        const cursor = await blendIngredient_1.default.find({})
+            .lean()
+            .select('-blendNutrients -srcFoodReference -notBlendNutrients -portions -wikiCoverImages -wikiFeatureImage -wikiTitle -wikiDescription -bodies -seoTitle -seoSlug -seoCanonicalURL -seoSiteMapPriority -seoKeywords -seoMetaDescription -sourceName -isPublished');
+        return cursor;
+        // cursor.on('data', function (player) {
+        //   allPlayers.push(player);
+        //   console.log(player);
+        // });
+        // cursor.on('end', function () {
+        //   console.log('All players are loaded here');
+        // });
+        // console.log(allPlayers);
+    }
     async EditIngredient(data) {
         let food = await blendIngredient_1.default.findOne({ _id: data.editId });
         if (!food) {
@@ -563,6 +578,12 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], BlendIngredientResolver.prototype, "getAllBlendIngredients", null);
+__decorate([
+    (0, type_graphql_1.Query)(() => [ReturnBlendIngredient_1.default]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], BlendIngredientResolver.prototype, "getALlBlendIngredients2", null);
 __decorate([
     (0, type_graphql_1.Mutation)(() => String),
     __param(0, (0, type_graphql_1.Arg)('data')),

@@ -7,8 +7,15 @@ const memberConfiguirationSchema = new mongoose_1.Schema({
         enum: ['male', 'female', 'others'],
     },
     weight: String,
-    age: Number,
-    height: Number,
+    age: {
+        quantity: Number,
+        years: Boolean,
+        months: Boolean,
+    },
+    height: {
+        feet: Number,
+        inches: Number,
+    },
     activity: {
         type: String,
         enum: ['low', 'moderate', 'high'],
