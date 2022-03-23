@@ -50,6 +50,10 @@ __decorate([
     __metadata("design:type", Array)
 ], ReturnBlendIngredientBasedOnDefaultPortion.prototype, "portions", void 0);
 __decorate([
+    (0, type_graphql_1.Field)(() => type_graphql_1.ID, { nullable: true }),
+    __metadata("design:type", String)
+], ReturnBlendIngredientBasedOnDefaultPortion.prototype, "varrient", void 0);
+__decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
 ], ReturnBlendIngredientBasedOnDefaultPortion.prototype, "source", void 0);

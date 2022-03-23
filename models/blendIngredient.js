@@ -49,6 +49,7 @@ const blendIngredientSchema = new mongoose_1.Schema({
             ref: 'AdminCollection',
         },
     ],
+    varrient: { type: mongoose_1.Schema.Types.ObjectId, ref: 'BlendIngredient' },
     wikiCoverImages: [String],
     wikiFeatureImage: String,
     wikiTitle: String,

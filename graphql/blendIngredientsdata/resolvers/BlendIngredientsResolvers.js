@@ -38,6 +38,14 @@ let BlendIngredientResolver = class BlendIngredientResolver {
             .select('-blendNutrients -notBlendNutrients -wikiCoverImages -wikiFeatureImage -wikiTitle -wikiDescription -bodies -seoTitle -seoSlug -seoCanonicalURL -seoSiteMapPriority -seoKeywords -seoMetaDescription -isPublished');
         return blendIngredients;
     }
+    async getAllClassOneIngredients() {
+        let blendIngredients = await blendIngredient_1.default.find({
+            classType: 'Class - 1',
+        })
+            .lean()
+            .select('-blendNutrients -notBlendNutrients -wikiCoverImages -wikiFeatureImage -wikiTitle -wikiDescription -bodies -seoTitle -seoSlug -seoCanonicalURL -seoSiteMapPriority -seoKeywords -seoMetaDescription -isPublished');
+        return blendIngredients;
+    }
     async getALlBlendIngredients2() {
         // const allPlayers: any = [];
         let blendIngredients = await blendIngredient_1.default.find()
@@ -584,6 +592,12 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], BlendIngredientResolver.prototype, "getAllBlendIngredients", null);
+__decorate([
+    (0, type_graphql_1.Query)(() => [ReturnBlendIngredient_1.default]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], BlendIngredientResolver.prototype, "getAllClassOneIngredients", null);
 __decorate([
     (0, type_graphql_1.Query)(() => [ReturnBlendIngredient_1.default]),
     __metadata("design:type", Function),

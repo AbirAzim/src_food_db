@@ -44,6 +44,10 @@ __decorate([
     __metadata("design:type", String)
 ], BlendIngredientData.prototype, "description", void 0);
 __decorate([
+    (0, type_graphql_1.Field)(() => type_graphql_1.ID, { nullable: true }),
+    __metadata("design:type", String)
+], BlendIngredientData.prototype, "varrient", void 0);
+__decorate([
     (0, type_graphql_1.Field)((type) => Ingredient_1.default, { nullable: true }),
     __metadata("design:type", Ingredient_1.default)
 ], BlendIngredientData.prototype, "srcFoodReference", void 0);

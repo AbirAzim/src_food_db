@@ -37,6 +37,10 @@ __decorate([
     __metadata("design:type", String)
 ], CreateEditBlendIngredient.prototype, "description", void 0);
 __decorate([
+    (0, type_graphql_1.Field)(() => type_graphql_1.ID, { nullable: true }),
+    __metadata("design:type", String)
+], CreateEditBlendIngredient.prototype, "varrient", void 0);
+__decorate([
     (0, type_graphql_1.Field)((type) => [type_graphql_1.ID], { nullable: true }),
     __metadata("design:type", String)
 ], CreateEditBlendIngredient.prototype, "blendNutrients", void 0);
