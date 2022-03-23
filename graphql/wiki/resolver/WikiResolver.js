@@ -67,7 +67,7 @@ let WikiResolver = class WikiResolver {
             returnData.push(data);
         }
         let blendIngredients = await blendIngredient_1.default.find()
-            .select('-wikiCoverImages -wikiFeatureImage -wikiTitle -wikiDescription -bodies -seoTitle -seoSlug -seoCanonicalURL -seoSiteMapPriority -seoKeywords -seoMetaDescription -sourceName -isPublished')
+            .select('-wikiCoverImages -wikiFeatureImage -wikiTitle -wikiDescription -bodies -seoTitle -seoSlug -seoCanonicalURL -seoSiteMapPriority -seoKeywords -seoMetaDescription -sourceName')
             .limit(100);
         for (let i = 0; i < blendIngredients.length; i++) {
             let data = {

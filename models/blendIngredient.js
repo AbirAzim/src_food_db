@@ -8,15 +8,19 @@ const blendIngredientSchema = new mongoose_1.Schema({
     classType: String,
     description: String,
     srcFoodReference: { type: mongoose_1.Schema.Types.ObjectId, ref: 'Ingredient' },
-    blendNutrients: [
-        {
-            value: String,
-            blendNutrientRefference: {
-                type: mongoose_1.Schema.Types.ObjectId,
-                ref: 'BlendNutrient',
+    blendNutrients: {
+        type: [
+            {
+                value: String,
+                blendNutrientRefference: {
+                    type: mongoose_1.Schema.Types.ObjectId,
+                    ref: 'BlendNutrient',
+                },
             },
-        },
-    ],
+        ],
+        index: true,
+    },
+    nutrientCount: Number,
     notBlendNutrients: [
         {
             value: String,
@@ -61,4 +65,14 @@ const blendIngredientSchema = new mongoose_1.Schema({
     isPublished: Boolean,
 });
 const BlendIngredient = (0, mongoose_1.model)('BlendIngredient', blendIngredientSchema);
+blendIngredientSchema.pre('save', function (next) {
+    //@ts-ignore
+    this.nutrientCount = this.blendNutrients.length;
+    next();
+});
+// blendIngredientSchema.pre('find', function (next) {
+//   //@ts-ignore
+//   this.nutrientCount = this.blendNutrients.length;
+//   next();
+// });
 exports.default = BlendIngredient;

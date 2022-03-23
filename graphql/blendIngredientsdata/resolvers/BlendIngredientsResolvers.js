@@ -47,11 +47,14 @@ let BlendIngredientResolver = class BlendIngredientResolver {
         return blendIngredients;
     }
     async getALlBlendIngredients2() {
-        const allPlayers = [];
-        const cursor = await blendIngredient_1.default.find({})
-            .lean()
-            .select('-blendNutrients -srcFoodReference -notBlendNutrients -portions -wikiCoverImages -wikiFeatureImage -wikiTitle -wikiDescription -bodies -seoTitle -seoSlug -seoCanonicalURL -seoSiteMapPriority -seoKeywords -seoMetaDescription -sourceName -isPublished');
-        return cursor;
+        // const allPlayers: any = [];
+        // const cursor: any = await BlendIngredientModel.find()
+        //   .lean()
+        //   .select(
+        //     '-blendNutrients -notBlendNutrients -wikiCoverImages -wikiFeatureImage -wikiTitle -wikiDescription -bodies -seoTitle -seoSlug -seoCanonicalURL -seoSiteMapPriority -seoKeywords -seoMetaDescription -isPublished'
+        //   );
+        // return cursor;
+        let ing = await blendIngredient_1.default.findOne({ _id: "620b6b8b40d3f19b558f0a15" });
         // cursor.on('data', function (player) {
         //   allPlayers.push(player);
         //   console.log(player);
