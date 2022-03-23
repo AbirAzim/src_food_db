@@ -42,6 +42,7 @@ const blendIngredientSchema = new mongoose_1.Schema({
     ],
     featuredImage: String,
     images: [String],
+    imageCount: Number,
     collections: [
         {
             type: mongoose_1.Schema.Types.ObjectId,
@@ -64,12 +65,27 @@ const blendIngredientSchema = new mongoose_1.Schema({
     sourceName: String,
     isPublished: Boolean,
 });
-const BlendIngredient = (0, mongoose_1.model)('BlendIngredient', blendIngredientSchema);
-blendIngredientSchema.pre('save', function (next) {
+blendIngredientSchema.pre('save', async function (next) {
     //@ts-ignore
     this.nutrientCount = this.blendNutrients.length;
     next();
 });
+blendIngredientSchema.pre('save', async function (next) {
+    //@ts-ignore
+    this.imageCount = this.images.length;
+    next();
+});
+// blendIngredientSchema.pre('find', async function (next) {
+//   //@ts-ignore
+//   this.nutrientCount = this.blendNutrients.length;
+//   next();
+// });
+const BlendIngredient = (0, mongoose_1.model)('BlendIngredient', blendIngredientSchema);
+// blendIngredientSchema.pre('save', async function (next) {
+//   //@ts-ignore
+//   this.nutrientCount = this.blendNutrients.length;
+//   next();
+// });
 // blendIngredientSchema.pre('find', function (next) {
 //   //@ts-ignore
 //   this.nutrientCount = this.blendNutrients.length;

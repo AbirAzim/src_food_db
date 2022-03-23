@@ -33,28 +33,31 @@ const ReturnBlendIngredientBasedOnDefaultPortion_1 = __importDefault(require("..
 const AppError_1 = __importDefault(require("../../../utils/AppError"));
 let BlendIngredientResolver = class BlendIngredientResolver {
     async getAllBlendIngredients() {
-        let blendIngredients = await blendIngredient_1.default.find().limit(100);
-        let returnIngredients = [];
-        for (let i = 0; i < blendIngredients.length; i++) {
-            let returnIngredient = blendIngredients[i];
-            returnIngredient.nutrientCount =
-                blendIngredients[i].blendNutrients.length;
-            returnIngredient.notBlendNutrientCount =
-                blendIngredients[i].notBlendNutrients.length;
-            returnIngredient.imageCount = blendIngredients[i].images.length;
-            returnIngredients.push(returnIngredient);
-        }
+        let blendIngredients = await blendIngredient_1.default.find()
+            .lean()
+            .select('-blendNutrients -notBlendNutrients -wikiCoverImages -wikiFeatureImage -wikiTitle -wikiDescription -bodies -seoTitle -seoSlug -seoCanonicalURL -seoSiteMapPriority -seoKeywords -seoMetaDescription -isPublished');
         return blendIngredients;
     }
     async getALlBlendIngredients2() {
         // const allPlayers: any = [];
+        let blendIngredients = await blendIngredient_1.default.find()
+            .lean()
+            .select('-blendNutrients -notBlendNutrients -wikiCoverImages -wikiFeatureImage -wikiTitle -wikiDescription -bodies -seoTitle -seoSlug -seoCanonicalURL -seoSiteMapPriority -seoKeywords -seoMetaDescription -isPublished');
+        return blendIngredients;
         // const cursor: any = await BlendIngredientModel.find()
         //   .lean()
         //   .select(
         //     '-blendNutrients -notBlendNutrients -wikiCoverImages -wikiFeatureImage -wikiTitle -wikiDescription -bodies -seoTitle -seoSlug -seoCanonicalURL -seoSiteMapPriority -seoKeywords -seoMetaDescription -isPublished'
         //   );
         // return cursor;
-        let ing = await blendIngredient_1.default.findOne({ _id: "620b6b8b40d3f19b558f0a15" });
+        // let nutrients: any = fs.readFileSync('./temp/nutrients.json', 'utf-8');
+        // let ing = await BlendIngredientModel.findOne({_id: "620b6b8b40d3f19b558f0a15"})
+        // fs.writeFileSync('./temp/testbaal.json', JSON.stringify(ing));
+        // let ingredient = fs.readFileSync('./temp/testbaal.json', 'utf-8');
+        // let ingredientData = JSON.parse(ingredient);
+        // let data = await BlendIngredientModel.create(ingredientData);
+        // data.save();
+        // return [data];
         // cursor.on('data', function (player) {
         //   allPlayers.push(player);
         //   console.log(player);
