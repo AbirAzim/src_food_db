@@ -61,7 +61,9 @@ let MemberResolver = class MemberResolver {
         else {
             let ingredientsForTotalCounting = await ingredient_1.default.find({
                 ingredientName: { $regex: filter.search, $options: 'i' },
-            });
+            })
+                .lean()
+                .select('_id');
             totalIngredients = ingredientsForTotalCounting.length;
         }
         if (filter.sort === '' || filter.sort === undefined) {
@@ -73,7 +75,9 @@ let MemberResolver = class MemberResolver {
                 model: 'UniqueNutrient',
             })
                 .skip(skip)
-                .limit(+limit);
+                .limit(+limit)
+                .lean()
+                .select('-refDatabaseId -ingredientId -ingredientName -category -classType -nutrients -featuredImage -images -collections');
         }
         else {
             ingredients = await ingredient_1.default.find({
@@ -85,7 +89,9 @@ let MemberResolver = class MemberResolver {
             })
                 .sort(JSON.parse(filter.sort.toString()))
                 .skip(skip)
-                .limit(+limit);
+                .limit(+limit)
+                .lean()
+                .select('-refDatabaseId -ingredientId -ingredientName -category -classType -nutrients -featuredImage -images -collections');
         }
         // let returnIngredients: any = [];
         // for (let i = 0; i < ingredients.length; i++) {
