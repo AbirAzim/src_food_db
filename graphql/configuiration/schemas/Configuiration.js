@@ -14,7 +14,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
 const AgeType_1 = __importDefault(require("./AgeType"));
-const HeightType_1 = __importDefault(require("./HeightType"));
 let Configuiration = class Configuiration {
 };
 __decorate([
@@ -28,15 +27,15 @@ __decorate([
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", Number)
-], Configuiration.prototype, "weight", void 0);
+], Configuiration.prototype, "weightInKilograms", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Number)
+], Configuiration.prototype, "heightInCentimeters", void 0);
 __decorate([
     (0, type_graphql_1.Field)((type) => AgeType_1.default, { nullable: true }),
     __metadata("design:type", AgeType_1.default)
 ], Configuiration.prototype, "age", void 0);
-__decorate([
-    (0, type_graphql_1.Field)((type) => HeightType_1.default, { nullable: true }),
-    __metadata("design:type", HeightType_1.default)
-], Configuiration.prototype, "height", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)

@@ -6,16 +6,13 @@ const memberConfiguirationSchema = new mongoose_1.Schema({
         type: String,
         enum: ['male', 'female', 'others'],
     },
-    weight: String,
+    weightInKilograms: Number,
     age: {
         quantity: Number,
         years: Boolean,
         months: Boolean,
     },
-    height: {
-        feet: Number,
-        inches: Number,
-    },
+    heightInCentimeters: Number,
     activity: {
         type: String,
         enum: ['low', 'moderate', 'high'],
