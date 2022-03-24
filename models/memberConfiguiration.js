@@ -18,6 +18,7 @@ const memberConfiguirationSchema = new mongoose_1.Schema({
         enum: ['low', 'moderate', 'high'],
     },
     dieteryLifeStyle: String,
+    pregnantOrLactating: String,
     allergies: [String],
     preExistingMedicalConditions: [String],
     meditcation: [String],

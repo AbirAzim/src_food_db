@@ -33,6 +33,10 @@ __decorate([
     __metadata("design:type", Number)
 ], Configuiration.prototype, "heightInCentimeters", void 0);
 __decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], Configuiration.prototype, "pregnantOrLactating", void 0);
+__decorate([
     (0, type_graphql_1.Field)((type) => AgeType_1.default, { nullable: true }),
     __metadata("design:type", AgeType_1.default)
 ], Configuiration.prototype, "age", void 0);

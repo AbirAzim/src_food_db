@@ -29,6 +29,10 @@ __decorate([
     __metadata("design:type", Number)
 ], CreateEditConfiguration.prototype, "heightInCentimeters", void 0);
 __decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], CreateEditConfiguration.prototype, "pregnantOrLactating", void 0);
+__decorate([
     (0, type_graphql_1.Field)((type) => Age_1.default, { nullable: true }),
     __metadata("design:type", Age_1.default)
 ], CreateEditConfiguration.prototype, "age", void 0);
