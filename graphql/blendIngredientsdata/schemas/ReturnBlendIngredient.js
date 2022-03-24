@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
 const BlendPortion_1 = __importDefault(require("./BlendPortion"));
+const BlendIngredientData_1 = __importDefault(require("./BlendIngredientData"));
 let ReturnBlendIngredientData = class ReturnBlendIngredientData {
 };
 __decorate([
@@ -49,8 +50,8 @@ __decorate([
     __metadata("design:type", Number)
 ], ReturnBlendIngredientData.prototype, "nutrientCount", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(() => type_graphql_1.ID, { nullable: true }),
-    __metadata("design:type", String)
+    (0, type_graphql_1.Field)(() => BlendIngredientData_1.default, { nullable: true }),
+    __metadata("design:type", BlendIngredientData_1.default)
 ], ReturnBlendIngredientData.prototype, "varrient", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),

@@ -36,6 +36,7 @@ let BlendIngredientResolver = class BlendIngredientResolver {
     async getAllBlendIngredients() {
         let blendIngredients = await blendIngredient_1.default.find()
             .lean()
+            .populate('varrient')
             .select('-blendNutrients -notBlendNutrients -wikiCoverImages -wikiFeatureImage -wikiTitle -wikiDescription -bodies -seoTitle -seoSlug -seoCanonicalURL -seoSiteMapPriority -seoKeywords -seoMetaDescription -isPublished');
         return blendIngredients;
     }
