@@ -90,12 +90,9 @@ let BlendIngredientResolver = class BlendIngredientResolver {
         if (data.editableObject.blendStatus) {
             // await BlendIngredientModel.findByIdAndRemove(data.editId);
             await ingredient_1.default.findByIdAndUpdate(food.srcFoodReference, {
-                addedToBlend: false,
                 blendStatus: data.editableObject.blendStatus,
             });
-            return 'Archieved Successfully';
         }
-        console.log(data.editableObject.defaultPortion);
         if (data.editableObject.defaultPortion === '' ||
             data.editableObject.defaultPortion === null ||
             data.editableObject.defaultPortion === undefined) {
