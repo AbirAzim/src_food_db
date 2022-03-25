@@ -176,12 +176,49 @@ let RecipeResolver = class RecipeResolver {
         return 'done';
     }
     async editARecipe(data) {
-        let updatedData = data.editableObject;
+        let willBeModifiedData = data.editableObject;
+        let ingredients = data.editableObject.ingredients;
+        //   @Field((type) => ID)
+        // ingredientId: String;
+        // @Field({ nullable: true })
+        // selectedPortionName: String;
+        // @Field({ nullable: true })
+        // weightInGram: Number;
+        let modifiedIngredients = [];
+        for (let i = 0; i < ingredients.length; i++) {
+            let ingredient = await blendIngredient_1.default.findOne({
+                _id: ingredients[i].ingredientId,
+            }).select('portions');
+            let mainPortion = ingredient.portions.filter(
+            //@ts-ignore
+            (portion) => portion.measurement === ingredients[i].selectedPortionName)[0];
+            let selectedPortion = {
+                name: ingredients[i].selectedPortionName,
+                gram: ingredients[i].weightInGram,
+                quantity: ingredients[i].weightInGram / +mainPortion.meausermentWeight,
+            };
+            let portions = [];
+            for (let j = 0; j < ingredient.portions.length; j++) {
+                portions.push({
+                    name: ingredient.portions[j].measurement,
+                    default: ingredient.portions[j].default,
+                    gram: ingredient.portions[j].meausermentWeight,
+                });
+            }
+            modifiedIngredients.push({
+                ingredientId: ingredients[i].ingredientId,
+                portions: portions,
+                selectedPortion: selectedPortion,
+                weightInGram: ingredients[i].weightInGram,
+            });
+        }
+        //@ts-ignore
+        willBeModifiedData.ingredients = modifiedIngredients;
         // let recipeBlendCategory = await CategoryModel.findOne({
         //   _id: data.editableObject.recipeBlendCategory,
         // });
         // updatedData.tempBlendCategory = recipeBlendCategory.name;
-        await recipe_1.default.findOneAndUpdate({ _id: data.editId }, updatedData);
+        await recipe_1.default.findOneAndUpdate({ _id: data.editId }, willBeModifiedData);
         return 'recipe updated successfully';
     }
     async deleteARecipe(recipeId) {
