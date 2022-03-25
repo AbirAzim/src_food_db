@@ -164,7 +164,7 @@ let BlendIngredientResolver = class BlendIngredientResolver {
         await ingredient_1.default.findByIdAndUpdate(id, {
             addedToBlend: false,
         });
-        return 'Success';
+        return blendIngredient._id;
     }
     async removeABlendIngredient(id) {
         let food = await blendIngredient_1.default.findOne({ _id: id });
@@ -251,9 +251,9 @@ let BlendIngredientResolver = class BlendIngredientResolver {
                 newBlendIngredient.blendNutrients.push(nutrient);
             }
         }
-        await blendIngredient_1.default.create(newBlendIngredient);
+        let newBlendData = await blendIngredient_1.default.create(newBlendIngredient);
         await ingredient_1.default.findByIdAndUpdate(srcId, { addedToBlend: true });
-        return 'Added successfully';
+        return newBlendData;
     }
     async filterIngredientByCategoryAndClass(data) {
         let ingredients;
@@ -755,7 +755,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], BlendIngredientResolver.prototype, "addNewBlendIngredient", null);
 __decorate([
-    (0, type_graphql_1.Mutation)(() => String),
+    (0, type_graphql_1.Mutation)(() => ReturnBlendIngredient_1.default),
     __param(0, (0, type_graphql_1.Arg)('srcId')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
