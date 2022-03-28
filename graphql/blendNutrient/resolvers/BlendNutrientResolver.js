@@ -73,9 +73,9 @@ let BlendNutrientResolver = class BlendNutrientResolver {
         let checkBlendId = await blendNutrient_1.default.findOne({
             uniqueNutrientId: data.srcNutrientId,
         });
-        if (checkBlendId) {
-            return new AppError_1.default('Unique Nutrient Id already exists', 400);
-        }
+        // if (checkBlendId) {
+        //   return new AppError('Unique Nutrient Id already exists', 400);
+        // }
         let newBlendNutrient = {
             nutrientName: un.nutrient,
             altName: '',
