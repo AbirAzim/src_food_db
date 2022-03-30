@@ -17,6 +17,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
 const blendNutrient_1 = __importDefault(require("../../../models/blendNutrient"));
+const blendIngredient_1 = __importDefault(require("../../../models/blendIngredient"));
 const uniqueNutrient_1 = __importDefault(require("../../../models/uniqueNutrient"));
 const mapToBlend_1 = __importDefault(require("../../../models/mapToBlend"));
 const AddNewBlendNutrient_1 = __importDefault(require("./input-type/blendNutrient/AddNewBlendNutrient"));
@@ -40,10 +41,37 @@ let BlendNutrientResolver = class BlendNutrientResolver {
                 parentIsCategory: true,
             });
             data.rank = searchBlendNutrient.length + 1;
+            data.blendId = (+searchBlendNutrient[searchBlendNutrient.length - 1].blendId + 1).toString();
+        }
+        else {
+            data.parentIsCategory = false;
+            let searchBlendNutrient = await blendNutrient_1.default.find({
+                parent: data.parent,
+                parentIsCategory: false,
+            });
+            data.rank = searchBlendNutrient.length + 1;
+            data.blendId = (+searchBlendNutrient[searchBlendNutrient.length - 1].blendId + 1).toString();
         }
         await blendNutrient_1.default.create(data);
         return 'BlendNutrient Created Successfull';
     }
+    // @Mutation(() => String)
+    // async hello() {
+    //   let blendNutrient: any = await BlendNutrientModel.findOne({
+    //     _id: '62407412305947996ac265eb',
+    //   });
+    //   let blendIngredints = await BlendNutrientModel.findOne({
+    //     _id: '624076f2305947996ac266e7',
+    //   });
+    //   console.log('hello', blendIngredints.blendId);
+    //   if (blendNutrient.parentIsCategory) {
+    //     let allBlendNutrients = await BlendNutrientModel.find({
+    //       category: blendNutrient.category,
+    //       parentIsCategory: true,
+    //     });
+    //     console.log(allBlendNutrients[allBlendNutrients.length - 1].blendId);
+    //   }
+    // }
     async getAllBlendNutrients() {
         let blendNutrients = await blendNutrient_1.default.find()
             .populate('parent')
@@ -60,7 +88,27 @@ let BlendNutrientResolver = class BlendNutrientResolver {
         if (data.editableObject.category === null) {
             return new AppError_1.default('Category can not be null.', 400);
         }
-        await blendNutrient_1.default.findByIdAndUpdate(data.editId, data.editableObject);
+        let modifiedData = data.editableObject;
+        if (!modifiedData.parent || modifiedData.parent === '') {
+            modifiedData.parent = null;
+            modifiedData.parentIsCategory = true;
+            let searchBlendNutrient = await blendNutrient_1.default.find({
+                category: modifiedData.category,
+                parentIsCategory: true,
+            });
+            modifiedData.rank = searchBlendNutrient.length + 1;
+            modifiedData.blendId = (+searchBlendNutrient[searchBlendNutrient.length - 1].blendId + 1).toString();
+        }
+        else {
+            modifiedData.parentIsCategory = false;
+            let searchBlendNutrient = await blendNutrient_1.default.find({
+                parent: modifiedData.parent,
+                parentIsCategory: false,
+            });
+            modifiedData.rank = searchBlendNutrient.length + 1;
+            modifiedData.blendId = (+searchBlendNutrient[searchBlendNutrient.length - 1].blendId + 1).toString();
+        }
+        await blendNutrient_1.default.findByIdAndUpdate(data.editId, modifiedData);
         return 'BlendNutrient Updated';
     }
     async addNewBlendNutrientFromSrc(data) {
@@ -70,33 +118,66 @@ let BlendNutrientResolver = class BlendNutrientResolver {
         if (!un) {
             return new AppError_1.default('Nutrient not found in source', 400);
         }
-        let checkBlendId = await blendNutrient_1.default.findOne({
-            uniqueNutrientId: data.srcNutrientId,
+        let blendNutrient = await blendNutrient_1.default.findOne({
+            _id: data.blendNutrientIdForMaping,
         });
+        if (!blendNutrient) {
+            return new AppError_1.default('Blend Nutrient not found', 400);
+        }
         // if (checkBlendId) {
         //   return new AppError('Unique Nutrient Id already exists', 400);
         // }
-        let newBlendNutrient = {
-            nutrientName: un.nutrient,
-            altName: '',
-            category: null,
-            status: 'Review',
-            parent: null,
-            uniqueNutrientId: un._id,
-            parentIsCategory: false,
-            rank: un.rank,
-            unitName: '',
-            units: un.unitName,
-            min_measure: '',
-            related_sources: un.related_sources,
-        };
-        newBlendNutrient.related_sources[0].sourceId = un._id;
-        let newBlendNutrientData = await blendNutrient_1.default.create(newBlendNutrient);
+        let checkBlendId = await mapToBlend_1.default.findOne({
+            blendNutrientId: data.blendNutrientIdForMaping,
+            srcUniqueNutrientId: data.srcNutrientId,
+        });
+        if (checkBlendId) {
+            console.log(checkBlendId);
+            return new AppError_1.default('This Mapping is already exist', 400);
+        }
         await mapToBlend_1.default.create({
-            blendNutrientId: newBlendNutrientData._id,
+            blendNutrientId: data.blendNutrientIdForMaping,
             srcUniqueNutrientId: un._id,
         });
+        await this.makeNotBlendNutrientToBlendNutrient(un._id, data.blendNutrientIdForMaping);
         return 'BlendNutrient Created Successfull';
+    }
+    async makeNotBlendNutrientToBlendNutrient(uniqueNutrientReferrence, blendNutrientRefference) {
+        let blendIngredints = await blendIngredient_1.default.find({
+            'notBlendNutrients.uniqueNutrientRefference': uniqueNutrientReferrence,
+        }).select('notBlendNutrients');
+        for (let i = 0; i < blendIngredints.length; i++) {
+            let index = blendIngredints[i].notBlendNutrients.filter(
+            //@ts-ignore
+            (x) => {
+                return (String(x.uniqueNutrientRefference) ===
+                    String(uniqueNutrientReferrence));
+            })[0];
+            if (index) {
+                let value = {
+                    value: index.value,
+                    blendNutrientRefference: blendNutrientRefference,
+                };
+                await blendIngredient_1.default.findOneAndUpdate({ _id: blendIngredints[i]._id }, {
+                    $push: {
+                        blendNutrients: value,
+                    },
+                });
+            }
+        }
+    }
+    async makeBlendNutrientToNotBlendNutrient(blendNutrientId) {
+        await blendIngredient_1.default.updateMany({
+            'blendNutrient.blendNutrientRefference': blendNutrientId,
+        }, {
+            $pull: { blendNutrients: { blendNutrientRefference: blendNutrientId } },
+        });
+        await mapToBlend_1.default.deleteMany({ blendNutrientId });
+    }
+    async removeBlendNutrient(id) {
+        await blendNutrient_1.default.findByIdAndDelete(id);
+        await this.makeBlendNutrientToNotBlendNutrient(id);
+        return 'BlendNutrient Deleted';
     }
 };
 __decorate([
@@ -133,6 +214,13 @@ __decorate([
     __metadata("design:paramtypes", [AddNewBlendNutrientFromSrc_1.default]),
     __metadata("design:returntype", Promise)
 ], BlendNutrientResolver.prototype, "addNewBlendNutrientFromSrc", null);
+__decorate([
+    (0, type_graphql_1.Mutation)(() => String),
+    __param(0, (0, type_graphql_1.Arg)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], BlendNutrientResolver.prototype, "removeBlendNutrient", null);
 BlendNutrientResolver = __decorate([
     (0, type_graphql_1.Resolver)()
 ], BlendNutrientResolver);

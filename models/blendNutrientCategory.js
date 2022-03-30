@@ -15,6 +15,7 @@ const blendNutrientCategory = new mongoose_1.Schema({
     keywords: [String],
     isPublished: Boolean,
     rank: Number,
+    count: Number,
 });
 const BlendNutrientCategory = (0, mongoose_1.model)('BlendNutrientCategory', blendNutrientCategory);
 exports.default = BlendNutrientCategory;
