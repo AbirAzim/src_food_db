@@ -12,6 +12,10 @@ const roleSchema = new mongoose_1.Schema({
             type: Boolean,
             default: false,
         },
+        create: {
+            type: Boolean,
+            default: false,
+        },
         edit: {
             type: Boolean,
             default: false,
@@ -23,6 +27,10 @@ const roleSchema = new mongoose_1.Schema({
     },
     Shop: {
         delete: {
+            type: Boolean,
+            default: false,
+        },
+        create: {
             type: Boolean,
             default: false,
         },
@@ -40,6 +48,10 @@ const roleSchema = new mongoose_1.Schema({
             type: Boolean,
             default: false,
         },
+        create: {
+            type: Boolean,
+            default: false,
+        },
         edit: {
             type: Boolean,
             default: false,
@@ -54,6 +66,10 @@ const roleSchema = new mongoose_1.Schema({
             type: Boolean,
             default: false,
         },
+        create: {
+            type: Boolean,
+            default: false,
+        },
         edit: {
             type: Boolean,
             default: false,
@@ -65,6 +81,10 @@ const roleSchema = new mongoose_1.Schema({
     },
     Admin: {
         delete: {
+            type: Boolean,
+            default: false,
+        },
+        create: {
             type: Boolean,
             default: false,
         },

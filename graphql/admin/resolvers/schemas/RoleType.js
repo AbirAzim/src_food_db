@@ -23,6 +23,10 @@ __decorate([
 __decorate([
     (0, type_graphql_1.Field)(),
     __metadata("design:type", Boolean)
+], RoleType.prototype, "create", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(),
+    __metadata("design:type", Boolean)
 ], RoleType.prototype, "view", void 0);
 RoleType = __decorate([
     (0, type_graphql_1.ObjectType)()

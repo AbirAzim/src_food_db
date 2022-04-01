@@ -8,63 +8,67 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
-let Admin = class Admin {
+const Role_1 = __importDefault(require("./Role"));
+let PopulatedAdmin = class PopulatedAdmin {
 };
 __decorate([
     (0, type_graphql_1.Field)(() => type_graphql_1.ID),
     __metadata("design:type", String)
-], Admin.prototype, "_id", void 0);
+], PopulatedAdmin.prototype, "_id", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
-], Admin.prototype, "firstName", void 0);
+], PopulatedAdmin.prototype, "firstName", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
-], Admin.prototype, "lastName", void 0);
+], PopulatedAdmin.prototype, "lastName", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
-], Admin.prototype, "displayName", void 0);
+], PopulatedAdmin.prototype, "displayName", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
-], Admin.prototype, "location", void 0);
+], PopulatedAdmin.prototype, "location", void 0);
 __decorate([
     (0, type_graphql_1.Field)(),
     __metadata("design:type", String)
-], Admin.prototype, "email", void 0);
+], PopulatedAdmin.prototype, "email", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
-], Admin.prototype, "number", void 0);
+], PopulatedAdmin.prototype, "number", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
-], Admin.prototype, "title", void 0);
+], PopulatedAdmin.prototype, "title", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
-], Admin.prototype, "notes", void 0);
+], PopulatedAdmin.prototype, "notes", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
-], Admin.prototype, "profilePicture", void 0);
+], PopulatedAdmin.prototype, "profilePicture", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
-], Admin.prototype, "image", void 0);
+], PopulatedAdmin.prototype, "image", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(() => type_graphql_1.ID),
-    __metadata("design:type", String)
-], Admin.prototype, "role", void 0);
+    (0, type_graphql_1.Field)((type) => Role_1.default),
+    __metadata("design:type", Role_1.default)
+], PopulatedAdmin.prototype, "role", void 0);
 __decorate([
     (0, type_graphql_1.Field)(() => Date),
     __metadata("design:type", Date)
-], Admin.prototype, "createdAt", void 0);
-Admin = __decorate([
+], PopulatedAdmin.prototype, "createdAt", void 0);
+PopulatedAdmin = __decorate([
     (0, type_graphql_1.ObjectType)()
-], Admin);
-exports.default = Admin;
+], PopulatedAdmin);
+exports.default = PopulatedAdmin;

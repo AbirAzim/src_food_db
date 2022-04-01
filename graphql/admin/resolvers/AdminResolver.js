@@ -17,6 +17,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
 const Admin_1 = __importDefault(require("./schemas/Admin"));
+const PopulatedAdmin_1 = __importDefault(require("./schemas/PopulatedAdmin"));
 const NewAdminInput_1 = __importDefault(require("./input-type/NewAdminInput"));
 const Admin_2 = __importDefault(require("../../../models/Admin"));
 const EditAdmin_1 = __importDefault(require("./input-type/EditAdmin"));
@@ -26,7 +27,7 @@ let AdminResolver = class AdminResolver {
         return admin;
     }
     async getASingleAdmin(adminId) {
-        let admin = await Admin_2.default.findOne({ _id: adminId }).populate('role');
+        let admin = await Admin_2.default.findOne({ _id: adminId });
         return admin;
     }
     async getAllAdmin() {
@@ -57,7 +58,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], AdminResolver.prototype, "getASingleAdmin", null);
 __decorate([
-    (0, type_graphql_1.Query)(() => [Admin_1.default]),
+    (0, type_graphql_1.Query)(() => [PopulatedAdmin_1.default]),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
