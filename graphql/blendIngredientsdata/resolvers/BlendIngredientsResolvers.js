@@ -27,11 +27,13 @@ const AddBlendIngredient_1 = __importDefault(require("./input-type/AddBlendIngre
 const IngredientFilter_1 = __importDefault(require("./input-type/IngredientFilter"));
 const BlendIngredientInfo_1 = __importDefault(require("./input-type/BlendIngredientInfo"));
 const EditBlendIngredient_1 = __importDefault(require("./input-type/EditBlendIngredient"));
+const GetIngredientsFromNutrition_1 = __importDefault(require("../../wiki/resolver/input-type/GetIngredientsFromNutrition"));
 const BlendIngredientData_1 = __importDefault(require("../schemas/BlendIngredientData"));
 const ReturnBlendIngredient_1 = __importDefault(require("../schemas/ReturnBlendIngredient"));
 const ReturnBlendIngredientBasedOnDefaultPortion_1 = __importDefault(require("../schemas/ReturnBlendIngredientBasedOnDefaultPortion"));
 const AppError_1 = __importDefault(require("../../../utils/AppError"));
 const blendNutrientCategory_2 = __importDefault(require("../../../models/blendNutrientCategory"));
+const IngredientForWiki_1 = __importDefault(require("../../wiki/schemas/IngredientForWiki"));
 let BlendIngredientResolver = class BlendIngredientResolver {
     async getAllBlendIngredients() {
         let blendIngredients = await blendIngredient_1.default.find()
@@ -700,6 +702,78 @@ let BlendIngredientResolver = class BlendIngredientResolver {
         fs_1.default.writeFileSync('./temp/sx2.json', JSON.stringify(fpoot));
         return 'done';
     }
+    async getAllIngredientsDataBasedOnNutrition(data) {
+        let nutrient = await blendNutrient_1.default.findOne({
+            _id: data.nutritionID,
+        }).populate('category');
+        if (!nutrient) {
+            return new AppError_1.default('Nutrient not found', 404);
+        }
+        let ingredients;
+        if (data.category === 'All') {
+            ingredients = await blendIngredient_1.default.find({
+                classType: 'Class - 1',
+                blendStatus: 'Active',
+            })
+                .select('-srcFoodReference -description -classType -blendStatus -category -sourceName -notBlendNutrients')
+                .populate('blendNutrients.blendNutrientRefference');
+        }
+        else {
+            ingredients = await blendIngredient_1.default.find({
+                classType: 'Class - 1',
+                blendStatus: 'Active',
+                category: data.category,
+            })
+                .select('-srcFoodReference -description -classType -blendStatus -category -sourceName -notBlendNutrients')
+                .populate('blendNutrients.blendNutrientRefference');
+        }
+        console.log(ingredients.length);
+        let returnIngredients = {};
+        for (let i = 0; i < ingredients.length; i++) {
+            for (let j = 0; j < ingredients[i].blendNutrients.length; j++) {
+                if (String(ingredients[i].blendNutrients[j].blendNutrientRefference._id) === data.nutritionID) {
+                    if (!returnIngredients[ingredients[i].ingredientName]) {
+                        // let value = await this.convertToGram({
+                        //   amount: parseInt(ingredients[i].blendNutrients[j].value),
+                        //   unit: ingredients[i].blendNutrients[j].blendNutrientRefference
+                        //     .units,
+                        // });
+                        let defaultPortion = ingredients[i].portions.filter(
+                        //@ts-ignore
+                        (a) => a.default === true)[0];
+                        returnIngredients[ingredients[i].ingredientName] = {
+                            ingredientId: ingredients[i]._id,
+                            name: ingredients[i].ingredientName,
+                            value: parseFloat(ingredients[i].blendNutrients[j].value),
+                            units: ingredients[i].blendNutrients[j].blendNutrientRefference.units,
+                            portion: defaultPortion,
+                        };
+                    }
+                    else {
+                        let defaultPortion = ingredients[i].portions.filter(
+                        //@ts-ignore
+                        (a) => a.default === true)[0];
+                        returnIngredients[ingredients[i].ingredientName] = {
+                            ingredientId: ingredients[i]._id,
+                            name: ingredients[i].ingredientName,
+                            value: parseFloat(returnIngredients[ingredients[i].ingredientName].value) + parseFloat(ingredients[i].blendNutrients[j].value),
+                            units: ingredients[i].blendNutrients[j].blendNutrientRefference.units,
+                            portion: defaultPortion,
+                        };
+                    }
+                }
+            }
+        }
+        let sortArray = [];
+        Object.keys(returnIngredients).forEach((key) => {
+            sortArray.push(returnIngredients[key]);
+        });
+        //@ts-ignore
+        let result = sortArray.sort((a, b) => {
+            return b.value - a.value;
+        });
+        return result;
+    }
 };
 __decorate([
     (0, type_graphql_1.Query)(() => [ReturnBlendIngredient_1.default]),
@@ -828,6 +902,13 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], BlendIngredientResolver.prototype, "start", null);
+__decorate([
+    (0, type_graphql_1.Query)(() => [IngredientForWiki_1.default]),
+    __param(0, (0, type_graphql_1.Arg)('data')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [GetIngredientsFromNutrition_1.default]),
+    __metadata("design:returntype", Promise)
+], BlendIngredientResolver.prototype, "getAllIngredientsDataBasedOnNutrition", null);
 BlendIngredientResolver = __decorate([
     (0, type_graphql_1.Resolver)()
 ], BlendIngredientResolver);
