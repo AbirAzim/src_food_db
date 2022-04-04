@@ -27,7 +27,7 @@ let RoleResolver = class RoleResolver {
     }
     async getASingleRole(roleId) {
         let role = await RoleModel_1.default.findOne({ _id: roleId });
-        return role;
+        return JSON.stringify(role);
     }
     async getAllRoles() {
         const roles = await RoleModel_1.default.find();
@@ -50,7 +50,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], RoleResolver.prototype, "createNewRole", null);
 __decorate([
-    (0, type_graphql_1.Query)(() => Role_1.default),
+    (0, type_graphql_1.Query)(() => String),
     __param(0, (0, type_graphql_1.Arg)('roleId')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),

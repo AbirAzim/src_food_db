@@ -97,6 +97,24 @@ const roleSchema = new mongoose_1.Schema({
             default: false,
         },
     },
+    All: {
+        delete: {
+            type: Boolean,
+            default: false,
+        },
+        create: {
+            type: Boolean,
+            default: false,
+        },
+        edit: {
+            type: Boolean,
+            default: false,
+        },
+        view: {
+            type: Boolean,
+            default: false,
+        },
+    },
     createdAt: { type: Date, default: Date.now },
 });
 const role = (0, mongoose_1.model)('Role', roleSchema);

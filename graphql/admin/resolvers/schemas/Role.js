@@ -45,6 +45,10 @@ __decorate([
     __metadata("design:type", RoleType_1.default)
 ], Role.prototype, "Blend", void 0);
 __decorate([
+    (0, type_graphql_1.Field)(() => RoleType_1.default),
+    __metadata("design:type", RoleType_1.default)
+], Role.prototype, "All", void 0);
+__decorate([
     (0, type_graphql_1.Field)(() => Date),
     __metadata("design:type", Date)
 ], Role.prototype, "createdAt", void 0);
