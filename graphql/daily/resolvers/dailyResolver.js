@@ -28,24 +28,37 @@ let UserDailyResolver = class UserDailyResolver {
         return 'Done';
     }
     async getDailyByUserId(userId) {
-        let user = await memberModel_1.default.find({ _id: userId });
+        let user = await memberModel_1.default.findOne({ _id: userId });
         if (!user) {
             return new AppError_1.default('User not found', 404);
         }
         let config = await memberConfiguiration_1.default.findOne({
-            _id: user.configuiration,
+            _id: user.configuration,
         });
-        if (!config) {
-            return new AppError_1.default('User not found', 404);
-        }
         console.log(config);
+        // if (
+        //   !config.age ||
+        //   !config.activity ||
+        //   config.activity === '' ||
+        //   !config.gender ||
+        //   config.gender === '' ||
+        //   !config.weightInKilograms ||
+        //   config.heightInCentimeters
+        // ) {
+        //   return new AppError(`${config}`, 404);
+        // }
+        let daily = await this.getDaily(config.age.month, Number(config.age.quantity), config.activity, config.gender, Number(config.weightInKilograms), Number(config.heightInCentimeters));
+        console.log(daily);
+        return daily;
     }
     async getDaily(isAgeInMonth, ageInNumber, activity, gender, weightInKG, heightInCM) {
         if (isAgeInMonth) {
             ageInNumber = Number(ageInNumber) * 0.0833334;
         }
-        let bmi = await this.bmiCalculation(weightInKG, heightInCM);
-        let calories = await this.getDailyCalorie(activity, ageInNumber, bmi, gender, weightInKG, heightInCM);
+        console.log('z', weightInKG);
+        let bmi = await this.bmiCalculation(Number(weightInKG), Number(heightInCM));
+        console.log('bmi', bmi);
+        let calories = await this.getDailyCalorie(activity.toLowerCase(), ageInNumber, bmi, gender.toLowerCase(), weightInKG, heightInCM);
         let nutrients = await this.getDailyNutrition(ageInNumber, calories);
         let retunrData = {
             bmi: {
@@ -142,7 +155,12 @@ let UserDailyResolver = class UserDailyResolver {
         return bmi;
     }
     async getDailyCalorie(activity, ageInYears, bmi, gender, weightInKG, heightInCM) {
-        // let pal: Number;
+        console.log('activity', activity);
+        console.log('ageInYears', ageInYears);
+        console.log(bmi);
+        console.log('gender', gender);
+        console.log(weightInKG);
+        console.log('heightInCM', heightInCM);
         let heightInMeters = Number(heightInCM) * 0.01;
         let totalCaloriesNeeded;
         if (bmi >= 18.5 && bmi <= 25) {
@@ -191,7 +209,9 @@ let UserDailyResolver = class UserDailyResolver {
                 }
             }
             else if (ageInYears >= 19) {
+                console.log('eeeeeeeeeeeeeee');
                 if (gender == 'male') {
+                    console.log('mmmmmmmmmmmm');
                     let pal;
                     if (activity === 'low') {
                         pal = 1;
@@ -200,6 +220,7 @@ let UserDailyResolver = class UserDailyResolver {
                         pal = 1.11;
                     }
                     else if (activity === 'high') {
+                        console.log('problem');
                         pal = 1.25;
                     }
                     else if (activity === 'extreme') {
@@ -210,6 +231,7 @@ let UserDailyResolver = class UserDailyResolver {
                         661.8 -
                             9.53 * Number(ageInYears) +
                             Number(pal) * (15.91 * Number(weightInKG) + 539.6 * heightInMeters);
+                    console.log('tpt', totalCaloriesNeeded);
                     return totalCaloriesNeeded;
                 }
                 else if (gender == 'female') {
