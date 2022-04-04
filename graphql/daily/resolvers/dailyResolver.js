@@ -19,10 +19,26 @@ const type_graphql_1 = require("type-graphql");
 const CreateNewDaily_1 = __importDefault(require("./input-type/CreateNewDaily"));
 const Daily_1 = __importDefault(require("../../../models/Daily"));
 const GetDaily_1 = __importDefault(require("../schemas/GetDaily"));
+const memberModel_1 = __importDefault(require("../../../models/memberModel"));
+const memberConfiguiration_1 = __importDefault(require("../../../models/memberConfiguiration"));
+const AppError_1 = __importDefault(require("../../../utils/AppError"));
 let UserDailyResolver = class UserDailyResolver {
     async createNewDaily(data) {
         await Daily_1.default.create(data);
         return 'Done';
+    }
+    async getDailyByUserId(userId) {
+        let user = await memberModel_1.default.find({ _id: userId });
+        if (!user) {
+            return new AppError_1.default('User not found', 404);
+        }
+        let config = await memberConfiguiration_1.default.findOne({
+            _id: user.configuiration,
+        });
+        if (!config) {
+            return new AppError_1.default('User not found', 404);
+        }
+        console.log(config);
     }
     async getDaily(isAgeInMonth, ageInNumber, activity, gender, weightInKG, heightInCM) {
         if (isAgeInMonth) {
@@ -317,6 +333,13 @@ __decorate([
     __metadata("design:paramtypes", [CreateNewDaily_1.default]),
     __metadata("design:returntype", Promise)
 ], UserDailyResolver.prototype, "createNewDaily", null);
+__decorate([
+    (0, type_graphql_1.Query)(() => GetDaily_1.default),
+    __param(0, (0, type_graphql_1.Arg)('userId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], UserDailyResolver.prototype, "getDailyByUserId", null);
 __decorate([
     (0, type_graphql_1.Query)(() => GetDaily_1.default),
     __param(0, (0, type_graphql_1.Arg)('isAgeInMonth')),

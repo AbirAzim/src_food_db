@@ -43,6 +43,10 @@ __decorate([
 __decorate([
     (0, type_graphql_1.Field)((type) => RoleType_1.default),
     __metadata("design:type", RoleType_1.default)
+], CreateRole.prototype, "Wiki", void 0);
+__decorate([
+    (0, type_graphql_1.Field)((type) => RoleType_1.default),
+    __metadata("design:type", RoleType_1.default)
 ], CreateRole.prototype, "All", void 0);
 CreateRole = __decorate([
     (0, type_graphql_1.InputType)()
