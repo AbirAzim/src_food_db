@@ -18,15 +18,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
 const CreateEditDailyGoal_1 = __importDefault(require("./input-type/DailyGoal/CreateEditDailyGoal"));
 const DailyGoal_1 = __importDefault(require("../../../models/DailyGoal"));
-const Goal_1 = __importDefault(require("../schemas/Goal"));
+const DailyGoal_2 = __importDefault(require("../schemas/DailyGoal"));
 let DailyGoalResolver = class DailyGoalResolver {
     async updateDailyGoals(data) {
-        await DailyGoal_1.default.findOneAndUpdate({ memberId: data.memberId }, { goals: data.goals });
+        await DailyGoal_1.default.findOneAndUpdate({ memberId: data.memberId }, { goals: data.goals, calories: data.calories, bmi: data.bmi });
         return 'success';
     }
     async getDailyGoals(memberId) {
         let dailyGoal = await DailyGoal_1.default.findOne({ memberId });
-        return dailyGoal.goals;
+        return dailyGoal;
     }
 };
 __decorate([
@@ -37,7 +37,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], DailyGoalResolver.prototype, "updateDailyGoals", null);
 __decorate([
-    (0, type_graphql_1.Query)(() => [Goal_1.default]),
+    (0, type_graphql_1.Query)(() => DailyGoal_2.default),
     __param(0, (0, type_graphql_1.Arg)('memberId')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),

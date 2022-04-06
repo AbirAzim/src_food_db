@@ -15,10 +15,10 @@ const DailyGoalSchema = new mongoose_1.Schema({
                 ref: 'BlendNutrient',
             },
             goal: Number,
-            calories: Number,
-            bmi: Number,
         },
     ],
+    calories: Number,
+    bmi: Number,
 });
 const DailyGoal = (0, mongoose_1.model)('dailyGoal', DailyGoalSchema);
 exports.default = DailyGoal;

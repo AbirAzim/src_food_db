@@ -30,6 +30,14 @@ __decorate([
     (0, type_graphql_1.Field)((type) => [Goal_1.default]),
     __metadata("design:type", Array)
 ], DailyGoal.prototype, "goals", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Number)
+], DailyGoal.prototype, "calories", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Number)
+], DailyGoal.prototype, "bmi", void 0);
 DailyGoal = __decorate([
     (0, type_graphql_1.ObjectType)()
 ], DailyGoal);

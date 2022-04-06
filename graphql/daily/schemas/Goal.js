@@ -34,14 +34,6 @@ __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", Number)
 ], Goal.prototype, "goal", void 0);
-__decorate([
-    (0, type_graphql_1.Field)({ nullable: true }),
-    __metadata("design:type", Number)
-], Goal.prototype, "calories", void 0);
-__decorate([
-    (0, type_graphql_1.Field)({ nullable: true }),
-    __metadata("design:type", Number)
-], Goal.prototype, "bmi", void 0);
 Goal = __decorate([
     (0, type_graphql_1.ObjectType)()
 ], Goal);

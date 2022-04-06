@@ -21,6 +21,7 @@ const recipe_1 = __importDefault(require("../../../models/recipe"));
 const memberModel_1 = __importDefault(require("../../../models/memberModel"));
 const userCollection_1 = __importDefault(require("../../../models/userCollection"));
 const blendIngredient_1 = __importDefault(require("../../../models/blendIngredient"));
+const userNote_1 = __importDefault(require("../../../models/userNote"));
 const Recipe_1 = __importDefault(require("../../recipe/schemas/Recipe"));
 const CreateRecipe_1 = __importDefault(require("./input-type/CreateRecipe"));
 const EditRecipe_1 = __importDefault(require("./input-type/EditRecipe"));
@@ -36,6 +37,25 @@ let RecipeResolver = class RecipeResolver {
     //   return 'Recipe Created';
     // }
     // fixing
+    async getTestRecipes(userId) {
+        const recipes = await recipe_1.default.find()
+            .populate({
+            path: 'ingredients.ingredientId',
+            model: 'BlendIngredient',
+        })
+            .populate('brand')
+            .populate('recipeBlendCategory');
+        let returnRecipe = [];
+        for (let i = 0; i < recipes.length; i++) {
+            let userNotes = await userNote_1.default.find({
+                recipeId: recipes[i]._id,
+                userId: userId,
+            });
+            returnRecipe.push({ ...recipes[i]._doc, notes: userNotes.length });
+        }
+        console.log(returnRecipe[0]);
+        return returnRecipe;
+    }
     async getAllRecipesByBlendCategory(data) {
         // let user = await MemberModel.findOne({ _id: data.userId }).populate({
         //   path: 'collections',
@@ -357,6 +377,13 @@ let RecipeResolver = class RecipeResolver {
         return count;
     }
 };
+__decorate([
+    (0, type_graphql_1.Query)((returns) => [Recipe_1.default]),
+    __param(0, (0, type_graphql_1.Arg)('userId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], RecipeResolver.prototype, "getTestRecipes", null);
 __decorate([
     (0, type_graphql_1.Query)((type) => [Recipe_1.default]) // not sure yet
     ,

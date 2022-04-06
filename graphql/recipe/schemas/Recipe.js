@@ -163,13 +163,17 @@ __decorate([
     __metadata("design:type", Number)
 ], Recipe.prototype, "seoSiteMapPriority", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(type => [String], { nullable: true }),
+    (0, type_graphql_1.Field)((type) => [String], { nullable: true }),
     __metadata("design:type", Array)
 ], Recipe.prototype, "seoKeywords", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
 ], Recipe.prototype, "seoMetaDescription", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Number)
+], Recipe.prototype, "notes", void 0);
 Recipe = __decorate([
     (0, type_graphql_1.ObjectType)()
 ], Recipe);

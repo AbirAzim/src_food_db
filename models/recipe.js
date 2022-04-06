@@ -83,5 +83,10 @@ const recipeSchema = new mongoose_1.Schema({
     seoKeywords: [String],
     seoMetaDescription: String,
 });
+recipeSchema.pre(/^find/, function (next) {
+    this.find({ secretTour: { $ne: true } });
+    this.start = Date.now();
+    next();
+});
 const Recipe = (0, mongoose_1.model)('Recipe', recipeSchema);
 exports.default = Recipe;

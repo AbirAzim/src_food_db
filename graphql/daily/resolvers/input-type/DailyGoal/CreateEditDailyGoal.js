@@ -24,6 +24,14 @@ __decorate([
     (0, type_graphql_1.Field)((type) => [GoalInput_1.default]),
     __metadata("design:type", Array)
 ], CreateEditDailyGoal.prototype, "goals", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Number)
+], CreateEditDailyGoal.prototype, "calories", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Number)
+], CreateEditDailyGoal.prototype, "bmi", void 0);
 CreateEditDailyGoal = __decorate([
     (0, type_graphql_1.InputType)()
 ], CreateEditDailyGoal);
