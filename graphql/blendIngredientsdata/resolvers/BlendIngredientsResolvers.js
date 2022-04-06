@@ -741,6 +741,9 @@ let BlendIngredientResolver = class BlendIngredientResolver {
                         let defaultPortion = ingredients[i].portions.filter(
                         //@ts-ignore
                         (a) => a.default === true)[0];
+                        if (!defaultPortion) {
+                            defaultPortion = ingredients[i].portions[0];
+                        }
                         returnIngredients[ingredients[i].ingredientName] = {
                             ingredientId: ingredients[i]._id,
                             name: ingredients[i].ingredientName,
@@ -753,6 +756,9 @@ let BlendIngredientResolver = class BlendIngredientResolver {
                         let defaultPortion = ingredients[i].portions.filter(
                         //@ts-ignore
                         (a) => a.default === true)[0];
+                        if (!defaultPortion) {
+                            defaultPortion = ingredients[i].portions[0];
+                        }
                         returnIngredients[ingredients[i].ingredientName] = {
                             ingredientId: ingredients[i]._id,
                             name: ingredients[i].ingredientName,

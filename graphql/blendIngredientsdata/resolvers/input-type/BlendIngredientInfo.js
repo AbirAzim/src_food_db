@@ -17,7 +17,7 @@ __decorate([
     __metadata("design:type", String)
 ], BlendIngredientInfo.prototype, "ingredientId", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", Number)
 ], BlendIngredientInfo.prototype, "value", void 0);
 BlendIngredientInfo = __decorate([

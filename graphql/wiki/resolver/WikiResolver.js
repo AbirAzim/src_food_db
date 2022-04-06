@@ -417,6 +417,18 @@ let WikiResolver = class WikiResolver {
             return gram;
         }
     }
+    async getDefaultPortion(ingredientId) {
+        let ingredient = await blendIngredient_1.default.findOne({
+            _id: ingredientId,
+        });
+        let defaultPortion = ingredient.portions.filter(
+        //@ts-ignore
+        (a) => a.default === true)[0];
+        if (!defaultPortion) {
+            defaultPortion = ingredient.portions[0];
+        }
+        return Number(defaultPortion.meausermentWeight);
+    }
     async bodyTest() {
         let description = await blendIngredient_1.default.find({}).select('wikiCoverImages wikiFeatureImage wikiTitle wikiDescription bodies seoTitle seoSlug seoCanonicalURL seoSiteMapPriority seoKeywords seoMetaDescription sourceName isPublished');
         return JSON.stringify(description);
@@ -471,6 +483,13 @@ __decorate([
     __metadata("design:paramtypes", [GramConversion_1.default]),
     __metadata("design:returntype", Promise)
 ], WikiResolver.prototype, "convertGramToUnit", null);
+__decorate([
+    (0, type_graphql_1.Query)(() => Number),
+    __param(0, (0, type_graphql_1.Arg)('ingredientId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], WikiResolver.prototype, "getDefaultPortion", null);
 __decorate([
     (0, type_graphql_1.Query)(() => String),
     __metadata("design:type", Function),
