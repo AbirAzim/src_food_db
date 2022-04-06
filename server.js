@@ -26,6 +26,7 @@ const BlendNutrientResolver_1 = __importDefault(require("./graphql/blendNutrient
 const BlendIngredientsResolvers_1 = __importDefault(require("./graphql/blendIngredientsdata/resolvers/BlendIngredientsResolvers"));
 const WikiResolver_1 = __importDefault(require("./graphql/wiki/resolver/WikiResolver"));
 const dailyResolver_1 = __importDefault(require("./graphql/daily/resolvers/dailyResolver"));
+const DailyGoalResolver_1 = __importDefault(require("./graphql/daily/resolvers/DailyGoalResolver"));
 process.on('uncaughtException', (err) => {
     console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
     console.log(err.name, err.message);
@@ -62,6 +63,7 @@ async function bootstrap() {
                 BlendIngredientsResolvers_1.default,
                 WikiResolver_1.default,
                 dailyResolver_1.default,
+                DailyGoalResolver_1.default
             ],
         });
     }

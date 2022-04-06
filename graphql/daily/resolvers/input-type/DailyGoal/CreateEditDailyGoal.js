@@ -13,22 +13,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
-const ValueUnit_1 = __importDefault(require("./ValueUnit"));
-let NutrientDailyDescription = class NutrientDailyDescription {
+const GoalInput_1 = __importDefault(require("./GoalInput"));
+let CreateEditDailyGoal = class CreateEditDailyGoal {
 };
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)((type) => type_graphql_1.ID),
     __metadata("design:type", String)
-], NutrientDailyDescription.prototype, "nutrientName", void 0);
+], CreateEditDailyGoal.prototype, "memberId", void 0);
 __decorate([
-    (0, type_graphql_1.Field)((type) => ValueUnit_1.default),
-    __metadata("design:type", ValueUnit_1.default)
-], NutrientDailyDescription.prototype, "data", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(() => type_graphql_1.ID, { nullable: true }),
-    __metadata("design:type", String)
-], NutrientDailyDescription.prototype, "blendNutrientRef", void 0);
-NutrientDailyDescription = __decorate([
-    (0, type_graphql_1.ObjectType)()
-], NutrientDailyDescription);
-exports.default = NutrientDailyDescription;
+    (0, type_graphql_1.Field)((type) => [GoalInput_1.default]),
+    __metadata("design:type", Array)
+], CreateEditDailyGoal.prototype, "goals", void 0);
+CreateEditDailyGoal = __decorate([
+    (0, type_graphql_1.InputType)()
+], CreateEditDailyGoal);
+exports.default = CreateEditDailyGoal;

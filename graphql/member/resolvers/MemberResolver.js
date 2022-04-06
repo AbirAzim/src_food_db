@@ -21,10 +21,11 @@ const Member_1 = __importDefault(require("../schemas/Member"));
 const Collection_1 = __importDefault(require("../schemas/Collection"));
 const NewUserInput_1 = __importDefault(require("./input-type/NewUserInput"));
 const EditUser_1 = __importDefault(require("./input-type/EditUser"));
+const CreateNewCollection_1 = __importDefault(require("./input-type/CreateNewCollection"));
 const memberModel_1 = __importDefault(require("../../../models/memberModel"));
 const memberConfiguiration_1 = __importDefault(require("../../../models/memberConfiguiration"));
 const userCollection_1 = __importDefault(require("../../../models/userCollection"));
-const CreateNewCollection_1 = __importDefault(require("./input-type/CreateNewCollection"));
+const DailyGoal_1 = __importDefault(require("../../../models/DailyGoal"));
 let MemberResolver = class MemberResolver {
     async createNewUser(data) {
         let user = await memberModel_1.default.findOne({ email: data.email })
@@ -50,6 +51,8 @@ let MemberResolver = class MemberResolver {
             pushedData.collections = [collection._id];
             pushedData.defaultCollection = collection._id;
             let user2 = await memberModel_1.default.create(pushedData);
+            let DailyGoal = await DailyGoal_1.default.create({ memberId: user2._id });
+            await memberModel_1.default.findOneAndUpdate({ _id: user2._id }, { dailyGoal: DailyGoal._id });
             let user3 = await memberModel_1.default.findOne({ _id: user2._id })
                 .populate('configuration')
                 .populate({

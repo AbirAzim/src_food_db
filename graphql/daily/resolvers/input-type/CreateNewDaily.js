@@ -28,6 +28,10 @@ __decorate([
     (0, type_graphql_1.Field)((type) => [Range_1.default]),
     __metadata("design:type", Array)
 ], CreateNewDaily.prototype, "ranges", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(() => type_graphql_1.ID),
+    __metadata("design:type", String)
+], CreateNewDaily.prototype, "blendNutrientRef", void 0);
 CreateNewDaily = __decorate([
     (0, type_graphql_1.InputType)()
 ], CreateNewDaily);

@@ -17,6 +17,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
 const CreateNewDaily_1 = __importDefault(require("./input-type/CreateNewDaily"));
+const EditDaily_1 = __importDefault(require("./input-type/EditDaily"));
 const Daily_1 = __importDefault(require("../../../models/Daily"));
 const GetDaily_1 = __importDefault(require("../schemas/GetDaily"));
 const memberModel_1 = __importDefault(require("../../../models/memberModel"));
@@ -27,6 +28,14 @@ let UserDailyResolver = class UserDailyResolver {
         await Daily_1.default.create(data);
         return 'Done';
     }
+    async editADaily(data) {
+        let daily = await Daily_1.default.findOne({ _id: data.editId });
+        if (!daily) {
+            return new AppError_1.default('Daily not found', 404);
+        }
+        await Daily_1.default.findOneAndUpdate({ _id: data.editId }, data.editableObject);
+        return 'success';
+    }
     async getDailyByUserId(userId) {
         let user = await memberModel_1.default.findOne({ _id: userId });
         if (!user) {
@@ -35,29 +44,14 @@ let UserDailyResolver = class UserDailyResolver {
         let config = await memberConfiguiration_1.default.findOne({
             _id: user.configuration,
         });
-        console.log(config);
-        // if (
-        //   !config.age ||
-        //   !config.activity ||
-        //   config.activity === '' ||
-        //   !config.gender ||
-        //   config.gender === '' ||
-        //   !config.weightInKilograms ||
-        //   config.heightInCentimeters
-        // ) {
-        //   return new AppError(`${config}`, 404);
-        // }
         let daily = await this.getDaily(config.age.month, Number(config.age.quantity), config.activity, config.gender, Number(config.weightInKilograms), Number(config.heightInCentimeters));
-        console.log(daily);
         return daily;
     }
     async getDaily(isAgeInMonth, ageInNumber, activity, gender, weightInKG, heightInCM) {
         if (isAgeInMonth) {
             ageInNumber = Number(ageInNumber) * 0.0833334;
         }
-        console.log('z', weightInKG);
         let bmi = await this.bmiCalculation(Number(weightInKG), Number(heightInCM));
-        console.log('bmi', bmi);
         let calories = await this.getDailyCalorie(activity.toLowerCase(), ageInNumber, bmi, gender.toLowerCase(), weightInKG, heightInCM);
         let nutrients = await this.getDailyNutrition(ageInNumber, calories);
         let retunrData = {
@@ -83,18 +77,21 @@ let UserDailyResolver = class UserDailyResolver {
                 Energy.push({
                     nutrientName: daily[i].nutrientName,
                     data: await this.getDataFromRanges(JSON.stringify(daily[i].ranges), ageInNumber, calories),
+                    blendNutrientRef: daily[i].blendNutrientRef,
                 });
             }
             else if (daily[i].categoryName === 'Minerals') {
                 Minerals.push({
                     nutrientName: daily[i].nutrientName,
                     data: await this.getDataFromRanges(JSON.stringify(daily[i].ranges), ageInNumber, calories),
+                    blendNutrientRef: daily[i].blendNutrientRef,
                 });
             }
             else if (daily[i].categoryName === 'Vitamins') {
                 Vitamins.push({
                     nutrientName: daily[i].nutrientName,
                     data: await this.getDataFromRanges(JSON.stringify(daily[i].ranges), ageInNumber, calories),
+                    blendNutrientRef: daily[i].blendNutrientRef,
                 });
             }
         }
@@ -155,12 +152,6 @@ let UserDailyResolver = class UserDailyResolver {
         return bmi;
     }
     async getDailyCalorie(activity, ageInYears, bmi, gender, weightInKG, heightInCM) {
-        console.log('activity', activity);
-        console.log('ageInYears', ageInYears);
-        console.log(bmi);
-        console.log('gender', gender);
-        console.log(weightInKG);
-        console.log('heightInCM', heightInCM);
         let heightInMeters = Number(heightInCM) * 0.01;
         let totalCaloriesNeeded;
         if (bmi >= 18.5 && bmi <= 25) {
@@ -209,9 +200,7 @@ let UserDailyResolver = class UserDailyResolver {
                 }
             }
             else if (ageInYears >= 19) {
-                console.log('eeeeeeeeeeeeeee');
                 if (gender == 'male') {
-                    console.log('mmmmmmmmmmmm');
                     let pal;
                     if (activity === 'low') {
                         pal = 1;
@@ -220,7 +209,6 @@ let UserDailyResolver = class UserDailyResolver {
                         pal = 1.11;
                     }
                     else if (activity === 'high') {
-                        console.log('problem');
                         pal = 1.25;
                     }
                     else if (activity === 'extreme') {
@@ -231,7 +219,6 @@ let UserDailyResolver = class UserDailyResolver {
                         661.8 -
                             9.53 * Number(ageInYears) +
                             Number(pal) * (15.91 * Number(weightInKG) + 539.6 * heightInMeters);
-                    console.log('tpt', totalCaloriesNeeded);
                     return totalCaloriesNeeded;
                 }
                 else if (gender == 'female') {
@@ -355,6 +342,13 @@ __decorate([
     __metadata("design:paramtypes", [CreateNewDaily_1.default]),
     __metadata("design:returntype", Promise)
 ], UserDailyResolver.prototype, "createNewDaily", null);
+__decorate([
+    (0, type_graphql_1.Mutation)(() => String),
+    __param(0, (0, type_graphql_1.Arg)('data')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [EditDaily_1.default]),
+    __metadata("design:returntype", Promise)
+], UserDailyResolver.prototype, "editADaily", null);
 __decorate([
     (0, type_graphql_1.Query)(() => GetDaily_1.default),
     __param(0, (0, type_graphql_1.Arg)('userId')),

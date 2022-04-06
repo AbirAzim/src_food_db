@@ -35,6 +35,7 @@ const memberSchema = new mongoose_1.Schema({
         ref: 'UserCollection',
     },
     collections: [{ type: mongoose_1.Schema.Types.ObjectId, ref: 'UserCollection' }],
+    dailyGoal: { type: mongoose_1.Schema.Types.ObjectId, ref: 'dailyGoal' },
 });
 const Member = (0, mongoose_1.model)('User', memberSchema);
 exports.default = Member;

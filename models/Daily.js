@@ -4,6 +4,10 @@ const mongoose_1 = require("mongoose");
 const DailySchema = new mongoose_1.Schema({
     nutrientName: String,
     categoryName: String,
+    blendNutrientRef: {
+        type: mongoose_1.SchemaTypes.ObjectId,
+        ref: 'BlendNutrient',
+    },
     ranges: [
         {
             lifeStageGroup: {
