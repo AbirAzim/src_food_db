@@ -548,19 +548,35 @@ let BlendIngredientResolver = class BlendIngredientResolver {
         let obj = {};
         let childs = await blendNutrient_1.default.find({ parent: parent })
             .lean()
-            .select('_id nutrientName');
+            .select('_id nutrientName altName');
         if (childs.length === 0) {
             return null;
         }
         for (let i = 0; i < childs.length; i++) {
             let ek = returnNutrients.filter((rn) => String(rn.blendNutrientRefference._id) === String(childs[i]._id))[0];
+            let check = childs[i].altName === '';
+            let check2 = childs[i].altName === undefined;
+            let check3 = check || check2;
+            //  ||
+            // populatedChild2[i].blendNutrientRefference.altName !== undefined ||
+            // populatedChild2[i].blendNutrientRefference.altName !== null;
+            let name = check3 ? childs[i].nutrientName : childs[i].altName;
             if (!ek) {
-                obj[childs[i].nutrientName] = null;
+                obj[name.toLowerCase()] = null;
                 continue;
             }
             childs[i] = ek;
             childs[i].childs = await this.getChild(childs[i].blendNutrientRefference._id, returnNutrients);
-            obj[childs[i].blendNutrientRefference.nutrientName] = childs[i];
+            let check4 = childs[i].blendNutrientRefference.altName === '';
+            let check5 = childs[i].blendNutrientRefference.altName === undefined;
+            let check6 = check4 || check5;
+            //  ||
+            // populatedChild2[i].blendNutrientRefference.altName !== undefined ||
+            // populatedChild2[i].blendNutrientRefference.altName !== null;
+            let name2 = check6
+                ? childs[i].blendNutrientRefference.nutrientName
+                : childs[i].blendNutrientRefference.altName;
+            obj[name2.toLowerCase()] = childs[i];
         }
         return obj;
     }
@@ -586,10 +602,17 @@ let BlendIngredientResolver = class BlendIngredientResolver {
         //@ts-ignore
         (child) => child.blendNutrientRefference !== null);
         for (let i = 0; i < populatedChild2.length; i++) {
-            obj[populatedChild2[i].blendNutrientRefference.nutrientName] =
-                populatedChild2[i];
-            obj[populatedChild2[i].blendNutrientRefference.nutrientName].childs =
-                await this.getChild(populatedChild2[i].blendNutrientRefference._id, returnNutrients);
+            let check = populatedChild2[i].blendNutrientRefference.altName === '';
+            let check2 = populatedChild2[i].blendNutrientRefference.altName === undefined;
+            let check3 = check || check2;
+            //  ||
+            // populatedChild2[i].blendNutrientRefference.altName !== undefined ||
+            // populatedChild2[i].blendNutrientRefference.altName !== null;
+            let name = check3
+                ? populatedChild2[i].blendNutrientRefference.nutrientName
+                : populatedChild2[i].blendNutrientRefference.altName;
+            obj[name.toLowerCase()] = populatedChild2[i];
+            obj[name.toLowerCase()].childs = await this.getChild(populatedChild2[i].blendNutrientRefference._id, returnNutrients);
         }
         return obj;
     }

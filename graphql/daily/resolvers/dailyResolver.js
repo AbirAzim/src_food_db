@@ -53,6 +53,7 @@ let UserDailyResolver = class UserDailyResolver {
         }
         let bmi = await this.bmiCalculation(Number(weightInKG), Number(heightInCM));
         let calories = await this.getDailyCalorie(activity.toLowerCase(), ageInNumber, bmi, gender.toLowerCase(), weightInKG, heightInCM);
+        console.log('calories', calories);
         let nutrients = await this.getDailyNutrition(ageInNumber, calories);
         let retunrData = {
             bmi: {
@@ -61,7 +62,7 @@ let UserDailyResolver = class UserDailyResolver {
             },
             calories: {
                 value: calories,
-                units: 'N/A',
+                units: 'kcal/d',
             },
             nutrients: nutrients,
         };
@@ -154,7 +155,14 @@ let UserDailyResolver = class UserDailyResolver {
     async getDailyCalorie(activity, ageInYears, bmi, gender, weightInKG, heightInCM) {
         let heightInMeters = Number(heightInCM) * 0.01;
         let totalCaloriesNeeded;
+        console.log('activity', activity);
+        console.log('ageInYears', ageInYears);
+        console.log('bmi', bmi);
+        console.log('gender', gender);
+        console.log('weightInKG', weightInKG);
+        console.log('heightInCM', heightInCM);
         if (bmi >= 18.5 && bmi <= 25) {
+            console.log('step 1');
             if (ageInYears >= 9 && ageInYears <= 18) {
                 if (gender === 'male') {
                     let pal;
@@ -222,6 +230,7 @@ let UserDailyResolver = class UserDailyResolver {
                     return totalCaloriesNeeded;
                 }
                 else if (gender == 'female') {
+                    console.log('step 2');
                     let pal;
                     if (activity === 'low') {
                         pal = 1;
@@ -230,6 +239,7 @@ let UserDailyResolver = class UserDailyResolver {
                         pal = 1.12;
                     }
                     else if (activity === 'high') {
+                        console.log('step 3');
                         pal = 1.27;
                     }
                     else if (activity === 'extreme') {
@@ -240,6 +250,7 @@ let UserDailyResolver = class UserDailyResolver {
                         354.1 -
                             6.91 * Number(ageInYears) +
                             Number(pal) * (9.36 * Number(weightInKG) + 726 * heightInMeters);
+                    return totalCaloriesNeeded;
                 }
             }
         }
