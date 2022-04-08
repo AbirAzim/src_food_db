@@ -25,6 +25,15 @@ const EditBlendNutrient_1 = __importDefault(require("./input-type/blendNutrient/
 const AddNewBlendNutrientFromSrc_1 = __importDefault(require("./input-type/blendNutrient/AddNewBlendNutrientFromSrc"));
 const BlendNutrientData_1 = __importDefault(require("../schemas/BlendNutrientData"));
 const AppError_1 = __importDefault(require("../../../utils/AppError"));
+let allUnits = {
+    Kilojoules: { unit: 'kJ', unitName: 'Kilojoules' },
+    Gram: { unit: 'G', unitName: 'Gram' },
+    Milligram: { unit: 'MG', unitName: 'Milligram' },
+    Microgram: { unit: 'UG', unitName: 'Microgram' },
+    Kilogram: { unit: 'KG', unitName: 'Kilogram' },
+    Millilitre: { unit: 'ML', unitName: 'Millilitre' },
+    Ounces: { unit: 'OZ', unitName: 'Ounces' },
+};
 let BlendNutrientResolver = class BlendNutrientResolver {
     async addNewBlendNutrient(data) {
         let checkBlendId = await blendNutrient_1.default.findOne({
@@ -92,21 +101,19 @@ let BlendNutrientResolver = class BlendNutrientResolver {
         if (!modifiedData.parent || modifiedData.parent === '') {
             modifiedData.parent = null;
             modifiedData.parentIsCategory = true;
-            let searchBlendNutrient = await blendNutrient_1.default.find({
-                category: modifiedData.category,
-                parentIsCategory: true,
-            });
-            modifiedData.rank = searchBlendNutrient.length + 1;
-            modifiedData.blendId = (+searchBlendNutrient[searchBlendNutrient.length - 1].blendId + 1).toString();
         }
         else {
             modifiedData.parentIsCategory = false;
-            let searchBlendNutrient = await blendNutrient_1.default.find({
-                parent: modifiedData.parent,
-                parentIsCategory: false,
-            });
-            modifiedData.rank = searchBlendNutrient.length + 1;
-            modifiedData.blendId = (+searchBlendNutrient[searchBlendNutrient.length - 1].blendId + 1).toString();
+        }
+        if (
+        //@ts-ignore
+        modifiedData.unitName !== '' ||
+            //@ts-ignore
+            modifiedData.unitName === null ||
+            //@ts-ignore
+            modifiedData.unitName === undefined) {
+            //@ts-ignore
+            modifiedData.units = allUnits[modifiedData.unitName].unit;
         }
         await blendNutrient_1.default.findByIdAndUpdate(data.editId, modifiedData);
         return 'BlendNutrient Updated';

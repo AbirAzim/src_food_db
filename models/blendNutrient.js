@@ -21,7 +21,7 @@ const blendNutrient = new mongoose_1.Schema({
     category: { type: mongoose_1.Schema.Types.ObjectId, ref: 'BlendNutrientCategory' },
     status: {
         type: String,
-        enum: ['Active', 'Review', 'Archived'],
+        enum: ['Active', 'Review', 'Archive'],
         default: 'Active',
     },
     parent: { type: mongoose_1.Schema.Types.ObjectId, ref: 'BlendNutrient' },
@@ -53,7 +53,6 @@ const blendNutrient = new mongoose_1.Schema({
     createdAt: { type: Date, default: Date.now },
     isPublished: Boolean,
 });
-const BlendNutrient = (0, mongoose_1.model)('BlendNutrient', blendNutrient);
 blendNutrient.pre('save', async function (next) {
     if (this.unitName !== '' ||
         this.unitName === null ||
@@ -63,7 +62,7 @@ blendNutrient.pre('save', async function (next) {
         next();
     }
 });
-blendNutrient.pre('update', async function (next) {
+blendNutrient.post('update', async function (next) {
     if (
     //@ts-ignore
     this.unitName !== '' ||
@@ -76,4 +75,5 @@ blendNutrient.pre('update', async function (next) {
         next();
     }
 });
+const BlendNutrient = (0, mongoose_1.model)('BlendNutrient', blendNutrient);
 exports.default = BlendNutrient;
