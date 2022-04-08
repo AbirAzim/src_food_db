@@ -8,10 +8,15 @@ let allUnits = {
     Microgram: { unit: 'UG', unitName: 'Microgram' },
     Kilogram: { unit: 'KG', unitName: 'Kilogram' },
     Millilitre: { unit: 'ML', unitName: 'Millilitre' },
+    Ounces: { unit: 'OZ', unitName: 'Ounces' },
 };
 const blendNutrient = new mongoose_1.Schema({
     blendId: String,
-    nutrientName: String,
+    nutrientName: {
+        type: String,
+        required: [true, 'nutrient name is required'],
+        unique: true,
+    },
     altName: String,
     category: { type: mongoose_1.Schema.Types.ObjectId, ref: 'BlendNutrientCategory' },
     status: {
