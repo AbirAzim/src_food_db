@@ -22,7 +22,7 @@ const blendNutrient = new mongoose_1.Schema({
     status: {
         type: String,
         enum: ['Active', 'Review', 'Archive'],
-        default: 'Active',
+        default: 'Archive',
     },
     parent: { type: mongoose_1.Schema.Types.ObjectId, ref: 'BlendNutrient' },
     uniqueNutrientId: { type: mongoose_1.Schema.Types.ObjectId, ref: 'UniqueNutrient' },

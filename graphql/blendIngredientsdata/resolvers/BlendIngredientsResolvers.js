@@ -483,6 +483,7 @@ let BlendIngredientResolver = class BlendIngredientResolver {
         let hello = data.map((x) => new mongoose_1.default.mongo.ObjectId(x.ingredientId));
         let ingredients = await blendIngredient_1.default.find({
             _id: { $in: hello },
+            status: 'Active',
         })
             .populate({
             path: 'blendNutrients.blendNutrientRefference',

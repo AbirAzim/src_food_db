@@ -183,6 +183,9 @@ let BlendNutrientResolver = class BlendNutrientResolver {
     }
     async removeBlendNutrient(id) {
         await blendNutrient_1.default.findByIdAndDelete(id);
+        await mapToBlend_1.default.deleteMany({
+            blendNutrientId: id,
+        });
         await this.makeBlendNutrientToNotBlendNutrient(id);
         return 'BlendNutrient Deleted';
     }
