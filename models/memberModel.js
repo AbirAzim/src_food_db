@@ -39,9 +39,3 @@ const memberSchema = new mongoose_1.Schema({
 });
 const Member = (0, mongoose_1.model)('User', memberSchema);
 exports.default = Member;
-// collection1._id [ r2 , r3, r4]
-// collection2._id [r1, r5 , r6]
-// fromCollection
-// toCollection
-// recipeId
-// command = copy/move Required

@@ -1,6 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
+let allUnits = {
+    Kilojoules: { unit: 'kJ', unitName: 'Kilojoules' },
+    Gram: { unit: 'G', unitName: 'Gram' },
+    Milligram: { unit: 'MG', unitName: 'Milligram' },
+    Microgram: { unit: 'UG', unitName: 'Microgram' },
+    Kilogram: { unit: 'KG', unitName: 'Kilogram' },
+    Millilitre: { unit: 'ML', unitName: 'Millilitre' },
+};
 const blendNutrient = new mongoose_1.Schema({
     blendId: String,
     nutrientName: String,
@@ -41,4 +49,26 @@ const blendNutrient = new mongoose_1.Schema({
     isPublished: Boolean,
 });
 const BlendNutrient = (0, mongoose_1.model)('BlendNutrient', blendNutrient);
+blendNutrient.pre('save', async function (next) {
+    if (this.unitName !== '' ||
+        this.unitName === null ||
+        this.unitName === undefined) {
+        //@ts-ignore
+        this.units = allUnits[this.unitName].unit;
+        next();
+    }
+});
+blendNutrient.pre('update', async function (next) {
+    if (
+    //@ts-ignore
+    this.unitName !== '' ||
+        //@ts-ignore
+        this.unitName === null ||
+        //@ts-ignore
+        this.unitName === undefined) {
+        //@ts-ignore
+        this.units = allUnits[this.unitName].unit;
+        next();
+    }
+});
 exports.default = BlendNutrient;
