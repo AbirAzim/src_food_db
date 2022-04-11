@@ -63,7 +63,7 @@ async function bootstrap() {
                 BlendIngredientsResolvers_1.default,
                 WikiResolver_1.default,
                 dailyResolver_1.default,
-                DailyGoalResolver_1.default
+                DailyGoalResolver_1.default,
             ],
         });
     }

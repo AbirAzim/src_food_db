@@ -111,167 +111,90 @@ let WikiResolver = class WikiResolver {
         let data = ingredientsInfo;
         // @ts-ignore
         let hello = data.map((x) => new mongoose_1.default.mongo.ObjectId(x.ingredientId));
-        let ingredients = await blendIngredient_1.default.find({
-            _id: { $in: hello },
-        }).populate({
-            path: 'blendNutrients.blendNutrientRefference',
-            model: 'BlendNutrient',
+        let ingredient = await blendIngredient_1.default.findOne({
+            _id: ingredientsInfo[0].ingredientId,
         });
-        for (let i = 0; i < ingredients.length; i++) {
-            let value = data.filter(
-            // @ts-ignore
-            (y) => y.ingredientId === String(ingredients[i]._id))[0].value;
-            for (let j = 0; j < ingredients[i].blendNutrients.length; j++) {
-                ingredients[i].blendNutrients[j].value =
-                    (+ingredients[i].blendNutrients[j].value / 100) * value;
-            }
-        }
-        let nutrients = [];
-        for (let i = 0; i < ingredients.length; i++) {
-            nutrients.push(...ingredients[i].blendNutrients);
-        }
-        //@ts-ignore
-        let returnNutrients = nutrients.reduce((acc, nutrient) => {
-            //@ts-ignore
-            let obj = acc.find(
-            //@ts-ignore
-            (o) => String(o.blendNutrientRefference._id) ===
-                String(nutrient.blendNutrientRefference._id));
-            if (!obj) {
-                nutrient.count = 1;
-                acc.push(nutrient);
-            }
-            else {
-                //@ts-ignore
-                const index = acc.findIndex((element, index) => {
-                    if (String(element.blendNutrientRefference._id) ===
-                        String(obj.blendNutrientRefference._id)) {
-                        return true;
-                    }
-                });
-                acc[index].count++;
-                acc[index].value = +acc[index].value + +nutrient.value;
-            }
-            return acc;
-        }, []);
-        for (let j = 0; j < returnNutrients.length; j++) {
-            returnNutrients[j].blendNutrientRefference.category =
-                await blendNutrientCategory_1.default.findOne({
-                    _id: returnNutrients[j].blendNutrientRefference.category,
-                });
-            returnNutrients[j].blendNutrientRefference.parent =
-                returnNutrients[j].blendNutrientRefference.parent === null
-                    ? null
-                    : await blendNutrient_1.default.findOne({
-                        _id: returnNutrients[j].blendNutrientRefference.parent,
-                    });
-        }
-        let res = await this.architect(returnNutrients);
-        let a = JSON.stringify(res);
+        // for (let i = 0; i < ingredients.length; i++) {
+        //   let value = data.filter(
+        //     // @ts-ignore
+        //     (y) => y.ingredientId === String(ingredients[i]._id)
+        //   )[0].value;
+        //   for (let j = 0; j < ingredients[i].blendNutrients.length; j++) {
+        //     ingredients[i].blendNutrients[j].value =
+        //       (+ingredients[i].blendNutrients[j].value / 100) * value;
+        //   }
+        // }
+        // let nutrients = [];
+        // for (let i = 0; i < ingredients.length; i++) {
+        //   nutrients.push(...ingredients[i].blendNutrients);
+        // }
+        // //@ts-ignore
+        // let returnNutrients = nutrients.reduce((acc, nutrient) => {
+        //   //@ts-ignore
+        //   let obj = acc.find(
+        //     //@ts-ignore
+        //     (o) =>
+        //       String(o.blendNutrientRefference._id) ===
+        //       String(nutrient.blendNutrientRefference._id)
+        //   );
+        //   if (!obj) {
+        //     nutrient.count = 1;
+        //     acc.push(nutrient);
+        //   } else {
+        //     //@ts-ignore
+        //     const index = acc.findIndex((element, index) => {
+        //       if (
+        //         String(element.blendNutrientRefference._id) ===
+        //         String(obj.blendNutrientRefference._id)
+        //       ) {
+        //         return true;
+        //       }
+        //     });
+        //     acc[index].count++;
+        //     acc[index].value = +acc[index].value + +nutrient.value;
+        //   }
+        //   return acc;
+        // }, []);
+        // for (let j = 0; j < returnNutrients.length; j++) {
+        //   returnNutrients[j].blendNutrientRefference.category =
+        //     await BlendNutrientCategoryModel.findOne({
+        //       _id: returnNutrients[j].blendNutrientRefference.category,
+        //     });
+        //   returnNutrients[j].blendNutrientRefference.parent =
+        //     returnNutrients[j].blendNutrientRefference.parent === null
+        //       ? null
+        //       : await BlendNutrientModel.findOne({
+        //           _id: returnNutrients[j].blendNutrientRefference.parent,
+        //         });
+        // }
+        let res = await this.getBlendNutritionBasedOnRecipexxx2([
+            {
+                ingredientId: ingredientsInfo[0].ingredientId,
+                value: ingredientsInfo[0].value,
+            },
+        ]);
         // console.log(ingredients[0].wikiTitle)
         // console.log(ingredients[0].wikiDescription)
         let returnData = {
-            wikiTitle: ingredients[0].wikiTitle,
-            wikiDescription: ingredients[0].wikiDescription,
-            ingredientName: ingredients[0].ingredientName,
-            wikiCoverImages: ingredients[0].wikiCoverImages,
-            wikiFeatureImage: ingredients[0].wikiFeatureImage,
-            bodies: ingredients[0].bodies,
-            nutrients: a,
+            wikiTitle: ingredient.wikiTitle,
+            wikiDescription: ingredient.wikiDescription,
+            ingredientName: ingredient.ingredientName,
+            wikiCoverImages: ingredient.wikiCoverImages,
+            wikiFeatureImage: ingredient.wikiFeatureImage,
+            bodies: ingredient.bodies,
+            nutrients: res,
             type: 'Ingredient',
-            category: ingredients[0].category ? ingredients[0].category : '',
+            category: ingredient.category ? ingredient.category : '',
             publishedBy: 'g. Braun',
-            seoTitle: ingredients[0].seoTitle,
-            seoSlug: ingredients[0].seoSlug,
-            seoCanonicalURL: ingredients[0].seoCanonicalURL,
-            seoSiteMapPriority: ingredients[0].seoSiteMapPriority,
-            seoKeywords: ingredients[0].seoKeywords,
-            seoMetaDescription: ingredients[0].seoMetaDescription,
-            isPublished: ingredients[0].isPublished,
+            seoTitle: ingredient.seoTitle,
+            seoSlug: ingredient.seoSlug,
+            seoCanonicalURL: ingredient.seoCanonicalURL,
+            seoSiteMapPriority: ingredient.seoSiteMapPriority,
+            seoKeywords: ingredient.seoKeywords,
+            seoMetaDescription: ingredient.seoMetaDescription,
+            isPublished: ingredient.isPublished,
         };
         return returnData;
-    }
-    async architect(arr) {
-        let data = {};
-        arr.forEach((item) => {
-            var _a;
-            const name = (_a = item.blendNutrientRefference.nutrientName) === null || _a === void 0 ? void 0 : _a.toLowerCase();
-            data[name] = {
-                value: item.value,
-                blendNutrientRefference: item.blendNutrientRefference,
-            };
-        });
-        let carbohydrates = {
-            ...data.carbohydrate,
-            dietryFibre: {
-                ...data['dietary fiber'],
-                childs: {
-                    fiberSoluable: data['Fiber, soluble'],
-                    fiberInsoluble: data['Fiber, insoluble'],
-                },
-            },
-            sugars: {
-                ...data.sugars,
-                childs: {
-                    sucrose: data.sucrose,
-                    glucose: data.glucose,
-                    fructose: data.fructose,
-                    lactose: data.lactose,
-                    maltose: data.maltose,
-                    galactose: data.galactose,
-                },
-            },
-            starch: data.starch,
-        };
-        let energy = {
-            childs: {
-                protien: data.protein,
-                fats: data.fats,
-                carbohydrates,
-            },
-        };
-        let vitamins = {
-            childs: {
-                vitaminC: data['vitamin c'],
-                thiamin: data.thiamin,
-                riboflavin: data.riboflavin,
-                niacin: data.niacin,
-                pantothenicAcid: data['pantothenic acid'],
-                vitaminB6: data['vitamin b-6'],
-                biotin: data.biotin,
-                folate: data.folate,
-                choline: data.choline,
-                betaine: data.betaine,
-                vitaminB12: data['vitamin b-12'],
-                vitaminA: data['vitamin a'],
-                vitaminE: data['vitamin e'],
-                vitaminD: data['vitamin d'],
-                vitaminK: data['vitamin k'],
-            },
-        };
-        let calories = data.calorie;
-        let minerals = {
-            childs: {
-                calcium: data.calcium,
-                iron: data.iron,
-                magnesium: data.magnesium,
-                phosphorus: data.phosphorus,
-                potassium: data.potassium,
-                sodium: data.sodium,
-                zinc: data.zinc,
-                copper: data.copper,
-                manganese: data.manganese,
-                iodine: data.iodine,
-                salenium: data.salenium,
-                sulfur: data.sulfur,
-                nickel: data.nickel,
-                molybdenum: data.molybdenum,
-                colbalt: data.colbalt,
-                boron: data.boron,
-                fluoride: data.fluoride,
-            },
-        };
-        return { calories, energy, vitamins, minerals };
     }
     async getAllIngredientsBasedOnNutrition(data) {
         let nutrient = await blendNutrient_1.default.findOne({
@@ -433,6 +356,149 @@ let WikiResolver = class WikiResolver {
         let description = await blendIngredient_1.default.find({}).select('wikiCoverImages wikiFeatureImage wikiTitle wikiDescription bodies seoTitle seoSlug seoCanonicalURL seoSiteMapPriority seoKeywords seoMetaDescription sourceName isPublished');
         return JSON.stringify(description);
     }
+    // have to fix this later
+    // fixing this
+    // warning
+    async getBlendNutritionBasedOnRecipexxx2(ingredientsInfo) {
+        let data = ingredientsInfo;
+        // @ts-ignore
+        let hello = data.map((x) => new mongoose_1.default.mongo.ObjectId(x.ingredientId));
+        let ingredients = await blendIngredient_1.default.find({
+            _id: { $in: hello },
+            status: 'Active',
+        })
+            .populate({
+            path: 'blendNutrients.blendNutrientRefference',
+            model: 'BlendNutrient',
+            select: '-bodies -wikiCoverImages -wikiFeatureImage -wikiDescription -wikiTitle -isPublished -related_sources',
+        })
+            .lean();
+        for (let i = 0; i < ingredients.length; i++) {
+            let value = data.filter(
+            // @ts-ignore
+            (y) => y.ingredientId === String(ingredients[i]._id))[0].value;
+            for (let j = 0; j < ingredients[i].blendNutrients.length; j++) {
+                ingredients[i].blendNutrients[j].value =
+                    (+ingredients[i].blendNutrients[j].value / 100) * value;
+                // if (
+                //   String(ingredients[i].nutrients[j].uniqueNutrientRefference._id) ===
+                //   '61c618813ced314894f2924a'
+                // ) {
+                //   console.log(ingredients[i].nutrients[j].value);
+                // }
+            }
+        }
+        let nutrients = [];
+        for (let i = 0; i < ingredients.length; i++) {
+            nutrients.push(...ingredients[i].blendNutrients);
+        }
+        //@ts-ignore
+        let returnNutrients = nutrients.reduce((acc, nutrient) => {
+            //@ts-ignore
+            let obj = acc.find(
+            //@ts-ignore
+            (o) => String(o.blendNutrientRefference._id) ===
+                String(nutrient.blendNutrientRefference._id));
+            if (!obj) {
+                nutrient.count = 1;
+                acc.push(nutrient);
+            }
+            else {
+                //@ts-ignore
+                const index = acc.findIndex((element, index) => {
+                    if (String(element.blendNutrientRefference._id) ===
+                        String(obj.blendNutrientRefference._id)) {
+                        return true;
+                    }
+                });
+                acc[index].count++;
+                acc[index].value = +acc[index].value + +nutrient.value;
+            }
+            return acc;
+        }, []);
+        let blendNutrientCategories = await blendNutrientCategory_1.default.find()
+            .lean()
+            .select('_id categoryName');
+        //returnNutrients
+        let obj = {};
+        for (let i = 0; i < blendNutrientCategories.length; i++) {
+            obj[blendNutrientCategories[i].categoryName] =
+                await this.getTopLevelChilds(blendNutrientCategories[i]._id, returnNutrients);
+        }
+        return JSON.stringify(obj);
+    }
+    async getChild(parent, returnNutrients) {
+        let obj = {};
+        let childs = await blendNutrient_1.default.find({ parent: parent })
+            .lean()
+            .select('_id nutrientName altName');
+        if (childs.length === 0) {
+            return null;
+        }
+        for (let i = 0; i < childs.length; i++) {
+            let ek = returnNutrients.filter((rn) => String(rn.blendNutrientRefference._id) === String(childs[i]._id))[0];
+            let check = childs[i].altName === '';
+            let check2 = childs[i].altName === undefined;
+            let check3 = check || check2;
+            //  ||
+            // populatedChild2[i].blendNutrientRefference.altName !== undefined ||
+            // populatedChild2[i].blendNutrientRefference.altName !== null;
+            let name = check3 ? childs[i].nutrientName : childs[i].altName;
+            if (!ek) {
+                obj[name.toLowerCase()] = null;
+                continue;
+            }
+            childs[i] = ek;
+            childs[i].childs = await this.getChild(childs[i].blendNutrientRefference._id, returnNutrients);
+            let check4 = childs[i].blendNutrientRefference.altName === '';
+            let check5 = childs[i].blendNutrientRefference.altName === undefined;
+            let check6 = check4 || check5;
+            //  ||
+            // populatedChild2[i].blendNutrientRefference.altName !== undefined ||
+            // populatedChild2[i].blendNutrientRefference.altName !== null;
+            let name2 = check6
+                ? childs[i].blendNutrientRefference.nutrientName
+                : childs[i].blendNutrientRefference.altName;
+            obj[name2.toLowerCase()] = childs[i];
+        }
+        return obj;
+    }
+    async getTopLevelChilds(category, returnNutrients) {
+        let obj = {};
+        let childs = await blendNutrient_1.default.find({
+            category: category,
+            parentIsCategory: true,
+        })
+            .lean()
+            .select('_id');
+        let populatedChild = childs.map((child) => {
+            let data = returnNutrients.filter((rn) => String(rn.blendNutrientRefference._id) === String(child._id))[0];
+            if (!data) {
+                data = {
+                    value: 0,
+                    blendNutrientRefference: null,
+                };
+            }
+            return data;
+        });
+        let populatedChild2 = populatedChild.filter(
+        //@ts-ignore
+        (child) => child.blendNutrientRefference !== null);
+        for (let i = 0; i < populatedChild2.length; i++) {
+            let check = populatedChild2[i].blendNutrientRefference.altName === '';
+            let check2 = populatedChild2[i].blendNutrientRefference.altName === undefined;
+            let check3 = check || check2;
+            //  ||
+            // populatedChild2[i].blendNutrientRefference.altName !== undefined ||
+            // populatedChild2[i].blendNutrientRefference.altName !== null;
+            let name = check3
+                ? populatedChild2[i].blendNutrientRefference.nutrientName
+                : populatedChild2[i].blendNutrientRefference.altName;
+            obj[name.toLowerCase()] = populatedChild2[i];
+            obj[name.toLowerCase()].childs = await this.getChild(populatedChild2[i].blendNutrientRefference._id, returnNutrients);
+        }
+        return obj;
+    }
 };
 __decorate([
     (0, type_graphql_1.Query)(() => [Wikilist_1.default]),
@@ -496,6 +562,14 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], WikiResolver.prototype, "bodyTest", null);
+__decorate([
+    (0, type_graphql_1.Query)(() => String) // wait
+    ,
+    __param(0, (0, type_graphql_1.Arg)('ingredientsInfo', (type) => [BlendIngredientInfo_1.default])),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Array]),
+    __metadata("design:returntype", Promise)
+], WikiResolver.prototype, "getBlendNutritionBasedOnRecipexxx2", null);
 WikiResolver = __decorate([
     (0, type_graphql_1.Resolver)()
 ], WikiResolver);
