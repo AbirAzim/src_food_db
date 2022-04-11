@@ -114,59 +114,6 @@ let WikiResolver = class WikiResolver {
         let ingredient = await blendIngredient_1.default.findOne({
             _id: ingredientsInfo[0].ingredientId,
         });
-        // for (let i = 0; i < ingredients.length; i++) {
-        //   let value = data.filter(
-        //     // @ts-ignore
-        //     (y) => y.ingredientId === String(ingredients[i]._id)
-        //   )[0].value;
-        //   for (let j = 0; j < ingredients[i].blendNutrients.length; j++) {
-        //     ingredients[i].blendNutrients[j].value =
-        //       (+ingredients[i].blendNutrients[j].value / 100) * value;
-        //   }
-        // }
-        // let nutrients = [];
-        // for (let i = 0; i < ingredients.length; i++) {
-        //   nutrients.push(...ingredients[i].blendNutrients);
-        // }
-        // //@ts-ignore
-        // let returnNutrients = nutrients.reduce((acc, nutrient) => {
-        //   //@ts-ignore
-        //   let obj = acc.find(
-        //     //@ts-ignore
-        //     (o) =>
-        //       String(o.blendNutrientRefference._id) ===
-        //       String(nutrient.blendNutrientRefference._id)
-        //   );
-        //   if (!obj) {
-        //     nutrient.count = 1;
-        //     acc.push(nutrient);
-        //   } else {
-        //     //@ts-ignore
-        //     const index = acc.findIndex((element, index) => {
-        //       if (
-        //         String(element.blendNutrientRefference._id) ===
-        //         String(obj.blendNutrientRefference._id)
-        //       ) {
-        //         return true;
-        //       }
-        //     });
-        //     acc[index].count++;
-        //     acc[index].value = +acc[index].value + +nutrient.value;
-        //   }
-        //   return acc;
-        // }, []);
-        // for (let j = 0; j < returnNutrients.length; j++) {
-        //   returnNutrients[j].blendNutrientRefference.category =
-        //     await BlendNutrientCategoryModel.findOne({
-        //       _id: returnNutrients[j].blendNutrientRefference.category,
-        //     });
-        //   returnNutrients[j].blendNutrientRefference.parent =
-        //     returnNutrients[j].blendNutrientRefference.parent === null
-        //       ? null
-        //       : await BlendNutrientModel.findOne({
-        //           _id: returnNutrients[j].blendNutrientRefference.parent,
-        //         });
-        // }
         let res = await this.getBlendNutritionBasedOnRecipexxx2([
             {
                 ingredientId: ingredientsInfo[0].ingredientId,
@@ -218,10 +165,11 @@ let WikiResolver = class WikiResolver {
                 .select('-srcFoodReference -description -classType -blendStatus -category -sourceName -notBlendNutrients')
                 .populate('blendNutrients.blendNutrientRefference');
         }
-        console.log(ingredients.length);
         let returnIngredients = {};
         for (let i = 0; i < ingredients.length; i++) {
             for (let j = 0; j < ingredients[i].blendNutrients.length; j++) {
+                if (ingredients[i].blendNutrients[j].blendNutrientRefference === null)
+                    continue;
                 if (String(ingredients[i].blendNutrients[j].blendNutrientRefference._id) === data.nutritionID) {
                     if (!returnIngredients[ingredients[i].ingredientName]) {
                         // let value = await this.convertToGram({
@@ -282,6 +230,7 @@ let WikiResolver = class WikiResolver {
             seoMetaDescription: nutrient.seoMetaDescription,
             isPublished: nutrient.isPublished,
         };
+        console.log(returnData);
         return returnData;
     }
     async editIngredientWiki(data) {
