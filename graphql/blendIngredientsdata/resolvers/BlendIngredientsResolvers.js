@@ -34,6 +34,7 @@ const ReturnBlendIngredientBasedOnDefaultPortion_1 = __importDefault(require("..
 const AppError_1 = __importDefault(require("../../../utils/AppError"));
 const blendNutrientCategory_2 = __importDefault(require("../../../models/blendNutrientCategory"));
 const IngredientForWiki_1 = __importDefault(require("../../wiki/schemas/IngredientForWiki"));
+const uniqueNutrient_1 = __importDefault(require("../../../models/uniqueNutrient"));
 let BlendIngredientResolver = class BlendIngredientResolver {
     async getAllBlendIngredients() {
         let blendIngredients = await blendIngredient_1.default.find()
@@ -804,6 +805,64 @@ let BlendIngredientResolver = class BlendIngredientResolver {
         });
         return result;
     }
+    async testData() {
+        // let mapToData = await MapToBlendModel.find({});
+        // for (let i = 0; i < mapToData.length; i++) {
+        //   let blendI = await BlendNutrientModel.findOne({
+        //     _id: mapToData[i].blendNutrientId,
+        //   });
+        //   let ingredientId = await UniqueNutrientModel.findOne({
+        //     _id: mapToData[i].srcUniqueNutrientId,
+        //   });
+        //   if (!blendI) {
+        //     console.log(
+        //       mapToData[i]._id,
+        //       'No Blend ID',
+        //       mapToData[i].blendIngredientId
+        //     );
+        //   }
+        //   if (!ingredientId) {
+        //     console.log(
+        //       mapToData[i]._id,
+        //       'No Ingredient ID',
+        //       mapToData[i].srcUniqueNutrientId
+        //     );
+        //   }
+        // }
+        let bn = await blendNutrient_1.default.find({});
+        let mainData = [];
+        for (let i = 0; i < bn.length; i++) {
+            let findMap = await mapToBlend_1.default.find({
+                blendNutrientId: bn[i]._id,
+            });
+            if (findMap.length === 0) {
+                console.log(bn[i]._id);
+                continue;
+            }
+            let data = [];
+            for (let j = 0; j < findMap.length; j++) {
+                let un = await uniqueNutrient_1.default.findOne({
+                    _id: findMap[j].srcUniqueNutrientId,
+                });
+                if (!un) {
+                    console.log('no Un', findMap[j].srcUniqueNutrientId);
+                    continue;
+                }
+                data.push({
+                    ingredientId: un._id,
+                    ingredientName: un.nutrient,
+                });
+            }
+            mainData.push({
+                blendNutrientId: bn[i]._id,
+                blendNutrientName: bn[i].nutrientName,
+                data: data,
+                totalChild: data.length,
+            });
+        }
+        fs_1.default.writeFileSync('./temp/test.json', JSON.stringify(mainData));
+        return 'done';
+    }
 };
 __decorate([
     (0, type_graphql_1.Query)(() => [ReturnBlendIngredient_1.default]),
@@ -939,6 +998,12 @@ __decorate([
     __metadata("design:paramtypes", [GetIngredientsFromNutrition_1.default]),
     __metadata("design:returntype", Promise)
 ], BlendIngredientResolver.prototype, "getAllIngredientsDataBasedOnNutrition", null);
+__decorate([
+    (0, type_graphql_1.Query)(() => String),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], BlendIngredientResolver.prototype, "testData", null);
 BlendIngredientResolver = __decorate([
     (0, type_graphql_1.Resolver)()
 ], BlendIngredientResolver);

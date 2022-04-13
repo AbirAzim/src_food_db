@@ -69,7 +69,7 @@ let BlendNutrientResolver = class BlendNutrientResolver {
     //   let blendNutrient: any = await BlendNutrientModel.findOne({
     //     _id: '62407412305947996ac265eb',
     //   });
-    //   let blendIngredints = await BlendNutrientModel.findOne({
+    //   let blendIngredints = await BlendNutrientModel.findOne({5
     //     _id: '624076f2305947996ac266e7',
     //   });
     //   console.log('hello', blendIngredints.blendId);

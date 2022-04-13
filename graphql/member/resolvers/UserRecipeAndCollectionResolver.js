@@ -30,6 +30,7 @@ const AppError_1 = __importDefault(require("../../../utils/AppError"));
 const memberModel_1 = __importDefault(require("../../../models/memberModel"));
 const userCollection_1 = __importDefault(require("../../../models/userCollection"));
 const recipe_1 = __importDefault(require("../../../models/recipe"));
+const userNote_1 = __importDefault(require("../../../models/userNote"));
 const Collection_2 = __importDefault(require("../schemas/Collection"));
 let UserRecipeAndCollectionResolver = class UserRecipeAndCollectionResolver {
     async createNewUserRecipeWithCollection(data) {
@@ -171,7 +172,7 @@ let UserRecipeAndCollectionResolver = class UserRecipeAndCollectionResolver {
         });
         return member.collections;
     }
-    async getAllRecipesFromCollection(userEmail) {
+    async getAllRecipesFromCollection(userEmail, userId) {
         let user = await memberModel_1.default.findOne({ email: userEmail }).populate({
             path: 'collections',
             populate: {
@@ -191,7 +192,15 @@ let UserRecipeAndCollectionResolver = class UserRecipeAndCollectionResolver {
         }
         let ids = returnRecipe.map((o) => o._id);
         const filtered = returnRecipe.filter(({ _id }, index) => !ids.includes(_id, index + 1));
-        return filtered;
+        let returnRecipe2 = [];
+        for (let i = 0; i < filtered.length; i++) {
+            let userNotes = await userNote_1.default.find({
+                recipeId: filtered[i]._id,
+                userId: userId,
+            });
+            returnRecipe2.push({ ...filtered[i]._doc, notes: userNotes.length });
+        }
+        return returnRecipe2;
     }
     async addRecipeToAUserCollection(data) {
         let user = await memberModel_1.default.findOne({ email: data.userEmail }).populate('collections');
@@ -416,8 +425,10 @@ __decorate([
 __decorate([
     (0, type_graphql_1.Query)(() => [Recipe_1.default]),
     __param(0, (0, type_graphql_1.Arg)('userEmail')),
+    __param(1, (0, type_graphql_1.Arg)('userId')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [String,
+        String]),
     __metadata("design:returntype", Promise)
 ], UserRecipeAndCollectionResolver.prototype, "getAllRecipesFromCollection", null);
 __decorate([

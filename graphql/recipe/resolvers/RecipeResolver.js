@@ -57,18 +57,6 @@ let RecipeResolver = class RecipeResolver {
         return returnRecipe;
     }
     async getAllRecipesByBlendCategory(data) {
-        // let user = await MemberModel.findOne({ _id: data.userId }).populate({
-        //   path: 'collections',
-        //   populate: {
-        //     path: 'recipes',
-        //     model: 'Recipe',
-        //   },
-        // });
-        // //@ts-ignore
-        // let memberRecipes = user.collections.map((collection) => {
-        //   return collection.recipes;
-        // });
-        // console.log(memberRecipes);
         let recipes;
         //@ts-ignore
         if (data.includeIngredientIds.length > 0) {
@@ -94,9 +82,17 @@ let RecipeResolver = class RecipeResolver {
                 .populate('brand')
                 .populate('recipeBlendCategory');
         }
-        return recipes;
+        let returnRecipe = [];
+        for (let i = 0; i < recipes.length; i++) {
+            let userNotes = await userNote_1.default.find({
+                recipeId: recipes[i]._id,
+                userId: data.userId,
+            });
+            returnRecipe.push({ ...recipes[i]._doc, notes: userNotes.length });
+        }
+        return returnRecipe;
     }
-    async getAllRecipes() {
+    async getAllRecipes(userId) {
         const recipes = await recipe_1.default.find()
             .populate({
             path: 'ingredients.ingredientId',
@@ -104,9 +100,17 @@ let RecipeResolver = class RecipeResolver {
         })
             .populate('brand')
             .populate('recipeBlendCategory');
-        return recipes;
+        let returnRecipe = [];
+        for (let i = 0; i < recipes.length; i++) {
+            let userNotes = await userNote_1.default.find({
+                recipeId: recipes[i]._id,
+                userId: userId,
+            });
+            returnRecipe.push({ ...recipes[i]._doc, notes: userNotes.length });
+        }
+        return returnRecipe;
     }
-    async getAllrecomendedRecipes() {
+    async getAllrecomendedRecipes(userId) {
         const recipes = await recipe_1.default.find()
             .populate({
             path: 'ingredients.ingredientId',
@@ -114,9 +118,17 @@ let RecipeResolver = class RecipeResolver {
         })
             .populate('brand')
             .populate('recipeBlendCategory');
-        return recipes;
+        let returnRecipe = [];
+        for (let i = 0; i < recipes.length; i++) {
+            let userNotes = await userNote_1.default.find({
+                recipeId: recipes[i]._id,
+                userId: userId,
+            });
+            returnRecipe.push({ ...recipes[i]._doc, notes: userNotes.length });
+        }
+        return returnRecipe;
     }
-    async getAllpopularRecipes() {
+    async getAllpopularRecipes(userId) {
         const recipes = await recipe_1.default.find()
             .limit(4)
             .populate({
@@ -125,9 +137,17 @@ let RecipeResolver = class RecipeResolver {
         })
             .populate('brand')
             .populate('recipeBlendCategory');
-        return recipes;
+        let returnRecipe = [];
+        for (let i = 0; i < recipes.length; i++) {
+            let userNotes = await userNote_1.default.find({
+                recipeId: recipes[i]._id,
+                userId: userId,
+            });
+            returnRecipe.push({ ...recipes[i]._doc, notes: userNotes.length });
+        }
+        return returnRecipe;
     }
-    async getAllLatestRecipes() {
+    async getAllLatestRecipes(userId) {
         const recipes = await recipe_1.default.find()
             .sort({ datePublished: -1 })
             .populate({
@@ -136,9 +156,17 @@ let RecipeResolver = class RecipeResolver {
         })
             .populate('brand')
             .populate('recipeBlendCategory');
-        return recipes;
+        let returnRecipe = [];
+        for (let i = 0; i < recipes.length; i++) {
+            let userNotes = await userNote_1.default.find({
+                recipeId: recipes[i]._id,
+                userId: userId,
+            });
+            returnRecipe.push({ ...recipes[i]._doc, notes: userNotes.length });
+        }
+        return returnRecipe;
     }
-    async getARecipe(recipeId) {
+    async getARecipe(recipeId, userId) {
         const recipe = await recipe_1.default.findById(recipeId)
             .populate({
             path: 'ingredients.ingredientId',
@@ -146,8 +174,11 @@ let RecipeResolver = class RecipeResolver {
         })
             .populate('brand')
             .populate('recipeBlendCategory');
-        console.log(recipe.ingredients[0]);
-        return recipe;
+        let userNotes = await userNote_1.default.find({
+            recipeId: recipe._id,
+            userId: userId,
+        });
+        return { ...recipe._doc, notes: userNotes.length };
     }
     async addNewRecipe(data) {
         const newRecipe = await recipe_1.default.create(data);
@@ -394,33 +425,39 @@ __decorate([
 ], RecipeResolver.prototype, "getAllRecipesByBlendCategory", null);
 __decorate([
     (0, type_graphql_1.Query)((type) => [Recipe_1.default]),
+    __param(0, (0, type_graphql_1.Arg)('userId')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], RecipeResolver.prototype, "getAllRecipes", null);
 __decorate([
     (0, type_graphql_1.Query)((type) => [Recipe_1.default]),
+    __param(0, (0, type_graphql_1.Arg)('userId')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], RecipeResolver.prototype, "getAllrecomendedRecipes", null);
 __decorate([
     (0, type_graphql_1.Query)((type) => [Recipe_1.default]),
+    __param(0, (0, type_graphql_1.Arg)('userId')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], RecipeResolver.prototype, "getAllpopularRecipes", null);
 __decorate([
     (0, type_graphql_1.Query)((type) => [Recipe_1.default]),
+    __param(0, (0, type_graphql_1.Arg)('userId')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], RecipeResolver.prototype, "getAllLatestRecipes", null);
 __decorate([
     (0, type_graphql_1.Query)((type) => Recipe_1.default),
     __param(0, (0, type_graphql_1.Arg)('recipeId')),
+    __param(1, (0, type_graphql_1.Arg)('userId')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [String,
+        String]),
     __metadata("design:returntype", Promise)
 ], RecipeResolver.prototype, "getARecipe", null);
 __decorate([
