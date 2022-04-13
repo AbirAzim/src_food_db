@@ -191,7 +191,9 @@ let UserRecipeAndCollectionResolver = class UserRecipeAndCollectionResolver {
             }
         }
         let ids = returnRecipe.map((o) => o._id);
-        const filtered = returnRecipe.filter(({ _id }, index) => !ids.includes(_id, index + 1));
+        const filtered = returnRecipe.filter(
+        //@ts-ignore
+        ({ _id }, index) => !ids.includes(_id, index + 1));
         let returnRecipe2 = [];
         for (let i = 0; i < filtered.length; i++) {
             let userNotes = await userNote_1.default.find({

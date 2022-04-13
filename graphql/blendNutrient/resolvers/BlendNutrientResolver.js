@@ -35,6 +35,13 @@ let allUnits = {
     Ounces: { unit: 'OZ', unitName: 'Ounces' },
 };
 let BlendNutrientResolver = class BlendNutrientResolver {
+    // @Mutation(() => String)
+    // async hjhj() {
+    //   await MapToBlendModel.create({
+    //     blendNutrientId: '620b4606b82695d67f28e193',
+    //     srcUniqueNutrientId: '61c618823ced314894f29250',
+    //   });
+    // }
     async addNewBlendNutrient(data) {
         let checkBlendId = await blendNutrient_1.default.findOne({
             blendId: data.blendId,
@@ -135,12 +142,10 @@ let BlendNutrientResolver = class BlendNutrientResolver {
         //   return new AppError('Unique Nutrient Id already exists', 400);
         // }
         let checkBlendId = await mapToBlend_1.default.findOne({
-            blendNutrientId: data.blendNutrientIdForMaping,
             srcUniqueNutrientId: data.srcNutrientId,
         });
         if (checkBlendId) {
-            console.log(checkBlendId);
-            return new AppError_1.default('This Mapping is already exist', 400);
+            await this.makeBlendNutrientsToNotBlendNutrients(data.srcNutrientId, data.blendNutrientIdForMaping);
         }
         await mapToBlend_1.default.create({
             blendNutrientId: data.blendNutrientIdForMaping,
@@ -148,6 +153,26 @@ let BlendNutrientResolver = class BlendNutrientResolver {
         });
         await this.makeNotBlendNutrientToBlendNutrient(un._id, data.blendNutrientIdForMaping);
         return 'BlendNutrient Created Successfull';
+    }
+    async makeBlendNutrientsToNotBlendNutrients(uniqueNutrientReferrence, blendNutrientId) {
+        await mapToBlend_1.default.findOneAndDelete({
+            srcUniqueNutrientId: uniqueNutrientReferrence,
+        });
+        let blendIngredints = await blendIngredient_1.default.find({
+            'blendNutrients.uniqueNutrientRefference': uniqueNutrientReferrence,
+        }).select('blendNutrients');
+        for (let i = 0; i < blendIngredints.length; i++) {
+            let index = blendIngredints[i].blendNutrients.filter(
+            //@ts-ignore
+            (x) => {
+                return (String(x.uniqueNutrientRefference) !==
+                    String(uniqueNutrientReferrence));
+            });
+            await blendIngredient_1.default.findOneAndUpdate({ _id: blendIngredints[i]._id }, {
+                blendNutrients: index,
+            });
+        }
+        return;
     }
     async makeNotBlendNutrientToBlendNutrient(uniqueNutrientReferrence, blendNutrientRefference) {
         let blendIngredints = await blendIngredient_1.default.find({
@@ -164,6 +189,7 @@ let BlendNutrientResolver = class BlendNutrientResolver {
                 let value = {
                     value: index.value,
                     blendNutrientRefference: blendNutrientRefference,
+                    uniqueNutrientReferrence: uniqueNutrientReferrence,
                 };
                 await blendIngredient_1.default.findOneAndUpdate({ _id: blendIngredints[i]._id }, {
                     $push: {
@@ -180,6 +206,7 @@ let BlendNutrientResolver = class BlendNutrientResolver {
             $pull: { blendNutrients: { blendNutrientRefference: blendNutrientId } },
         });
         await mapToBlend_1.default.deleteMany({ blendNutrientId });
+        return;
     }
     async removeBlendNutrient(id) {
         await blendNutrient_1.default.findByIdAndDelete(id);
