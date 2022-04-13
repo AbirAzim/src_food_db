@@ -34,14 +34,41 @@ let allUnits = {
     Millilitre: { unit: 'ML', unitName: 'Millilitre' },
     Ounces: { unit: 'OZ', unitName: 'Ounces' },
 };
+// nutrient
+// "Energy"
+// category
+// "Juicy"
+// unitName
+// "kJ"
+// min
+// ""
+// rank
+// 400
+// refDatabaseId
+// "61c618823ced314894f29250"
+// related_sources
+// Array
+// __v
+// 0
+// units
+// ""
 let BlendNutrientResolver = class BlendNutrientResolver {
-    // @Mutation(() => String)
-    // async hjhj() {
-    //   await MapToBlendModel.create({
-    //     blendNutrientId: '620b4606b82695d67f28e193',
-    //     srcUniqueNutrientId: '61c618823ced314894f29250',
-    //   });
-    // }
+    async hjhj() {
+        //6256a6df3a4cf43015c37341
+        let value = {
+            uniqueNutrientRefference: '6256a6df3a4cf43015c37341',
+            value: 10,
+        };
+        await blendIngredient_1.default.findOneAndUpdate({ _id: '620b6ba640d3f19b558f0aa5' }, {
+            $push: { notBlendNutrients: value },
+        });
+        await blendIngredient_1.default.findOneAndUpdate({
+            _id: '620b6bce40d3f19b558f0bc1',
+        }, {
+            $push: { notBlendNutrients: value },
+        });
+        return 'done';
+    }
     async addNewBlendNutrient(data) {
         let checkBlendId = await blendNutrient_1.default.findOne({
             blendId: data.blendId,
@@ -217,6 +244,12 @@ let BlendNutrientResolver = class BlendNutrientResolver {
         return 'BlendNutrient Deleted';
     }
 };
+__decorate([
+    (0, type_graphql_1.Mutation)(() => String),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], BlendNutrientResolver.prototype, "hjhj", null);
 __decorate([
     (0, type_graphql_1.Mutation)(() => String),
     __param(0, (0, type_graphql_1.Arg)('data')),
