@@ -23,6 +23,7 @@ const CreateAdminCollection_1 = __importDefault(require("./input-type/CreateAdmi
 const EditAdminCollection_1 = __importDefault(require("./input-type/EditAdminCollection"));
 const EditChildren_1 = __importDefault(require("./input-type/EditChildren"));
 const AdminCollection_1 = __importDefault(require("./schemas/AdminCollection"));
+const SimpleAdminCollection_1 = __importDefault(require("./schemas/SimpleAdminCollection"));
 const GenericModel_1 = __importDefault(require("../../../utils/GenericModel"));
 let AdminCollectionResolver = class AdminCollectionResolver {
     async addNewAdminCollection(data) {
@@ -100,6 +101,10 @@ let AdminCollectionResolver = class AdminCollectionResolver {
         });
         return collections;
     }
+    async getSimpleAdminCollections() {
+        const collections = await adminCollection_1.default.find({}).select('_id collectionType name');
+        return collections;
+    }
     async getAllAdminCollectionType() {
         return ['Recipe', 'Ingredient'];
     }
@@ -146,6 +151,12 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], AdminCollectionResolver.prototype, "getAllAdminCollection", null);
+__decorate([
+    (0, type_graphql_1.Query)(() => [SimpleAdminCollection_1.default]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], AdminCollectionResolver.prototype, "getSimpleAdminCollections", null);
 __decorate([
     (0, type_graphql_1.Query)(() => [String]),
     __metadata("design:type", Function),

@@ -8,27 +8,19 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
-const WidgetCollection_1 = __importDefault(require("./WidgetCollection"));
-let AddWidgetInput = class AddWidgetInput {
+let CreateEditWidgetInput = class CreateEditWidgetInput {
 };
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
-], AddWidgetInput.prototype, "widgetName", void 0);
+], CreateEditWidgetInput.prototype, "widgetName", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
-], AddWidgetInput.prototype, "widgetType", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(() => [WidgetCollection_1.default], { nullable: true }),
-    __metadata("design:type", Array)
-], AddWidgetInput.prototype, "widgetCollections", void 0);
-AddWidgetInput = __decorate([
+], CreateEditWidgetInput.prototype, "widgetType", void 0);
+CreateEditWidgetInput = __decorate([
     (0, type_graphql_1.InputType)()
-], AddWidgetInput);
-exports.default = AddWidgetInput;
+], CreateEditWidgetInput);
+exports.default = CreateEditWidgetInput;

@@ -13,46 +13,30 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
-const AddFilter_1 = __importDefault(require("./AddFilter"));
-let WidgetCollection = class WidgetCollection {
+const WidgetCollection_1 = __importDefault(require("./WidgetCollection"));
+let WidgetType = class WidgetType {
 };
-__decorate([
-    (0, type_graphql_1.Field)(),
-    __metadata("design:type", String)
-], WidgetCollection.prototype, "displayName", void 0);
-__decorate([
-    (0, type_graphql_1.Field)({ nullable: true }),
-    __metadata("design:type", String)
-], WidgetCollection.prototype, "icon", void 0);
-__decorate([
-    (0, type_graphql_1.Field)({ nullable: true }),
-    __metadata("design:type", String)
-], WidgetCollection.prototype, "banner", void 0);
 __decorate([
     (0, type_graphql_1.Field)(() => type_graphql_1.ID),
     __metadata("design:type", String)
-], WidgetCollection.prototype, "collectionData", void 0);
-__decorate([
-    (0, type_graphql_1.Field)({ nullable: true }),
-    __metadata("design:type", Boolean)
-], WidgetCollection.prototype, "isPublished", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(() => type_graphql_1.ID, { nullable: true }),
-    __metadata("design:type", String)
-], WidgetCollection.prototype, "publishedBy", void 0);
+], WidgetType.prototype, "_id", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
-], WidgetCollection.prototype, "orderBy", void 0);
+], WidgetType.prototype, "widgetName", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
-], WidgetCollection.prototype, "theme", void 0);
+], WidgetType.prototype, "widgetType", void 0);
 __decorate([
-    (0, type_graphql_1.Field)((type) => AddFilter_1.default, { nullable: true }),
-    __metadata("design:type", AddFilter_1.default)
-], WidgetCollection.prototype, "filter", void 0);
-WidgetCollection = __decorate([
-    (0, type_graphql_1.InputType)()
-], WidgetCollection);
-exports.default = WidgetCollection;
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Number)
+], WidgetType.prototype, "collectionCount", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(() => [WidgetCollection_1.default], { nullable: true }),
+    __metadata("design:type", Array)
+], WidgetType.prototype, "widgetCollections", void 0);
+WidgetType = __decorate([
+    (0, type_graphql_1.ObjectType)()
+], WidgetType);
+exports.default = WidgetType;

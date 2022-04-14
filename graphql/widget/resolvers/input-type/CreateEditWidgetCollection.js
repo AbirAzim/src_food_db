@@ -14,45 +14,49 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
 const AddFilter_1 = __importDefault(require("./AddFilter"));
-let WidgetCollection = class WidgetCollection {
+let CreateEditWidgetCollection = class CreateEditWidgetCollection {
 };
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)((type) => type_graphql_1.ID),
     __metadata("design:type", String)
-], WidgetCollection.prototype, "displayName", void 0);
+], CreateEditWidgetCollection.prototype, "_id", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
-], WidgetCollection.prototype, "icon", void 0);
+], CreateEditWidgetCollection.prototype, "displayName", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
-], WidgetCollection.prototype, "banner", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(() => type_graphql_1.ID),
-    __metadata("design:type", String)
-], WidgetCollection.prototype, "collectionData", void 0);
+], CreateEditWidgetCollection.prototype, "icon", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
-    __metadata("design:type", Boolean)
-], WidgetCollection.prototype, "isPublished", void 0);
+    __metadata("design:type", String)
+], CreateEditWidgetCollection.prototype, "banner", void 0);
 __decorate([
     (0, type_graphql_1.Field)(() => type_graphql_1.ID, { nullable: true }),
     __metadata("design:type", String)
-], WidgetCollection.prototype, "publishedBy", void 0);
+], CreateEditWidgetCollection.prototype, "collectionData", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Boolean)
+], CreateEditWidgetCollection.prototype, "isPublished", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(() => type_graphql_1.ID, { nullable: true }),
+    __metadata("design:type", String)
+], CreateEditWidgetCollection.prototype, "publishedBy", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
-], WidgetCollection.prototype, "orderBy", void 0);
+], CreateEditWidgetCollection.prototype, "orderBy", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
-], WidgetCollection.prototype, "theme", void 0);
+], CreateEditWidgetCollection.prototype, "theme", void 0);
 __decorate([
     (0, type_graphql_1.Field)((type) => AddFilter_1.default, { nullable: true }),
     __metadata("design:type", AddFilter_1.default)
-], WidgetCollection.prototype, "filter", void 0);
-WidgetCollection = __decorate([
+], CreateEditWidgetCollection.prototype, "filter", void 0);
+CreateEditWidgetCollection = __decorate([
     (0, type_graphql_1.InputType)()
-], WidgetCollection);
-exports.default = WidgetCollection;
+], CreateEditWidgetCollection);
+exports.default = CreateEditWidgetCollection;

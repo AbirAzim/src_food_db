@@ -1,4 +1,8 @@
 "use strict";
+//     filter: {
+//       filterType: String,
+//       values: [String],
+//     },
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -8,27 +12,19 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
-const WidgetCollection_1 = __importDefault(require("./WidgetCollection"));
-let AddWidgetInput = class AddWidgetInput {
+let AddFilterInput = class AddFilterInput {
 };
 __decorate([
     (0, type_graphql_1.Field)(),
     __metadata("design:type", String)
-], AddWidgetInput.prototype, "widgetName", void 0);
+], AddFilterInput.prototype, "filterType", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(),
-    __metadata("design:type", String)
-], AddWidgetInput.prototype, "widgetType", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(() => [WidgetCollection_1.default], { nullable: true }),
+    (0, type_graphql_1.Field)(() => [String]),
     __metadata("design:type", Array)
-], AddWidgetInput.prototype, "widgetCollections", void 0);
-AddWidgetInput = __decorate([
+], AddFilterInput.prototype, "values", void 0);
+AddFilterInput = __decorate([
     (0, type_graphql_1.InputType)()
-], AddWidgetInput);
-exports.default = AddWidgetInput;
+], AddFilterInput);
+exports.default = AddFilterInput;

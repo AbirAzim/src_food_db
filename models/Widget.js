@@ -8,18 +8,35 @@ const widgetSchema = new mongoose_1.Schema({
         unique: true,
     },
     widgetType: String,
-    widget: [
+    collectionCount: {
+        type: Number,
+        default: 0,
+    },
+    widgetCollections: [
         {
+            displayName: String,
             icon: String,
             banner: String,
-            hasIcon: Boolean,
-            hasBanner: Boolean,
-            collections: [{ type: mongoose_1.Schema.Types.ObjectId, ref: 'AdminCollection' }],
-            isPublished: Boolean,
+            collectionData: { type: mongoose_1.Schema.Types.ObjectId, ref: 'AdminCollection' },
+            isPublished: { type: Boolean, default: false },
             publishedAt: Date,
             publishedBy: { type: mongoose_1.Schema.Types.ObjectId, ref: 'Admin' },
+            orderBy: String,
+            theme: String,
+            filter: {
+                filterType: String,
+                values: [String],
+            },
         },
     ],
 });
 const Widget = (0, mongoose_1.model)('Widget', widgetSchema);
 exports.default = Widget;
+// addWidget
+// deleteWidget
+// editWidget
+// getAllWidgets
+// addWidgetCollection
+// removeWidgetCollection
+// editWidgetCollection
+//
