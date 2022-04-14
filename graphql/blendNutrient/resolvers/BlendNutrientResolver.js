@@ -186,13 +186,13 @@ let BlendNutrientResolver = class BlendNutrientResolver {
             srcUniqueNutrientId: uniqueNutrientReferrence,
         });
         let blendIngredints = await blendIngredient_1.default.find({
-            'blendNutrients.uniqueNutrientRefference': uniqueNutrientReferrence,
+            'blendNutrients.uniqueNutrientReferrence': uniqueNutrientReferrence,
         }).select('blendNutrients');
         for (let i = 0; i < blendIngredints.length; i++) {
             let index = blendIngredints[i].blendNutrients.filter(
             //@ts-ignore
             (x) => {
-                return (String(x.uniqueNutrientRefference) !==
+                return (String(x.uniqueNutrientReferrence) !==
                     String(uniqueNutrientReferrence));
             });
             await blendIngredient_1.default.findOneAndUpdate({ _id: blendIngredints[i]._id }, {

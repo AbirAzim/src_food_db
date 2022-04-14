@@ -16,7 +16,7 @@ const blendIngredientSchema = new mongoose_1.Schema({
                     type: mongoose_1.Schema.Types.ObjectId,
                     ref: 'BlendNutrient',
                 },
-                uniqueNutrientRefference: {
+                uniqueNutrientReferrence: {
                     type: mongoose_1.Schema.Types.ObjectId,
                     ref: 'UniqueNutrient',
                 },
