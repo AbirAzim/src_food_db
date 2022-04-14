@@ -153,6 +153,10 @@ let BlendNutrientResolver = class BlendNutrientResolver {
         return 'BlendNutrient Updated';
     }
     async addNewBlendNutrientFromSrc(data) {
+        if (data.blendNutrientIdForMaping === '') {
+            await this.makeBlendNutrientsToNotBlendNutrients(data.srcNutrientId, data.blendNutrientIdForMaping);
+            return 'Successfull';
+        }
         let un = await uniqueNutrient_1.default.findOne({
             _id: data.srcNutrientId,
         });

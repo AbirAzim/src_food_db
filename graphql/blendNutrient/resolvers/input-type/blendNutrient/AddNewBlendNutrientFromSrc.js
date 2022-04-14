@@ -17,7 +17,7 @@ __decorate([
     __metadata("design:type", String)
 ], AddNewBlendNutrientFromSrc.prototype, "srcNutrientId", void 0);
 __decorate([
-    (0, type_graphql_1.Field)((type) => type_graphql_1.ID),
+    (0, type_graphql_1.Field)((type) => type_graphql_1.ID, { nullable: true }),
     __metadata("design:type", String)
 ], AddNewBlendNutrientFromSrc.prototype, "blendNutrientIdForMaping", void 0);
 AddNewBlendNutrientFromSrc = __decorate([
