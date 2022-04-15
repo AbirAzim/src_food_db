@@ -80,6 +80,16 @@ let WigdetResolver = class WigdetResolver {
         let widget = await Widget_2.default.findOne({ _id: widgetId });
         return widget.widgetCollections;
     }
+    async getASingleWidget(widgetId) {
+        let widget = await Widget_2.default.findOne({ _id: widgetId });
+        return widget;
+    }
+    async getASingleWidgetCollection(widgetId, widgetCollectionId) {
+        let widget = await Widget_2.default.findOne({ _id: widgetId });
+        return widget.widgetCollections.find(
+        // @ts-ignore
+        (widgetCollection) => String(widgetCollection._id) === widgetCollectionId);
+    }
     async editAWidget(data) {
         await Widget_2.default.findOneAndUpdate({ _id: data.editId }, data.editableObject);
         return 'new widget created successfully';
@@ -139,6 +149,22 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], WigdetResolver.prototype, "getAllWidgetCollection", null);
+__decorate([
+    (0, type_graphql_1.Query)(() => Widget_1.default),
+    __param(0, (0, type_graphql_1.Arg)('widgetId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], WigdetResolver.prototype, "getASingleWidget", null);
+__decorate([
+    (0, type_graphql_1.Query)(() => WidgetCollection_2.default),
+    __param(0, (0, type_graphql_1.Arg)('widgetId')),
+    __param(1, (0, type_graphql_1.Arg)('widgetCollectionId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String,
+        String]),
+    __metadata("design:returntype", Promise)
+], WigdetResolver.prototype, "getASingleWidgetCollection", null);
 __decorate([
     (0, type_graphql_1.Mutation)(() => String),
     __param(0, (0, type_graphql_1.Arg)('data')),
