@@ -21,6 +21,7 @@ const WidgetCollection_1 = __importDefault(require("./input-type/WidgetCollectio
 const CreateEditWidgetCollection_1 = __importDefault(require("./input-type/CreateEditWidgetCollection"));
 const EditWidget_1 = __importDefault(require("./input-type/EditWidget"));
 const Widget_1 = __importDefault(require("../schemas/Widget"));
+const WidgetCollection_2 = __importDefault(require("../schemas/WidgetCollection"));
 const Widget_2 = __importDefault(require("../../../models/Widget"));
 let WigdetResolver = class WigdetResolver {
     async addNewWidget(data) {
@@ -75,6 +76,10 @@ let WigdetResolver = class WigdetResolver {
         let widgets = await Widget_2.default.find();
         return widgets;
     }
+    async getAllWidgetCollection(widgetId) {
+        let widget = await Widget_2.default.findOne({ _id: widgetId });
+        return widget.widgetCollections;
+    }
     async editAWidget(data) {
         await Widget_2.default.findOneAndUpdate({ _id: data.editId }, data.editableObject);
         return 'new widget created successfully';
@@ -127,6 +132,13 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], WigdetResolver.prototype, "getAllWidgets", null);
+__decorate([
+    (0, type_graphql_1.Query)(() => [WidgetCollection_2.default]),
+    __param(0, (0, type_graphql_1.Arg)('widgetId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], WigdetResolver.prototype, "getAllWidgetCollection", null);
 __decorate([
     (0, type_graphql_1.Mutation)(() => String),
     __param(0, (0, type_graphql_1.Arg)('data')),
