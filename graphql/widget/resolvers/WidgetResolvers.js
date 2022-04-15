@@ -24,8 +24,8 @@ const Widget_1 = __importDefault(require("../schemas/Widget"));
 const Widget_2 = __importDefault(require("../../../models/Widget"));
 let WigdetResolver = class WigdetResolver {
     async addNewWidget(data) {
-        await Widget_2.default.create(data);
-        return 'new widget created successfully';
+        let widget = await Widget_2.default.create(data);
+        return widget._id;
     }
     async addNewWidgetCollection(widgetId, widgetCollection) {
         let data = widgetCollection;
