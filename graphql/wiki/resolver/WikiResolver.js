@@ -301,7 +301,7 @@ let WikiResolver = class WikiResolver {
         }
         return Number(defaultPortion.meausermentWeight);
     }
-    async bodyTest() {
+    async bodyTeswwt() {
         let description = await blendIngredient_1.default.find({}).select('wikiCoverImages wikiFeatureImage wikiTitle wikiDescription bodies seoTitle seoSlug seoCanonicalURL seoSiteMapPriority seoKeywords seoMetaDescription sourceName isPublished');
         return JSON.stringify(description);
     }
@@ -510,7 +510,7 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
-], WikiResolver.prototype, "bodyTest", null);
+], WikiResolver.prototype, "bodyTeswwt", null);
 __decorate([
     (0, type_graphql_1.Query)(() => String) // wait
     ,
