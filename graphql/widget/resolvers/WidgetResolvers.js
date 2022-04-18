@@ -30,9 +30,9 @@ let WigdetResolver = class WigdetResolver {
     }
     async addNewWidgetCollection(widgetId, widgetCollection) {
         let data = widgetCollection;
-        if (widgetCollection.isPublished) {
-            data.publishedAt = Date.now();
-        }
+        // if (widgetCollection.isPublished) {
+        //   data.publishedAt = Date.now();
+        // }
         await Widget_2.default.findOneAndUpdate({ _id: widgetId }, {
             $push: { widgetCollections: data },
             $inc: { collectionCount: 1 },
@@ -55,9 +55,9 @@ let WigdetResolver = class WigdetResolver {
             },
         });
         let data = widgetCollection;
-        if (widgetCollection.isPublished) {
-            data.publishedAt = Date.now();
-        }
+        // if (widgetCollection.isPublished) {
+        //   data.publishedAt = Date.now();
+        // }
         await Widget_2.default.findOneAndUpdate({ _id: widgetId }, {
             $push: { widgetCollections: data },
         });
@@ -67,11 +67,6 @@ let WigdetResolver = class WigdetResolver {
         await Widget_2.default.findOneAndRemove({ _id: widgetId });
         return 'widget removed successfully';
     }
-    // @Mutation(() => String)
-    // async editWidget(widgetId: String, data: EditWidget) {
-    //   await WidgetModel.findOneAndUpdate({ _id: widgetId }, data);
-    //   return 'widget updated successfully';
-    // }
     async getAllWidgets() {
         let widgets = await Widget_2.default.find();
         return widgets;

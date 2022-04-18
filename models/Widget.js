@@ -19,7 +19,7 @@ const widgetSchema = new mongoose_1.Schema({
             banner: String,
             collectionData: { type: mongoose_1.Schema.Types.ObjectId, ref: 'AdminCollection' },
             isPublished: { type: Boolean, default: false },
-            publishedAt: Date,
+            publishDate: String,
             publishedBy: { type: mongoose_1.Schema.Types.ObjectId, ref: 'Admin' },
             orderBy: String,
             theme: String,

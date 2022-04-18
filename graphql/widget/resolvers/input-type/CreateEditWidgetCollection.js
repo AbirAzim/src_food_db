@@ -38,8 +38,8 @@ __decorate([
 ], CreateEditWidgetCollection.prototype, "collectionData", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
-    __metadata("design:type", Boolean)
-], CreateEditWidgetCollection.prototype, "isPublished", void 0);
+    __metadata("design:type", String)
+], CreateEditWidgetCollection.prototype, "publishDate", void 0);
 __decorate([
     (0, type_graphql_1.Field)(() => type_graphql_1.ID, { nullable: true }),
     __metadata("design:type", String)
