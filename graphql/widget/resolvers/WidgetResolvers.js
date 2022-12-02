@@ -275,7 +275,7 @@ let WigdetResolver = class WigdetResolver {
             return returnWidgetCollection;
         }
     }
-    async qsq() {
+    async qsq12() {
         return 'done';
     }
 };
@@ -384,7 +384,7 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
-], WigdetResolver.prototype, "qsq", null);
+], WigdetResolver.prototype, "qsq12", null);
 WigdetResolver = __decorate([
     (0, type_graphql_1.Resolver)()
 ], WigdetResolver);
