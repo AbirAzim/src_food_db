@@ -45,34 +45,39 @@ let BlendNutrientCategoryResolver = class BlendNutrientCategoryResolver {
     }
 };
 __decorate([
-    (0, type_graphql_1.Mutation)(() => String),
+    (0, type_graphql_1.Mutation)(() => String) //ADMIN
+    ,
     __param(0, (0, type_graphql_1.Arg)('data')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [CreateNewBlendNutrientCategory_1.default]),
     __metadata("design:returntype", Promise)
 ], BlendNutrientCategoryResolver.prototype, "addNewBlendNutrientCategory", null);
 __decorate([
-    (0, type_graphql_1.Query)(() => [BlendNutrientCategory_1.default]),
+    (0, type_graphql_1.Query)(() => [BlendNutrientCategory_1.default]) // ADMIN
+    ,
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], BlendNutrientCategoryResolver.prototype, "getAllBlendNutrientCategories", null);
 __decorate([
-    (0, type_graphql_1.Query)(() => BlendNutrientCategory_1.default),
+    (0, type_graphql_1.Query)(() => BlendNutrientCategory_1.default) //ADMIN
+    ,
     __param(0, (0, type_graphql_1.Arg)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], BlendNutrientCategoryResolver.prototype, "getASingleBlendNutrientCategory", null);
 __decorate([
-    (0, type_graphql_1.Mutation)((type) => String),
+    (0, type_graphql_1.Mutation)((type) => String) //ADMIN
+    ,
     __param(0, (0, type_graphql_1.Arg)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], BlendNutrientCategoryResolver.prototype, "deleteBlendNutrientCategory", null);
 __decorate([
-    (0, type_graphql_1.Mutation)((type) => String),
+    (0, type_graphql_1.Mutation)((type) => String) //ADMIN
+    ,
     __param(0, (0, type_graphql_1.Arg)('data')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [EditBlendNutrientCategory_1.default]),

@@ -31,6 +31,14 @@ __decorate([
 ], CreateRecipe.prototype, "image", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Number)
+], CreateRecipe.prototype, "servingSize", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Number)
+], CreateRecipe.prototype, "servings", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
 ], CreateRecipe.prototype, "datePublished", void 0);
 __decorate([
@@ -118,7 +126,7 @@ __decorate([
     __metadata("design:type", Number)
 ], CreateRecipe.prototype, "seoSiteMapPriority", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(type => [String], { nullable: true }),
+    (0, type_graphql_1.Field)((type) => [String], { nullable: true }),
     __metadata("design:type", Array)
 ], CreateRecipe.prototype, "seoKeywords", void 0);
 __decorate([

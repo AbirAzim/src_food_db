@@ -8,8 +8,13 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
+const BlendPortion_1 = __importDefault(require("../../blendIngredientsdata/schemas/BlendPortion"));
+const Bookmark_1 = __importDefault(require("./Bookmark"));
 let NutritionFromIngredient = class NutritionFromIngredient {
 };
 __decorate([
@@ -21,10 +26,6 @@ __decorate([
     __metadata("design:type", String)
 ], NutritionFromIngredient.prototype, "wikiDescription", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(),
-    __metadata("design:type", String)
-], NutritionFromIngredient.prototype, "ingredientName", void 0);
-__decorate([
     (0, type_graphql_1.Field)((type) => [String], { nullable: true }),
     __metadata("design:type", Array)
 ], NutritionFromIngredient.prototype, "wikiCoverImages", void 0);
@@ -33,13 +34,9 @@ __decorate([
     __metadata("design:type", String)
 ], NutritionFromIngredient.prototype, "wikiFeatureImage", void 0);
 __decorate([
-    (0, type_graphql_1.Field)((type) => [String], { nullable: true }),
-    __metadata("design:type", Array)
-], NutritionFromIngredient.prototype, "bodies", void 0);
-__decorate([
-    (0, type_graphql_1.Field)({ nullable: true }),
+    (0, type_graphql_1.Field)((type) => String, { nullable: true }),
     __metadata("design:type", String)
-], NutritionFromIngredient.prototype, "nutrients", void 0);
+], NutritionFromIngredient.prototype, "bodies", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
@@ -65,6 +62,10 @@ __decorate([
     __metadata("design:type", String)
 ], NutritionFromIngredient.prototype, "seoCanonicalURL", void 0);
 __decorate([
+    (0, type_graphql_1.Field)(() => [BlendPortion_1.default], { nullable: true }),
+    __metadata("design:type", Array)
+], NutritionFromIngredient.prototype, "portions", void 0);
+__decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", Number)
 ], NutritionFromIngredient.prototype, "seoSiteMapPriority", void 0);
@@ -80,6 +81,18 @@ __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", Boolean)
 ], NutritionFromIngredient.prototype, "isPublished", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Number)
+], NutritionFromIngredient.prototype, "commentsCount", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Number)
+], NutritionFromIngredient.prototype, "hasInCompare", void 0);
+__decorate([
+    (0, type_graphql_1.Field)((type) => [Bookmark_1.default], { nullable: true }),
+    __metadata("design:type", Array)
+], NutritionFromIngredient.prototype, "ingredientBookmarkList", void 0);
 NutritionFromIngredient = __decorate([
     (0, type_graphql_1.ObjectType)()
 ], NutritionFromIngredient);

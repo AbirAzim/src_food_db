@@ -23,11 +23,19 @@ __decorate([
 __decorate([
     (0, type_graphql_1.Field)(),
     __metadata("design:type", String)
+], AddWidgetInput.prototype, "slug", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(),
+    __metadata("design:type", String)
 ], AddWidgetInput.prototype, "widgetType", void 0);
 __decorate([
     (0, type_graphql_1.Field)(() => [WidgetCollection_1.default], { nullable: true }),
     __metadata("design:type", Array)
 ], AddWidgetInput.prototype, "widgetCollections", void 0);
+__decorate([
+    (0, type_graphql_1.Field)((type) => type_graphql_1.ID, { nullable: true }),
+    __metadata("design:type", String)
+], AddWidgetInput.prototype, "bannerId", void 0);
 AddWidgetInput = __decorate([
     (0, type_graphql_1.InputType)()
 ], AddWidgetInput);

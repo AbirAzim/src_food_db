@@ -43,34 +43,39 @@ let RoleResolver = class RoleResolver {
     }
 };
 __decorate([
-    (0, type_graphql_1.Mutation)(() => Role_1.default),
+    (0, type_graphql_1.Mutation)(() => Role_1.default) // admin
+    ,
     __param(0, (0, type_graphql_1.Arg)('data')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [AddNewRole_1.default]),
     __metadata("design:returntype", Promise)
 ], RoleResolver.prototype, "createNewRole", null);
 __decorate([
-    (0, type_graphql_1.Query)(() => String),
+    (0, type_graphql_1.Query)(() => String) // admin
+    ,
     __param(0, (0, type_graphql_1.Arg)('roleId')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], RoleResolver.prototype, "getASingleRole", null);
 __decorate([
-    (0, type_graphql_1.Query)(() => [Role_1.default]),
+    (0, type_graphql_1.Query)(() => [Role_1.default]) // admin
+    ,
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], RoleResolver.prototype, "getAllRoles", null);
 __decorate([
-    (0, type_graphql_1.Mutation)(() => String),
+    (0, type_graphql_1.Mutation)(() => String) // admin
+    ,
     __param(0, (0, type_graphql_1.Arg)('roleId')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], RoleResolver.prototype, "removeRole", null);
 __decorate([
-    (0, type_graphql_1.Mutation)(() => String),
+    (0, type_graphql_1.Mutation)(() => String) // admin
+    ,
     __param(0, (0, type_graphql_1.Arg)('data')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [EditRole_1.default]),

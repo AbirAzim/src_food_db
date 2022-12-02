@@ -8,8 +8,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
+const FilterValue_1 = __importDefault(require("./FilterValue"));
 let FilterType = class FilterType {
 };
 __decorate([
@@ -17,7 +21,7 @@ __decorate([
     __metadata("design:type", String)
 ], FilterType.prototype, "filterType", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(() => [String], { nullable: true }),
+    (0, type_graphql_1.Field)(() => [FilterValue_1.default], { nullable: true }),
     __metadata("design:type", Array)
 ], FilterType.prototype, "values", void 0);
 FilterType = __decorate([

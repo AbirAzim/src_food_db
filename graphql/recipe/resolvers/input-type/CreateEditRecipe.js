@@ -24,6 +24,18 @@ __decorate([
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
+], CreateEditRecipe.prototype, "postfixTitle", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Number)
+], CreateEditRecipe.prototype, "servingSize", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Number)
+], CreateEditRecipe.prototype, "servings", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
 ], CreateEditRecipe.prototype, "name", void 0);
 __decorate([
     (0, type_graphql_1.Field)((type) => [ImageInput_1.default], { nullable: true }),
@@ -110,7 +122,7 @@ __decorate([
     __metadata("design:type", Number)
 ], CreateEditRecipe.prototype, "seoSiteMapPriority", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(type => [String], { nullable: true }),
+    (0, type_graphql_1.Field)((type) => [String], { nullable: true }),
     __metadata("design:type", Array)
 ], CreateEditRecipe.prototype, "seoKeywords", void 0);
 __decorate([

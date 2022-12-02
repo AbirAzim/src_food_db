@@ -61,7 +61,7 @@ __decorate([
     __metadata("design:type", String)
 ], PopulatedAdmin.prototype, "image", void 0);
 __decorate([
-    (0, type_graphql_1.Field)((type) => Role_1.default),
+    (0, type_graphql_1.Field)((type) => Role_1.default, { nullable: true }),
     __metadata("design:type", Role_1.default)
 ], PopulatedAdmin.prototype, "role", void 0);
 __decorate([

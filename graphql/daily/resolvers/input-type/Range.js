@@ -65,13 +65,13 @@ __decorate([
     __metadata("design:type", Number)
 ], Range.prototype, "value", void 0);
 __decorate([
-    (0, type_graphql_1.Field)({ nullable: true }),
-    __metadata("design:type", String)
-], Range.prototype, "units", void 0);
-__decorate([
     (0, type_graphql_1.Field)(),
     __metadata("design:type", Boolean)
 ], Range.prototype, "RDA", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Number)
+], Range.prototype, "upperLimit", void 0);
 Range = __decorate([
     (0, type_graphql_1.InputType)()
 ], Range);

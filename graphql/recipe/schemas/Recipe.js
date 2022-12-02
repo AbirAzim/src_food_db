@@ -17,23 +17,9 @@ const RecipeCategory_1 = __importDefault(require("./RecipeCategory"));
 const Brand_1 = __importDefault(require("./Brand"));
 const ImageType_1 = __importDefault(require("./ImageType"));
 const IngredientData_1 = __importDefault(require("./IngredientData"));
-let TestIngredient = class TestIngredient {
-};
-__decorate([
-    (0, type_graphql_1.Field)(),
-    __metadata("design:type", String)
-], TestIngredient.prototype, "quantity", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(),
-    __metadata("design:type", String)
-], TestIngredient.prototype, "unit", void 0);
-__decorate([
-    (0, type_graphql_1.Field)({ nullable: true }),
-    __metadata("design:type", String)
-], TestIngredient.prototype, "name", void 0);
-TestIngredient = __decorate([
-    (0, type_graphql_1.ObjectType)()
-], TestIngredient);
+const SimpleVersion_1 = __importDefault(require("./SimpleVersion"));
+const RecipeVersion_1 = __importDefault(require("./RecipeVersion"));
+const MemberProfileForRecipe_1 = __importDefault(require("./MemberProfileForRecipe"));
 let Recipe = class Recipe {
 };
 __decorate([
@@ -54,6 +40,14 @@ __decorate([
     }),
     __metadata("design:type", Array)
 ], Recipe.prototype, "image", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Number)
+], Recipe.prototype, "servingSize", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Number)
+], Recipe.prototype, "servings", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
@@ -127,10 +121,6 @@ __decorate([
     __metadata("design:type", String)
 ], Recipe.prototype, "favicon", void 0);
 __decorate([
-    (0, type_graphql_1.Field)((type) => [TestIngredient], { nullable: true }),
-    __metadata("design:type", Array)
-], Recipe.prototype, "testIngredient", void 0);
-__decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", Number)
 ], Recipe.prototype, "numberOfRating", void 0);
@@ -174,6 +164,38 @@ __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", Number)
 ], Recipe.prototype, "notes", void 0);
+__decorate([
+    (0, type_graphql_1.Field)((type) => MemberProfileForRecipe_1.default, { nullable: true }),
+    __metadata("design:type", MemberProfileForRecipe_1.default)
+], Recipe.prototype, "userId", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Boolean)
+], Recipe.prototype, "addedToCompare", void 0);
+__decorate([
+    (0, type_graphql_1.Field)((type) => [type_graphql_1.ID], { nullable: true }),
+    __metadata("design:type", Array)
+], Recipe.prototype, "userCollections", void 0);
+__decorate([
+    (0, type_graphql_1.Field)((type) => [type_graphql_1.ID], { nullable: true }),
+    __metadata("design:type", Array)
+], Recipe.prototype, "collections", void 0);
+__decorate([
+    (0, type_graphql_1.Field)((type) => [SimpleVersion_1.default], { nullable: true }),
+    __metadata("design:type", Array)
+], Recipe.prototype, "recipeVersion", void 0);
+__decorate([
+    (0, type_graphql_1.Field)((type) => RecipeVersion_1.default, { nullable: true }),
+    __metadata("design:type", RecipeVersion_1.default)
+], Recipe.prototype, "originalVersion", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(() => RecipeVersion_1.default, { nullable: true }),
+    __metadata("design:type", RecipeVersion_1.default)
+], Recipe.prototype, "defaultVersion", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Boolean)
+], Recipe.prototype, "isMatch", void 0);
 Recipe = __decorate([
     (0, type_graphql_1.ObjectType)()
 ], Recipe);

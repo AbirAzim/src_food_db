@@ -5,30 +5,28 @@ const recipeSchema = new mongoose_1.Schema({
     mainEntityOfPage: String,
     name: String,
     image: [{ image: String, default: Boolean }],
+    servings: {
+        type: Number,
+        default: 1,
+    },
     datePublished: String,
     description: String,
     prepTime: String,
     cookTime: String,
     totalTime: String,
     recipeYield: String,
-    recipeIngredients: [String],
-    recipeInstructions: [String],
     recipeCuisines: [String],
     author: [String],
     recipeBlendCategory: { type: mongoose_1.Schema.Types.ObjectId, ref: 'RecipeCategory' },
     tempBlendCategory: String,
     brand: { type: mongoose_1.Schema.Types.ObjectId, ref: 'RecipeBrand' },
     foodCategories: [String],
-    // ingredients: [
-    //   {
-    //     ingredientId: { type: Schema.Types.ObjectId, ref: 'Ingredient' },
-    //     selectedPortion: { name: String, quantity: Number, gram: Number },
-    //     weightInGram: Number,
-    //     portions: [
-    //       { name: String, quantiy: Number, default: Boolean, gram: Number },
-    //     ],
-    //   },
-    // ],
+    //NOTE:
+    recipeInstructions: [String],
+    servingSize: {
+        type: Number,
+        default: 0,
+    },
     ingredients: [
         {
             ingredientId: { type: mongoose_1.Schema.Types.ObjectId, ref: 'BlendIngredient' },
@@ -39,13 +37,7 @@ const recipeSchema = new mongoose_1.Schema({
             ],
         },
     ],
-    testIngredient: [
-        {
-            quantity: String,
-            unit: String,
-            name: String,
-        },
-    ],
+    //NOTE:
     isPublished: {
         type: Boolean,
         default: false,
@@ -82,11 +74,18 @@ const recipeSchema = new mongoose_1.Schema({
     seoSiteMapPriority: Number,
     seoKeywords: [String],
     seoMetaDescription: String,
-});
-recipeSchema.pre(/^find/, function (next) {
-    this.find({ secretTour: { $ne: true } });
-    this.start = Date.now();
-    next();
+    collections: [
+        {
+            type: mongoose_1.Schema.Types.ObjectId,
+            ref: 'AdminCollection',
+        },
+    ],
+    recipeVersion: [{ type: mongoose_1.Schema.Types.ObjectId, ref: 'RecipeVersion' }],
+    createdAt: { type: Date, default: Date.now },
+    originalVersion: { type: mongoose_1.Schema.Types.ObjectId, ref: 'RecipeVersion' },
+    defaultVersion: { type: mongoose_1.Schema.Types.ObjectId, ref: 'RecipeVersion' },
+    editedAt: Date,
+    isMatch: { type: Boolean, default: true },
 });
 const Recipe = (0, mongoose_1.model)('Recipe', recipeSchema);
 exports.default = Recipe;

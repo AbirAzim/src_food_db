@@ -17,11 +17,11 @@ __decorate([
     __metadata("design:type", String)
 ], RemoveNote.prototype, "noteId", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(type => type_graphql_1.ID),
+    (0, type_graphql_1.Field)((type) => type_graphql_1.ID),
     __metadata("design:type", String)
 ], RemoveNote.prototype, "recipeId", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(type => type_graphql_1.ID),
+    (0, type_graphql_1.Field)((type) => type_graphql_1.ID),
     __metadata("design:type", String)
 ], RemoveNote.prototype, "userId", void 0);
 RemoveNote = __decorate([

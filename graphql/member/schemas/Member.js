@@ -89,42 +89,23 @@ __decorate([
     (0, type_graphql_1.Field)((type) => type_graphql_1.ID),
     __metadata("design:type", String)
 ], Member.prototype, "lastModifiedCollection", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Number)
+], Member.prototype, "compareLength", void 0);
+__decorate([
+    (0, type_graphql_1.Field)((type) => [type_graphql_1.ID], { nullable: true }),
+    __metadata("design:type", Array)
+], Member.prototype, "compareList", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Number)
+], Member.prototype, "wikiCompareCount", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Boolean)
+], Member.prototype, "isCreated", void 0);
 Member = __decorate([
     (0, type_graphql_1.ObjectType)()
 ], Member);
 exports.default = Member;
-// image: String,
-// bio: String,
-// provider: {
-//   type: String,
-//   enum: ['email', 'google', 'facebook'],
-//   default: 'email',
-// },
-// cognitoUsername: {
-//   type: String,
-//   required: true,
-// },
-// socialAccounts: [
-//   {
-//     name: String,
-//     link: String,
-//   },
-// ],
-// firstName: String,
-// lastName: String,
-// displayName: String,
-// gender: String,
-// email: String,
-// mobileNumber: String,
-// address: {
-//   streetAddress: String,
-//   apartmentNo: String,
-//   city: String,
-//   state: String,
-// },
-// orderHistoty: [String],
-// myCart: [String],
-// recentViewedProducts: [String],
-// resetTokenTimeToExpire: Date,
-// myResetToken: String,
-// createdAt: { type: Date, default: Date.now },

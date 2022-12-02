@@ -21,6 +21,7 @@ const uniqueNutrient_1 = __importDefault(require("../../../models/uniqueNutrient
 const RecycledIngredient_1 = __importDefault(require("../../../models/RecycledIngredient"));
 const mapToBlend_1 = __importDefault(require("../../../models/mapToBlend"));
 const blendNutrient_1 = __importDefault(require("../../../models/blendNutrient"));
+const blendIngredient_1 = __importDefault(require("../../../models/blendIngredient"));
 const EditBlendIngredient_1 = __importDefault(require("../../blendIngredientsdata/resolvers/input-type/EditBlendIngredient"));
 const EditNutrient_1 = __importDefault(require("./input-type/EditNutrient"));
 const createIngredient_1 = __importDefault(require("./input-type/createIngredient"));
@@ -33,8 +34,7 @@ const UniqueNutrient_1 = __importDefault(require("../schemas/UniqueNutrient"));
 const ReurnIngredientBasedOnDefaultPortion_1 = __importDefault(require("../schemas/ReurnIngredientBasedOnDefaultPortion"));
 const AppError_1 = __importDefault(require("../../../utils/AppError"));
 const fs_1 = __importDefault(require("fs"));
-const mongoose_1 = __importDefault(require("mongoose"));
-let MemberResolver = class MemberResolver {
+let FoodResolver = class FoodResolver {
     async getAllTheIngredients(filter) {
         let totalIngredients = await ingredient_1.default.countDocuments({});
         if (filter.page === undefined) {
@@ -66,9 +66,11 @@ let MemberResolver = class MemberResolver {
                 .select('_id');
             totalIngredients = ingredientsForTotalCounting.length;
         }
+        console.log(totalIngredients);
+        console.log(limit, skip);
         if (filter.sort === '' || filter.sort === undefined) {
             ingredients = await ingredient_1.default.find({
-                description: { $regex: filter.search, $options: 'i' },
+                ingredientName: { $regex: filter.search, $options: 'i' },
             })
                 .populate({
                 path: 'nutrients.uniqueNutrientRefference',
@@ -77,11 +79,12 @@ let MemberResolver = class MemberResolver {
                 .skip(skip)
                 .limit(+limit)
                 .lean()
-                .select('-refDatabaseId -ingredientId -ingredientName -category -classType -nutrients -featuredImage -images -collections');
+                .select('-refDatabaseId -ingredientId -ingredientName -category -classType -nutrients -featuredImage -images -collections')
+                .sort({ ingredientName: 1 });
         }
         else {
             ingredients = await ingredient_1.default.find({
-                description: { $regex: filter.search, $options: 'i' },
+                ingredientName: { $regex: filter.search, $options: 'i' },
             })
                 .populate({
                 path: 'nutrients.uniqueNutrientRefference',
@@ -91,23 +94,18 @@ let MemberResolver = class MemberResolver {
                 .skip(skip)
                 .limit(+limit)
                 .lean()
-                .select('-refDatabaseId -ingredientId -ingredientName -category -classType -nutrients -featuredImage -images -collections');
+                .select('-refDatabaseId -ingredientId -ingredientName -category -classType -nutrients -featuredImage -images -collections')
+                .sort({ ingredientName: 1 });
         }
-        // let returnIngredients: any = [];
-        // for (let i = 0; i < ingredients.length; i++) {
-        //   let returnIngredient = ingredients[i];
-        //   returnIngredient.nutrientCount = ingredients[i].nutrients.length;
-        //   returnIngredient.portionCount = ingredients[i].portions.length;
-        //   returnIngredient.imageCount = ingredients[i].images.length;
-        //   returnIngredients.push(returnIngredient);
-        // }
         return {
             ingredients: ingredients,
             totalIngredientsCount: totalIngredients,
         };
     }
     async getALlUniqueNutrientList() {
-        let nutrients = await uniqueNutrient_1.default.find({});
+        let nutrients = await uniqueNutrient_1.default.find({}).sort({
+            nutrient: 1,
+        });
         for (let i = 0; i < nutrients.length; i++) {
             let mapToBlend = await mapToBlend_1.default.findOne({
                 srcUniqueNutrientId: nutrients[i]._id,
@@ -122,7 +120,7 @@ let MemberResolver = class MemberResolver {
         let ingredient = await ingredient_1.default.create(data);
         return ingredient;
     }
-    async gerASingleIngredient(ingredientId) {
+    async getASingleIngredient(ingredientId) {
         let ingredient = await ingredient_1.default.findOne({
             _id: ingredientId,
         }).populate({
@@ -141,7 +139,7 @@ let MemberResolver = class MemberResolver {
         await uniqueNutrient_1.default.findOneAndUpdate({ _id: data.editId }, data.editableObject);
         return 'Successfully Edited';
     }
-    async EditIngredient(data) {
+    async EditSrcIngredient(data) {
         let food = await ingredient_1.default.findOne({ _id: data.editId });
         if (!food) {
             return new AppError_1.default('Ingredient not found', 404);
@@ -434,7 +432,7 @@ let MemberResolver = class MemberResolver {
     async getNutritionBasedOnRecipe(ingredientsInfo) {
         let data = ingredientsInfo;
         // @ts-ignore
-        let hello = data.map((x) => new mongoose_1.default.mongo.ObjectId(x.ingredientId));
+        let hello = data.map((x) => new mongoose.mongo.ObjectId(x.ingredientId));
         let ingredients = await ingredient_1.default.find({
             _id: { $in: hello },
         }).populate({
@@ -539,6 +537,27 @@ let MemberResolver = class MemberResolver {
         }
         return 'done';
     }
+    async updateNotBlendIngredientData() {
+        let blendIngredients = await blendIngredient_1.default.find()
+            .skip(300)
+            .limit(441);
+        for (let i = 0; i < blendIngredients.length; i++) {
+            console.log(i);
+            console.log(blendIngredients[i].ingredientName);
+            let ingredient = await ingredient_1.default.findOne({
+                _id: blendIngredients[i].srcFoodReference,
+            });
+            if (!ingredient) {
+                console.log(blendIngredients[i]._id, ' has no src', i);
+            }
+            else {
+                await blendIngredient_1.default.findOneAndUpdate({ _id: blendIngredients[i]._id }, {
+                    notBlendNutrients: ingredient.nutrients,
+                });
+            }
+        }
+        return 'done';
+    }
 };
 __decorate([
     (0, type_graphql_1.Query)(() => ReturnIngredients_1.default),
@@ -546,74 +565,74 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [StructureIngredientsData_1.default]),
     __metadata("design:returntype", Promise)
-], MemberResolver.prototype, "getAllTheIngredients", null);
+], FoodResolver.prototype, "getAllTheIngredients", null);
 __decorate([
     (0, type_graphql_1.Query)(() => [UniqueNutrient_1.default]),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
-], MemberResolver.prototype, "getALlUniqueNutrientList", null);
+], FoodResolver.prototype, "getALlUniqueNutrientList", null);
 __decorate([
     (0, type_graphql_1.Mutation)(() => Ingredient_1.default),
     __param(0, (0, type_graphql_1.Arg)('data')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [createIngredient_1.default]),
     __metadata("design:returntype", Promise)
-], MemberResolver.prototype, "createNewIngredient", null);
+], FoodResolver.prototype, "createNewIngredient", null);
 __decorate([
     (0, type_graphql_1.Query)(() => Ingredient_1.default),
     __param(0, (0, type_graphql_1.Arg)('ingredientId')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
-], MemberResolver.prototype, "gerASingleIngredient", null);
+], FoodResolver.prototype, "getASingleIngredient", null);
 __decorate([
     (0, type_graphql_1.Query)(() => UniqueNutrient_1.default),
     __param(0, (0, type_graphql_1.Arg)('nutrientId')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
-], MemberResolver.prototype, "getAUniqueNutrient", null);
+], FoodResolver.prototype, "getAUniqueNutrient", null);
 __decorate([
     (0, type_graphql_1.Mutation)(() => String),
     __param(0, (0, type_graphql_1.Arg)('data')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [EditNutrient_1.default]),
     __metadata("design:returntype", Promise)
-], MemberResolver.prototype, "editUniqueNutrient", null);
+], FoodResolver.prototype, "editUniqueNutrient", null);
 __decorate([
     (0, type_graphql_1.Mutation)(() => String),
     __param(0, (0, type_graphql_1.Arg)('data')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [EditBlendIngredient_1.default]),
     __metadata("design:returntype", Promise)
-], MemberResolver.prototype, "EditIngredient", null);
+], FoodResolver.prototype, "EditSrcIngredient", null);
 __decorate([
     (0, type_graphql_1.Query)(() => String),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
-], MemberResolver.prototype, "storeAllUniqueNutrient", null);
+], FoodResolver.prototype, "storeAllUniqueNutrient", null);
 __decorate([
     (0, type_graphql_1.Query)(() => String),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
-], MemberResolver.prototype, "databaseShifting", null);
+], FoodResolver.prototype, "databaseShifting", null);
 __decorate([
     (0, type_graphql_1.Query)(() => [Ingredient_1.default]),
     __param(0, (0, type_graphql_1.Arg)('searchTerm')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
-], MemberResolver.prototype, "SearchIngredients", null);
+], FoodResolver.prototype, "SearchIngredients", null);
 __decorate([
     (0, type_graphql_1.Query)(() => ReurnIngredientBasedOnDefaultPortion_1.default),
     __param(0, (0, type_graphql_1.Arg)('ingredientId')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
-], MemberResolver.prototype, "getIngredientInfoBasedOnDefaultPortion", null);
+], FoodResolver.prototype, "getIngredientInfoBasedOnDefaultPortion", null);
 __decorate([
     (0, type_graphql_1.Query)(() => [NutrientValue_1.default]) // wait
     ,
@@ -621,25 +640,31 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Array]),
     __metadata("design:returntype", Promise)
-], MemberResolver.prototype, "getNutritionBasedOnRecipe", null);
+], FoodResolver.prototype, "getNutritionBasedOnRecipe", null);
 __decorate([
     (0, type_graphql_1.Mutation)(() => String),
     __param(0, (0, type_graphql_1.Arg)('ingredientId')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
-], MemberResolver.prototype, "removeIngredient", null);
+], FoodResolver.prototype, "removeIngredient", null);
 __decorate([
     (0, type_graphql_1.Mutation)(() => String),
     __param(0, (0, type_graphql_1.Arg)('page')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Promise)
-], MemberResolver.prototype, "updateSrcIngredient", null);
-MemberResolver = __decorate([
+], FoodResolver.prototype, "updateSrcIngredient", null);
+__decorate([
+    (0, type_graphql_1.Mutation)(() => String),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], FoodResolver.prototype, "updateNotBlendIngredientData", null);
+FoodResolver = __decorate([
     (0, type_graphql_1.Resolver)()
-], MemberResolver);
-exports.default = MemberResolver;
+], FoodResolver);
+exports.default = FoodResolver;
 // {
 //   "refDatabaseId": "",
 //   "ingredientName": "Abiyuch",

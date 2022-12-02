@@ -22,7 +22,7 @@ let roleType = {
 const roleSchema = new mongoose_1.Schema({
     roleName: {
         type: String,
-        required: [true, 'rolename is requires'],
+        required: [true, 'roleName is required'],
         unique: true,
     },
     Users: roleType,

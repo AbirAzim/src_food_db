@@ -13,9 +13,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
+const Bookmark_1 = __importDefault(require("./Bookmark"));
 const IngredientForWiki_1 = __importDefault(require("./IngredientForWiki"));
 let IngredientFromNutrition = class IngredientFromNutrition {
 };
+__decorate([
+    (0, type_graphql_1.Field)((type) => type_graphql_1.ID),
+    __metadata("design:type", String)
+], IngredientFromNutrition.prototype, "_id", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
@@ -25,10 +30,6 @@ __decorate([
     __metadata("design:type", String)
 ], IngredientFromNutrition.prototype, "wikiDescription", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(),
-    __metadata("design:type", String)
-], IngredientFromNutrition.prototype, "nutrientName", void 0);
-__decorate([
     (0, type_graphql_1.Field)((type) => [String], { nullable: true }),
     __metadata("design:type", Array)
 ], IngredientFromNutrition.prototype, "wikiCoverImages", void 0);
@@ -37,8 +38,8 @@ __decorate([
     __metadata("design:type", String)
 ], IngredientFromNutrition.prototype, "wikiFeatureImage", void 0);
 __decorate([
-    (0, type_graphql_1.Field)((type) => [String], { nullable: true }),
-    __metadata("design:type", Array)
+    (0, type_graphql_1.Field)((type) => String, { nullable: true }),
+    __metadata("design:type", String)
 ], IngredientFromNutrition.prototype, "bodies", void 0);
 __decorate([
     (0, type_graphql_1.Field)((type) => [IngredientForWiki_1.default], { nullable: true }),
@@ -84,6 +85,14 @@ __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", Boolean)
 ], IngredientFromNutrition.prototype, "isPublished", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Number)
+], IngredientFromNutrition.prototype, "commentsCount", void 0);
+__decorate([
+    (0, type_graphql_1.Field)((type) => [Bookmark_1.default], { nullable: true }),
+    __metadata("design:type", Array)
+], IngredientFromNutrition.prototype, "nutrientBookmarkList", void 0);
 IngredientFromNutrition = __decorate([
     (0, type_graphql_1.ObjectType)()
 ], IngredientFromNutrition);

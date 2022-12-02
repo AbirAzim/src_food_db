@@ -19,7 +19,15 @@ __decorate([
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
+], ValueUnit.prototype, "value2", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
 ], ValueUnit.prototype, "units", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Number)
+], ValueUnit.prototype, "upperLimit", void 0);
 ValueUnit = __decorate([
     (0, type_graphql_1.ObjectType)()
 ], ValueUnit);

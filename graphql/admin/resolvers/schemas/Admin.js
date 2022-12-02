@@ -57,7 +57,7 @@ __decorate([
     __metadata("design:type", String)
 ], Admin.prototype, "image", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(() => type_graphql_1.ID),
+    (0, type_graphql_1.Field)(() => type_graphql_1.ID, { nullable: true }),
     __metadata("design:type", String)
 ], Admin.prototype, "role", void 0);
 __decorate([

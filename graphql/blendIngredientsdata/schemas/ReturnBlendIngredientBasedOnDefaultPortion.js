@@ -85,6 +85,10 @@ __decorate([
     (0, type_graphql_1.Field)(() => [type_graphql_1.ID], { nullable: true }),
     __metadata("design:type", Array)
 ], ReturnBlendIngredientBasedOnDefaultPortion.prototype, "collections", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Number)
+], ReturnBlendIngredientBasedOnDefaultPortion.prototype, "gi", void 0);
 ReturnBlendIngredientBasedOnDefaultPortion = __decorate([
     (0, type_graphql_1.ObjectType)()
 ], ReturnBlendIngredientBasedOnDefaultPortion);

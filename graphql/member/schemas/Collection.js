@@ -25,6 +25,10 @@ __decorate([
     __metadata("design:type", String)
 ], CollectionType.prototype, "name", void 0);
 __decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], CollectionType.prototype, "slug", void 0);
+__decorate([
     (0, type_graphql_1.Field)((type) => [Recipe_1.default], { nullable: true }),
     __metadata("design:type", Array)
 ], CollectionType.prototype, "recipes", void 0);

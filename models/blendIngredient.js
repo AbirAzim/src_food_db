@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
+// srcFoodReference blendNutrients notBlendNutrients collections varrient bodies
 const blendIngredientSchema = new mongoose_1.Schema({
     ingredientName: String,
     category: String,
@@ -11,7 +12,10 @@ const blendIngredientSchema = new mongoose_1.Schema({
     blendNutrients: {
         type: [
             {
+                value2: { type: String, default: '0' },
                 value: String,
+                link: { type: String, default: null },
+                disabled: { type: Boolean, default: false },
                 blendNutrientRefference: {
                     type: mongoose_1.Schema.Types.ObjectId,
                     ref: 'BlendNutrient',
@@ -54,6 +58,7 @@ const blendIngredientSchema = new mongoose_1.Schema({
         },
     ],
     varrient: { type: mongoose_1.Schema.Types.ObjectId, ref: 'BlendIngredient' },
+    gi: Number,
     wikiCoverImages: [String],
     wikiFeatureImage: String,
     wikiTitle: String,
@@ -69,6 +74,7 @@ const blendIngredientSchema = new mongoose_1.Schema({
     seoMetaDescription: String,
     sourceName: String,
     isPublished: Boolean,
+    isBookmarked: { type: Boolean, default: false },
 });
 blendIngredientSchema.pre('save', async function (next) {
     //@ts-ignore

@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
 const FilterType_1 = __importDefault(require("./FilterType"));
+const AdminCollection_1 = __importDefault(require("../../../graphql/admin/resolvers/schemas/AdminCollection"));
 let WidgetCollecType = class WidgetCollecType {
 };
 __decorate([
@@ -33,8 +34,12 @@ __decorate([
     __metadata("design:type", String)
 ], WidgetCollecType.prototype, "banner", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(() => type_graphql_1.ID, { nullable: true }),
+    (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
+], WidgetCollecType.prototype, "bannerId", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(() => AdminCollection_1.default, { nullable: true }),
+    __metadata("design:type", AdminCollection_1.default)
 ], WidgetCollecType.prototype, "collectionData", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
@@ -44,6 +49,14 @@ __decorate([
     (0, type_graphql_1.Field)(() => type_graphql_1.ID, { nullable: true }),
     __metadata("design:type", String)
 ], WidgetCollecType.prototype, "publishedBy", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Boolean)
+], WidgetCollecType.prototype, "showTabMenu", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], WidgetCollecType.prototype, "slug", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
@@ -56,6 +69,10 @@ __decorate([
     (0, type_graphql_1.Field)((type) => FilterType_1.default, { nullable: true }),
     __metadata("design:type", FilterType_1.default)
 ], WidgetCollecType.prototype, "filter", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Boolean)
+], WidgetCollecType.prototype, "isPublished", void 0);
 WidgetCollecType = __decorate([
     (0, type_graphql_1.ObjectType)()
 ], WidgetCollecType);

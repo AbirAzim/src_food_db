@@ -36,6 +36,16 @@ const memberSchema = new mongoose_1.Schema({
     },
     collections: [{ type: mongoose_1.Schema.Types.ObjectId, ref: 'UserCollection' }],
     dailyGoal: { type: mongoose_1.Schema.Types.ObjectId, ref: 'dailyGoal' },
+    compareList: [{ type: mongoose_1.Schema.Types.ObjectId, ref: 'Recipe' }],
+    compareLength: Number,
+    macroInfo: [
+        {
+            blendNutrientId: { type: mongoose_1.Schema.Types.ObjectId, ref: 'BlendNutrient' },
+            percentage: Number,
+        },
+    ],
+    wikiCompareCount: { type: Number, default: 0 },
+    isCreated: Boolean, //
 });
 const Member = (0, mongoose_1.model)('User', memberSchema);
 exports.default = Member;

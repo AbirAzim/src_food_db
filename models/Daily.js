@@ -4,11 +4,19 @@ const mongoose_1 = require("mongoose");
 const DailySchema = new mongoose_1.Schema({
     nutrientName: String,
     categoryName: String,
+    category: { type: mongoose_1.SchemaTypes.ObjectId, ref: 'BlendNutrientCategory' },
     units: String,
+    unitName: String,
     blendNutrientRef: {
         type: mongoose_1.SchemaTypes.ObjectId,
         ref: 'BlendNutrient',
     },
+    showPercentage: {
+        type: Boolean,
+        default: false,
+    },
+    percentage: Number,
+    calorieGram: Number,
     ranges: [
         {
             lifeStageGroup: {
@@ -37,6 +45,7 @@ const DailySchema = new mongoose_1.Schema({
             value: Number,
             units: String,
             RDA: Boolean,
+            upperLimit: Number,
         },
     ],
 });

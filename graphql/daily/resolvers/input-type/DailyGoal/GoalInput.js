@@ -20,6 +20,18 @@ __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", Number)
 ], GoalInput.prototype, "goal", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(),
+    __metadata("design:type", Number)
+], GoalInput.prototype, "dri", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Number)
+], GoalInput.prototype, "percentage", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(),
+    __metadata("design:type", Boolean)
+], GoalInput.prototype, "showPercentage", void 0);
 GoalInput = __decorate([
     (0, type_graphql_1.InputType)()
 ], GoalInput);

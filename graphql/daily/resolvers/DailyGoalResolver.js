@@ -18,26 +18,51 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
 const CreateEditDailyGoal_1 = __importDefault(require("./input-type/DailyGoal/CreateEditDailyGoal"));
 const DailyGoal_1 = __importDefault(require("../../../models/DailyGoal"));
-const DailyGoal_2 = __importDefault(require("../schemas/DailyGoal"));
+const memberModel_1 = __importDefault(require("../../../models/memberModel"));
+const ReturnDailyGoal_1 = __importDefault(require("../schemas/ReturnDailyGoal"));
 let DailyGoalResolver = class DailyGoalResolver {
     async updateDailyGoals(data) {
+        //@ts-ignore
+        let macros = data.goals.filter((goal) => goal.showPercentage);
+        await memberModel_1.default.findOneAndUpdate({ _id: data.memberId }, {
+            macroInfo: macros,
+        });
         await DailyGoal_1.default.findOneAndUpdate({ memberId: data.memberId }, { goals: data.goals, calories: data.calories, bmi: data.bmi });
         return 'success';
     }
     async getDailyGoals(memberId) {
         let dailyGoal = await DailyGoal_1.default.findOne({ memberId });
-        return dailyGoal;
+        let returnDailyGoal = {};
+        //@ts-ignore
+        let data = dailyGoal.goals.reduce((acc, cur) => {
+            if (!acc[cur.blendNutrientId]) {
+                acc[cur.blendNutrientId] = {
+                    blendNutrientId: cur.blendNutrientId,
+                    goal: cur.goal,
+                    dri: cur.dri,
+                    percentage: cur.percentage,
+                    showPercentage: cur.percentage ? true : false,
+                };
+            }
+            return acc;
+        }, {});
+        returnDailyGoal.calories = dailyGoal.calories;
+        returnDailyGoal.bmi = dailyGoal.bmi;
+        returnDailyGoal.goals = JSON.stringify(data);
+        returnDailyGoal.memberId = dailyGoal.memberId;
+        return returnDailyGoal;
     }
 };
 __decorate([
-    (0, type_graphql_1.Mutation)(() => String),
+    (0, type_graphql_1.Mutation)(() => String) // client
+    ,
     __param(0, (0, type_graphql_1.Arg)('data')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [CreateEditDailyGoal_1.default]),
     __metadata("design:returntype", Promise)
 ], DailyGoalResolver.prototype, "updateDailyGoals", null);
 __decorate([
-    (0, type_graphql_1.Query)(() => DailyGoal_2.default),
+    (0, type_graphql_1.Query)(() => ReturnDailyGoal_1.default),
     __param(0, (0, type_graphql_1.Arg)('memberId')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),

@@ -18,6 +18,7 @@ const brandSchema = new mongoose_1.Schema({
     metaDesc: String,
     keywords: [String],
     isPublished: Boolean,
+    order: Number,
 });
 const RecipeBrand = (0, mongoose_1.model)('RecipeBrand', brandSchema);
 exports.default = RecipeBrand;

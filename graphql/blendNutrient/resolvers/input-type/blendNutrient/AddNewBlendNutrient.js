@@ -54,8 +54,16 @@ __decorate([
 ], AddNewBlendNutrient.prototype, "unitName", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Boolean)
+], AddNewBlendNutrient.prototype, "showChildren", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
 ], AddNewBlendNutrient.prototype, "units", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Boolean)
+], AddNewBlendNutrient.prototype, "isBookmarked", void 0);
 AddNewBlendNutrient = __decorate([
     (0, type_graphql_1.InputType)()
 ], AddNewBlendNutrient);

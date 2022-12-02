@@ -19,7 +19,15 @@ __decorate([
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
+], CreateEditWidgetInput.prototype, "slug", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
 ], CreateEditWidgetInput.prototype, "widgetType", void 0);
+__decorate([
+    (0, type_graphql_1.Field)((type) => type_graphql_1.ID, { nullable: true }),
+    __metadata("design:type", String)
+], CreateEditWidgetInput.prototype, "bannerId", void 0);
 CreateEditWidgetInput = __decorate([
     (0, type_graphql_1.InputType)()
 ], CreateEditWidgetInput);

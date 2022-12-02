@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
-const WidgetCollection_1 = __importDefault(require("./WidgetCollection"));
+const SingleWidgetCollection_1 = __importDefault(require("./SingleWidgetCollection"));
 let WidgetType = class WidgetType {
 };
 __decorate([
@@ -23,7 +23,15 @@ __decorate([
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
+], WidgetType.prototype, "slug", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
 ], WidgetType.prototype, "widgetName", void 0);
+__decorate([
+    (0, type_graphql_1.Field)((type) => type_graphql_1.ID, { nullable: true }),
+    __metadata("design:type", String)
+], WidgetType.prototype, "bannerId", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
@@ -31,9 +39,17 @@ __decorate([
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", Number)
+], WidgetType.prototype, "clickCount", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Number)
+], WidgetType.prototype, "viewCount", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Number)
 ], WidgetType.prototype, "collectionCount", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(() => [WidgetCollection_1.default], { nullable: true }),
+    (0, type_graphql_1.Field)(() => [SingleWidgetCollection_1.default], { nullable: true }),
     __metadata("design:type", Array)
 ], WidgetType.prototype, "widgetCollections", void 0);
 WidgetType = __decorate([

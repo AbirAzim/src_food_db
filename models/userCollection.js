@@ -6,7 +6,12 @@ const userCollectionSchema = new mongoose_1.Schema({
         type: String,
         required: [true, 'name is required'],
     },
+    slug: String,
     image: String,
+    userId: {
+        type: mongoose_1.SchemaTypes.ObjectId,
+        ref: 'Member',
+    },
     recipes: [
         {
             type: mongoose_1.Schema.Types.ObjectId,

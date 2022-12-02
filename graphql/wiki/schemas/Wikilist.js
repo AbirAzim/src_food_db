@@ -64,6 +64,18 @@ __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", Boolean)
 ], wikiList.prototype, "isPublished", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Number)
+], wikiList.prototype, "commentsCount", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Boolean)
+], wikiList.prototype, "hasInCompare", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(() => [type_graphql_1.ID], { nullable: true }),
+    __metadata("design:type", Array)
+], wikiList.prototype, "collections", void 0);
 wikiList = __decorate([
     (0, type_graphql_1.ObjectType)()
 ], wikiList);

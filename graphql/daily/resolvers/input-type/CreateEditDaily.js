@@ -8,12 +8,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
-const Range_1 = __importDefault(require("./Range"));
 let CreateEditDaily = class CreateEditDaily {
 };
 __decorate([
@@ -23,11 +19,27 @@ __decorate([
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
-], CreateEditDaily.prototype, "categoryName", void 0);
+], CreateEditDaily.prototype, "units", void 0);
 __decorate([
-    (0, type_graphql_1.Field)((type) => [Range_1.default], { nullable: true }),
-    __metadata("design:type", Array)
-], CreateEditDaily.prototype, "ranges", void 0);
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Boolean)
+], CreateEditDaily.prototype, "showPercentage", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Number)
+], CreateEditDaily.prototype, "percentage", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Number)
+], CreateEditDaily.prototype, "calorieGram", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], CreateEditDaily.prototype, "unitName", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], CreateEditDaily.prototype, "category", void 0);
 __decorate([
     (0, type_graphql_1.Field)(() => type_graphql_1.ID, { nullable: true }),
     __metadata("design:type", String)

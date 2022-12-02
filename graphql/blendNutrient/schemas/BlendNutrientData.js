@@ -16,6 +16,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
 const BlendNutrientCategory_1 = __importDefault(require("./BlendNutrientCategory"));
 const BlendRelatedSource_1 = __importDefault(require("./BlendRelatedSource"));
+const map_1 = __importDefault(require("./map"));
 let BlendNutrientData = BlendNutrientData_1 = class BlendNutrientData {
 };
 __decorate([
@@ -70,6 +71,22 @@ __decorate([
     (0, type_graphql_1.Field)((type) => [BlendRelatedSource_1.default], { nullable: true }),
     __metadata("design:type", Array)
 ], BlendNutrientData.prototype, "related_sources", void 0);
+__decorate([
+    (0, type_graphql_1.Field)((type) => [map_1.default], { nullable: true }),
+    __metadata("design:type", Array)
+], BlendNutrientData.prototype, "mapList", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Boolean)
+], BlendNutrientData.prototype, "showChildren", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Boolean)
+], BlendNutrientData.prototype, "usePriorityForMap", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Boolean)
+], BlendNutrientData.prototype, "isBookmarked", void 0);
 BlendNutrientData = BlendNutrientData_1 = __decorate([
     (0, type_graphql_1.ObjectType)()
 ], BlendNutrientData);

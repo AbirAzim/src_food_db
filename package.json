@@ -28,7 +28,8 @@
     "reflect-metadata": "^0.1.13",
     "type-graphql": "^1.1.1",
     "validator": "^13.6.0",
-    "xss-clean": "^0.1.1"
+    "xss-clean": "^0.1.1",
+    "slugify": "^1.6.5"
   },
   "engines": {
     "node": "14.16.0",

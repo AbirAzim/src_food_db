@@ -21,39 +21,39 @@ __decorate([
     __metadata("design:type", String)
 ], Role.prototype, "_id", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
 ], Role.prototype, "roleName", void 0);
 __decorate([
-    (0, type_graphql_1.Field)((type) => RoleType_1.default),
+    (0, type_graphql_1.Field)((type) => RoleType_1.default, { nullable: true }),
     __metadata("design:type", RoleType_1.default)
 ], Role.prototype, "Users", void 0);
 __decorate([
-    (0, type_graphql_1.Field)((type) => RoleType_1.default),
+    (0, type_graphql_1.Field)((type) => RoleType_1.default, { nullable: true }),
     __metadata("design:type", RoleType_1.default)
 ], Role.prototype, "Admin", void 0);
 __decorate([
-    (0, type_graphql_1.Field)((type) => RoleType_1.default),
+    (0, type_graphql_1.Field)((type) => RoleType_1.default, { nullable: true }),
     __metadata("design:type", RoleType_1.default)
 ], Role.prototype, "Dashboard", void 0);
 __decorate([
-    (0, type_graphql_1.Field)((type) => RoleType_1.default),
+    (0, type_graphql_1.Field)((type) => RoleType_1.default, { nullable: true }),
     __metadata("design:type", RoleType_1.default)
 ], Role.prototype, "Shop", void 0);
 __decorate([
-    (0, type_graphql_1.Field)((type) => RoleType_1.default),
+    (0, type_graphql_1.Field)((type) => RoleType_1.default, { nullable: true }),
     __metadata("design:type", RoleType_1.default)
 ], Role.prototype, "Blend", void 0);
 __decorate([
-    (0, type_graphql_1.Field)((type) => RoleType_1.default),
+    (0, type_graphql_1.Field)((type) => RoleType_1.default, { nullable: true }),
     __metadata("design:type", RoleType_1.default)
 ], Role.prototype, "Wiki", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(() => RoleType_1.default),
+    (0, type_graphql_1.Field)(() => RoleType_1.default, { nullable: true }),
     __metadata("design:type", RoleType_1.default)
 ], Role.prototype, "All", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(() => Date),
+    (0, type_graphql_1.Field)(() => Date, { nullable: true }),
     __metadata("design:type", Date)
 ], Role.prototype, "createdAt", void 0);
 Role = __decorate([

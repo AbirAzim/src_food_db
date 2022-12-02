@@ -44,34 +44,39 @@ let AdminResolver = class AdminResolver {
     }
 };
 __decorate([
-    (0, type_graphql_1.Mutation)(() => Admin_1.default),
+    (0, type_graphql_1.Mutation)(() => Admin_1.default) //admin
+    ,
     __param(0, (0, type_graphql_1.Arg)('data')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [NewAdminInput_1.default]),
     __metadata("design:returntype", Promise)
 ], AdminResolver.prototype, "createNewAdmin", null);
 __decorate([
-    (0, type_graphql_1.Query)(() => Admin_1.default),
+    (0, type_graphql_1.Query)(() => Admin_1.default) //admin
+    ,
     __param(0, (0, type_graphql_1.Arg)('adminId')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], AdminResolver.prototype, "getASingleAdmin", null);
 __decorate([
-    (0, type_graphql_1.Query)(() => [PopulatedAdmin_1.default]),
+    (0, type_graphql_1.Query)(() => [PopulatedAdmin_1.default]) // admin
+    ,
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], AdminResolver.prototype, "getAllAdmin", null);
 __decorate([
-    (0, type_graphql_1.Mutation)(() => String),
+    (0, type_graphql_1.Mutation)(() => String) // admin
+    ,
     __param(0, (0, type_graphql_1.Arg)('email')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], AdminResolver.prototype, "removeAdmin", null);
 __decorate([
-    (0, type_graphql_1.Mutation)(() => String),
+    (0, type_graphql_1.Mutation)(() => String) // admin
+    ,
     __param(0, (0, type_graphql_1.Arg)('data')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [EditAdmin_1.default]),

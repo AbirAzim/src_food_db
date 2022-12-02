@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
 const GoalInput_1 = __importDefault(require("./GoalInput"));
+const Calorie_1 = __importDefault(require("./Calorie"));
 let CreateEditDailyGoal = class CreateEditDailyGoal {
 };
 __decorate([
@@ -26,7 +27,7 @@ __decorate([
 ], CreateEditDailyGoal.prototype, "goals", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
-    __metadata("design:type", Number)
+    __metadata("design:type", Calorie_1.default)
 ], CreateEditDailyGoal.prototype, "calories", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),

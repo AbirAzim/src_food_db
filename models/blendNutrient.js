@@ -17,7 +17,7 @@ const blendNutrient = new mongoose_1.Schema({
         required: [true, 'nutrient name is required'],
         unique: true,
     },
-    altName: String,
+    altName: { type: String, default: '' },
     category: { type: mongoose_1.Schema.Types.ObjectId, ref: 'BlendNutrientCategory' },
     status: {
         type: String,
@@ -52,6 +52,9 @@ const blendNutrient = new mongoose_1.Schema({
     seoMetaDescription: String,
     createdAt: { type: Date, default: Date.now },
     isPublished: Boolean,
+    usePriorityForMap: { type: Boolean, default: false },
+    showChildren: { type: Boolean, default: false },
+    isBookmarked: { type: Boolean, default: false },
 });
 blendNutrient.pre('save', async function (next) {
     if (this.unitName !== '' ||
@@ -77,3 +80,5 @@ blendNutrient.post('update', async function (next) {
 });
 const BlendNutrient = (0, mongoose_1.model)('BlendNutrient', blendNutrient);
 exports.default = BlendNutrient;
+// https://ods.od.nih.gov/HealthInformation/nutrientrecommendations.aspx#:~:text=DRI%20is%20the%20general%20term,%25%2D98%25
+//https://www.ncbi.nlm.nih.gov/books/NBK545442/table/appJ_tab9/?report=objectonly

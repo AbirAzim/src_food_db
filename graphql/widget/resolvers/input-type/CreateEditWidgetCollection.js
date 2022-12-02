@@ -33,6 +33,14 @@ __decorate([
     __metadata("design:type", String)
 ], CreateEditWidgetCollection.prototype, "banner", void 0);
 __decorate([
+    (0, type_graphql_1.Field)((type) => type_graphql_1.ID, { nullable: true }),
+    __metadata("design:type", String)
+], CreateEditWidgetCollection.prototype, "bannerId", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], CreateEditWidgetCollection.prototype, "slug", void 0);
+__decorate([
     (0, type_graphql_1.Field)(() => type_graphql_1.ID, { nullable: true }),
     __metadata("design:type", String)
 ], CreateEditWidgetCollection.prototype, "collectionData", void 0);
@@ -46,6 +54,10 @@ __decorate([
 ], CreateEditWidgetCollection.prototype, "publishedBy", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Boolean)
+], CreateEditWidgetCollection.prototype, "showTabMenu", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
 ], CreateEditWidgetCollection.prototype, "orderBy", void 0);
 __decorate([
@@ -56,6 +68,10 @@ __decorate([
     (0, type_graphql_1.Field)((type) => AddFilter_1.default, { nullable: true }),
     __metadata("design:type", AddFilter_1.default)
 ], CreateEditWidgetCollection.prototype, "filter", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Boolean)
+], CreateEditWidgetCollection.prototype, "isPublished", void 0);
 CreateEditWidgetCollection = __decorate([
     (0, type_graphql_1.InputType)()
 ], CreateEditWidgetCollection);

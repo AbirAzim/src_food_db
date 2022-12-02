@@ -22,7 +22,9 @@ const RecipeCategory_1 = __importDefault(require("../schemas/RecipeCategory"));
 const recipeCategory_1 = __importDefault(require("../../../models/recipeCategory"));
 let RecipeCategoryResolver = class RecipeCategoryResolver {
     async getAllCategories() {
-        let recipeCategories = await recipeCategory_1.default.find();
+        let recipeCategories = await recipeCategory_1.default.find().sort({
+            order: 1,
+        });
         return recipeCategories;
     }
     async getASingleCategory(recipeCategoryName) {
@@ -31,8 +33,19 @@ let RecipeCategoryResolver = class RecipeCategoryResolver {
         });
         return recipeCategory;
     }
+    async orderingRecipeCategory(data) {
+        for (let i = 0; i < data.length; i++) {
+            await recipeCategory_1.default.findByIdAndUpdate(data[i], {
+                order: i + 1,
+            });
+        }
+        return 'Recipe Category Ordered';
+    }
     async createRecipeCategory(data) {
-        let newRecipeCategory = await recipeCategory_1.default.create(data);
+        let categories = await recipeCategory_1.default.find().select('_id');
+        let newData = data;
+        newData.order = categories.length + 1;
+        let newRecipeCategory = await recipeCategory_1.default.create(newData);
         return 'recipeCategrory Created Successfull';
     }
     async deleteRecipeCategory(recipeCategoryId) {
@@ -42,6 +55,15 @@ let RecipeCategoryResolver = class RecipeCategoryResolver {
     async updateRecipeCategory(data) {
         let recipeCategory = await recipeCategory_1.default.findByIdAndUpdate(data.editId, data.editableObject);
         return 'Recipe Category Updated';
+    }
+    async setOrder() {
+        let recipeCategories = await recipeCategory_1.default.find();
+        for (let i = 0; i < recipeCategories.length; i++) {
+            await recipeCategory_1.default.findByIdAndUpdate(recipeCategories[i]._id, {
+                order: i + 1,
+            });
+        }
+        return 'Order Set';
     }
 };
 __decorate([
@@ -57,6 +79,13 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], RecipeCategoryResolver.prototype, "getASingleCategory", null);
+__decorate([
+    (0, type_graphql_1.Mutation)((type) => String),
+    __param(0, (0, type_graphql_1.Arg)('data', (type) => [String])),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Array]),
+    __metadata("design:returntype", Promise)
+], RecipeCategoryResolver.prototype, "orderingRecipeCategory", null);
 __decorate([
     (0, type_graphql_1.Mutation)((type) => String),
     __param(0, (0, type_graphql_1.Arg)('data')),
@@ -78,6 +107,12 @@ __decorate([
     __metadata("design:paramtypes", [EditRecipeCategory_1.default]),
     __metadata("design:returntype", Promise)
 ], RecipeCategoryResolver.prototype, "updateRecipeCategory", null);
+__decorate([
+    (0, type_graphql_1.Mutation)((type) => String),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], RecipeCategoryResolver.prototype, "setOrder", null);
 RecipeCategoryResolver = __decorate([
     (0, type_graphql_1.Resolver)()
 ], RecipeCategoryResolver);

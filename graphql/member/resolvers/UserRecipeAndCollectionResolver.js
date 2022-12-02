@@ -31,6 +31,7 @@ const memberModel_1 = __importDefault(require("../../../models/memberModel"));
 const userCollection_1 = __importDefault(require("../../../models/userCollection"));
 const recipe_1 = __importDefault(require("../../../models/recipe"));
 const userNote_1 = __importDefault(require("../../../models/userNote"));
+const Compare_1 = __importDefault(require("../../../models/Compare"));
 const Collection_2 = __importDefault(require("../schemas/Collection"));
 let UserRecipeAndCollectionResolver = class UserRecipeAndCollectionResolver {
     async createNewUserRecipeWithCollection(data) {
@@ -172,37 +173,99 @@ let UserRecipeAndCollectionResolver = class UserRecipeAndCollectionResolver {
         });
         return member.collections;
     }
-    async getAllRecipesFromCollection(userEmail, userId) {
-        let user = await memberModel_1.default.findOne({ email: userEmail }).populate({
+    async getAllRecipesFromCollection(
+    // @Arg('userEmail', { nullable: true }) userEmail: String,
+    userId) {
+        // let user = await MemberModel.findOne({ email: userEmail }).populate({
+        //   path: 'collections',
+        //   populate: {
+        //     path: 'recipes',
+        //     model: 'Recipe',
+        //     populate: {
+        //       path: 'ingredients.ingredientId',
+        //       model: 'BlendIngredient',
+        //       select: 'ingredientName',
+        //     },
+        //   },
+        // });
+        let recipes = [];
+        let returnRecipe = [];
+        let collectionRecipes = [];
+        let memberCollections = await memberModel_1.default.find({ _id: userId })
+            .populate({
             path: 'collections',
-            populate: {
-                path: 'recipes',
-                model: 'Recipe',
+            model: 'UserCollection',
+            select: 'recipes',
+        })
+            .select('-_id collections');
+        for (let i = 0; i < memberCollections[0].collections.length; i++) {
+            let Collectionrecipes = await recipe_1.default.find({
+                _id: {
+                    $in: memberCollections[0].collections[i].recipes,
+                },
+            })
+                .populate({
+                path: 'ingredients.ingredientId',
+                model: 'BlendIngredient',
+                select: 'ingredientName',
+            })
+                .populate({
+                path: 'defaultVersion',
+                model: 'RecipeVersion',
                 populate: {
                     path: 'ingredients.ingredientId',
                     model: 'BlendIngredient',
+                    select: 'ingredientName',
                 },
-            },
-        });
-        let returnRecipe = [];
-        for (let k = 0; k < user.collections.length; k++) {
-            for (let j = 0; j < user.collections[k].recipes.length; j++) {
-                returnRecipe.push(user.collections[k].recipes[j]);
-            }
+                select: 'postfixTitle',
+            })
+                .populate({
+                path: 'userId',
+                model: 'User',
+                select: '_id displayName image firstName lastName email',
+            })
+                .populate('brand')
+                .populate('recipeBlendCategory');
+            recipes = recipes.concat(Collectionrecipes);
+            let items = memberCollections[0].collections[i].recipes.map(
+            //@ts-ignore
+            (recipe) => {
+                return {
+                    recipeId: String(recipe._id),
+                    recipeCollection: String(memberCollections[0].collections[i]._id),
+                };
+            });
+            collectionRecipes.push(...items);
         }
-        let ids = returnRecipe.map((o) => o._id);
-        const filtered = returnRecipe.filter(
-        //@ts-ignore
-        ({ _id }, index) => !ids.includes(_id, index + 1));
-        let returnRecipe2 = [];
-        for (let i = 0; i < filtered.length; i++) {
+        for (let i = 0; i < recipes.length; i++) {
             let userNotes = await userNote_1.default.find({
-                recipeId: filtered[i]._id,
+                recipeId: recipes[i]._id,
                 userId: userId,
             });
-            returnRecipe2.push({ ...filtered[i]._doc, notes: userNotes.length });
+            let addedToCompare = false;
+            let compare = await Compare_1.default.findOne({
+                userId: userId,
+                recipeId: recipes[i]._id,
+            });
+            if (compare) {
+                addedToCompare = true;
+            }
+            let collectionData = collectionRecipes.filter((recipeData) => recipeData.recipeId === String(recipes[i]._id));
+            if (collectionData.length === 0) {
+                collectionData = null;
+            }
+            else {
+                //@ts-ignore
+                collectionData = collectionData.map((data) => data.recipeCollection);
+            }
+            returnRecipe.push({
+                ...recipes[i]._doc,
+                notes: userNotes.length,
+                addedToCompare: addedToCompare,
+                userCollections: collectionData,
+            });
         }
-        return returnRecipe2;
+        return returnRecipe;
     }
     async addRecipeToAUserCollection(data) {
         let user = await memberModel_1.default.findOne({ email: data.userEmail }).populate('collections');
@@ -426,11 +489,9 @@ __decorate([
 ], UserRecipeAndCollectionResolver.prototype, "addTolastModifiedCollection", null);
 __decorate([
     (0, type_graphql_1.Query)(() => [Recipe_1.default]),
-    __param(0, (0, type_graphql_1.Arg)('userEmail')),
-    __param(1, (0, type_graphql_1.Arg)('userId')),
+    __param(0, (0, type_graphql_1.Arg)('userId')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String,
-        String]),
+    __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], UserRecipeAndCollectionResolver.prototype, "getAllRecipesFromCollection", null);
 __decorate([

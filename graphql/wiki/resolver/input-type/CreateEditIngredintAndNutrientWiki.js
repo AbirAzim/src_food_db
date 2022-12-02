@@ -29,8 +29,8 @@ __decorate([
     __metadata("design:type", String)
 ], CreateEditIngreidntAndNutrientWiki.prototype, "wikiFeatureImage", void 0);
 __decorate([
-    (0, type_graphql_1.Field)((type) => [String], { nullable: true }),
-    __metadata("design:type", Array)
+    (0, type_graphql_1.Field)((type) => String, { nullable: true }),
+    __metadata("design:type", String)
 ], CreateEditIngreidntAndNutrientWiki.prototype, "bodies", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),

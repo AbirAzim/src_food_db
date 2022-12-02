@@ -29,6 +29,14 @@ __decorate([
     __metadata("design:type", String)
 ], WidgetCollection.prototype, "banner", void 0);
 __decorate([
+    (0, type_graphql_1.Field)((type) => type_graphql_1.ID, { nullable: true }),
+    __metadata("design:type", String)
+], WidgetCollection.prototype, "bannerId", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(),
+    __metadata("design:type", String)
+], WidgetCollection.prototype, "slug", void 0);
+__decorate([
     (0, type_graphql_1.Field)(() => type_graphql_1.ID),
     __metadata("design:type", String)
 ], WidgetCollection.prototype, "collectionData", void 0);
@@ -36,6 +44,10 @@ __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
 ], WidgetCollection.prototype, "publishDate", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Boolean)
+], WidgetCollection.prototype, "showTabMenu", void 0);
 __decorate([
     (0, type_graphql_1.Field)(() => type_graphql_1.ID, { nullable: true }),
     __metadata("design:type", String)
@@ -52,6 +64,10 @@ __decorate([
     (0, type_graphql_1.Field)((type) => AddFilter_1.default, { nullable: true }),
     __metadata("design:type", AddFilter_1.default)
 ], WidgetCollection.prototype, "filter", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Boolean)
+], WidgetCollection.prototype, "isPublished", void 0);
 WidgetCollection = __decorate([
     (0, type_graphql_1.InputType)()
 ], WidgetCollection);

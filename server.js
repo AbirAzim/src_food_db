@@ -9,25 +9,7 @@ const app_1 = __importDefault(require("./app"));
 const apollo_server_express_1 = require("apollo-server-express");
 const type_graphql_1 = require("type-graphql");
 require("reflect-metadata");
-const FoodResolver_1 = __importDefault(require("./graphql/src_food/resolvers/FoodResolver"));
-const RecipeResolver_1 = __importDefault(require("./graphql/recipe/resolvers/RecipeResolver"));
-const RecipeCategoryResolver_1 = __importDefault(require("./graphql/recipe/resolvers/RecipeCategoryResolver"));
-const BrandResolver_1 = __importDefault(require("./graphql/recipe/resolvers/BrandResolver"));
-const AdminResolver_1 = __importDefault(require("./graphql/admin/resolvers/AdminResolver"));
-const RoleResolver_1 = __importDefault(require("./graphql/admin/resolvers/RoleResolver"));
-const MemberResolver_1 = __importDefault(require("./graphql/member/resolvers/MemberResolver"));
-const ConfigurationResolver_1 = __importDefault(require("./graphql/configuiration/resolvers/ConfigurationResolver"));
-const UserRecipeAndCollectionResolver_1 = __importDefault(require("./graphql/member/resolvers/UserRecipeAndCollectionResolver"));
-const UserCommentResolver_1 = __importDefault(require("./graphql/member/resolvers/UserCommentResolver"));
-const AdminCollectionResolver_1 = __importDefault(require("./graphql/admin/resolvers/AdminCollectionResolver"));
-const UserNoteResolver_1 = __importDefault(require("./graphql/member/resolvers/UserNoteResolver"));
-const BlendNutrientCategoryResolver_1 = __importDefault(require("./graphql/blendNutrient/resolvers/BlendNutrientCategoryResolver"));
-const BlendNutrientResolver_1 = __importDefault(require("./graphql/blendNutrient/resolvers/BlendNutrientResolver"));
-const BlendIngredientsResolvers_1 = __importDefault(require("./graphql/blendIngredientsdata/resolvers/BlendIngredientsResolvers"));
-const WikiResolver_1 = __importDefault(require("./graphql/wiki/resolver/WikiResolver"));
-const dailyResolver_1 = __importDefault(require("./graphql/daily/resolvers/dailyResolver"));
-const DailyGoalResolver_1 = __importDefault(require("./graphql/daily/resolvers/DailyGoalResolver"));
-const WidgetResolvers_1 = __importDefault(require("./graphql/widget/resolvers/WidgetResolvers"));
+const AllResolvers_1 = __importDefault(require("./utils/AllResolvers"));
 process.on('uncaughtException', (err) => {
     console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
     console.log(err.name, err.message);
@@ -46,27 +28,8 @@ async function bootstrap() {
     // ... Building schema here
     try {
         schema = await (0, type_graphql_1.buildSchema)({
-            resolvers: [
-                FoodResolver_1.default,
-                RecipeResolver_1.default,
-                RecipeCategoryResolver_1.default,
-                BrandResolver_1.default,
-                AdminResolver_1.default,
-                RoleResolver_1.default,
-                MemberResolver_1.default,
-                ConfigurationResolver_1.default,
-                UserRecipeAndCollectionResolver_1.default,
-                UserCommentResolver_1.default,
-                AdminCollectionResolver_1.default,
-                UserNoteResolver_1.default,
-                BlendNutrientCategoryResolver_1.default,
-                BlendNutrientResolver_1.default,
-                BlendIngredientsResolvers_1.default,
-                WikiResolver_1.default,
-                dailyResolver_1.default,
-                DailyGoalResolver_1.default,
-                WidgetResolvers_1.default,
-            ],
+            //@ts-ignore
+            resolvers: (0, AllResolvers_1.default)(),
         });
     }
     catch (e) {

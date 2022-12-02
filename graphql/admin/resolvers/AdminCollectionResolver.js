@@ -16,19 +16,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
+const mongoose_1 = __importDefault(require("mongoose"));
 const AppError_1 = __importDefault(require("../../../utils/AppError"));
 const adminCollection_1 = __importDefault(require("../../../models/adminCollection"));
-const ingredient_1 = __importDefault(require("../../../models/ingredient"));
 const CreateAdminCollection_1 = __importDefault(require("./input-type/CreateAdminCollection"));
 const EditAdminCollection_1 = __importDefault(require("./input-type/EditAdminCollection"));
 const EditChildren_1 = __importDefault(require("./input-type/EditChildren"));
 const AdminCollection_1 = __importDefault(require("./schemas/AdminCollection"));
 const SimpleAdminCollection_1 = __importDefault(require("./schemas/SimpleAdminCollection"));
 const GenericModel_1 = __importDefault(require("../../../utils/GenericModel"));
+const Widget_1 = __importDefault(require("../../../models/Widget"));
 let AdminCollectionResolver = class AdminCollectionResolver {
     async addNewAdminCollection(data) {
-        await adminCollection_1.default.create(data);
-        return 'Collection added successfully';
+        let adminCollection = await adminCollection_1.default.create(data);
+        return adminCollection._id;
     }
     async editAdminCollectionByID(data) {
         const collection = await adminCollection_1.default.findById(data.editId);
@@ -39,28 +40,14 @@ let AdminCollectionResolver = class AdminCollectionResolver {
         return 'Collection updated successfully';
     }
     async editChildrenInCollection(data) {
-        if (data.checked) {
-            await adminCollection_1.default.updateOne({ _id: data.adminCollectionId }, { $addToSet: { children: data.children } });
-            for (let i = 0; i < data.children.length; i++) {
-                await ingredient_1.default.updateOne({ _id: data.children[i] }, { $addToSet: { collections: data.adminCollectionId } });
-            }
-        }
-        else {
-            await adminCollection_1.default.updateOne({ _id: data.adminCollectionId }, { $pullAll: { children: data.children } });
-            for (let i = 0; i < data.children.length; i++) {
-                await ingredient_1.default.updateOne({ _id: data.children[i] }, { $pullAll: { collections: [data.adminCollectionId] } });
-            }
-        }
-        return 'Collection updated successfully';
-    }
-    async editChildrenInCollectionFortesting(data) {
         let adminCollection = await adminCollection_1.default.findById(data.adminCollectionId);
         let Model = (0, GenericModel_1.default)(adminCollection.collectionType);
         if (Model === null) {
             // has to be fixed
-            return new AppError_1.default(`Collection Type Is Not Correct : Avilable Collection are ${[
+            return new AppError_1.default(`Collection Type Is Not Correct : Available Collection are ${[
                 'Recipe',
                 'Ingredient',
+                'Wiki',
             ].join(', ')}`, 404);
         }
         if (data.checked) {
@@ -72,7 +59,7 @@ let AdminCollectionResolver = class AdminCollectionResolver {
         else {
             await adminCollection_1.default.updateOne({ _id: data.adminCollectionId }, { $pullAll: { children: data.children } });
             for (let i = 0; i < data.children.length; i++) {
-                await Model.updateOne({ _id: data.children[i] }, { $pullAll: { collections: [data.adminCollectionId] } });
+                await Model.updateOne({ _id: data.children[i] }, { $pull: { collections: adminCollection._id } });
             }
         }
         return 'Collection updated successfully';
@@ -92,6 +79,26 @@ let AdminCollectionResolver = class AdminCollectionResolver {
         if (!collection) {
             throw new Error('Collection not found');
         }
+        let Model = (0, GenericModel_1.default)(collection.collectionType);
+        if (Model === null) {
+            // has to be fixed
+            return new AppError_1.default(`Collection Type Is Not Correct : Available Collection are ${[
+                'Recipe',
+                'Ingredient',
+                'Wiki',
+            ].join(', ')}`, 404);
+        }
+        for (let i = 0; i < collection.children.length; i++) {
+            await Model.updateOne({ _id: collection.children[i] }, { $pull: { collections: collection._id } });
+        }
+        await Widget_1.default.updateMany({}, {
+            $pull: {
+                widgetCollections: {
+                    collectionData: collection._id,
+                },
+            },
+        });
+        await Widget_1.default.updateMany({ 'widgetCollections.collectionData': collection._id }, { $pull: { 'widgetCollections.$.collectionData': collection._id } });
         await adminCollection_1.default.findByIdAndDelete(collectionId);
         return 'Collection deleted successfully';
     }
@@ -106,63 +113,81 @@ let AdminCollectionResolver = class AdminCollectionResolver {
         return collections;
     }
     async getAllAdminCollectionType() {
-        return ['Recipe', 'Ingredient'];
+        return ['Recipe', 'Ingredient', 'Wiki'];
+    }
+    async emptyCollections(collectionType) {
+        await Widget_1.default.updateMany({}, {
+            $pull: {
+                widgetCollections: {
+                    collectionData: new mongoose_1.default.mongo.ObjectId(collectionType),
+                },
+            },
+        });
+        return 'Collection deleted successfully';
     }
 };
 __decorate([
-    (0, type_graphql_1.Mutation)(() => String),
+    (0, type_graphql_1.Mutation)(() => String) // admin
+    ,
     __param(0, (0, type_graphql_1.Arg)('data')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [CreateAdminCollection_1.default]),
     __metadata("design:returntype", Promise)
 ], AdminCollectionResolver.prototype, "addNewAdminCollection", null);
 __decorate([
-    (0, type_graphql_1.Mutation)(() => String),
+    (0, type_graphql_1.Mutation)(() => String) // admin
+    ,
     __param(0, (0, type_graphql_1.Arg)('data')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [EditAdminCollection_1.default]),
     __metadata("design:returntype", Promise)
 ], AdminCollectionResolver.prototype, "editAdminCollectionByID", null);
 __decorate([
-    (0, type_graphql_1.Mutation)(() => String),
+    (0, type_graphql_1.Mutation)(() => String) // admin
+    ,
     __param(0, (0, type_graphql_1.Arg)('data')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [EditChildren_1.default]),
     __metadata("design:returntype", Promise)
 ], AdminCollectionResolver.prototype, "editChildrenInCollection", null);
 __decorate([
-    (0, type_graphql_1.Mutation)(() => String),
-    __param(0, (0, type_graphql_1.Arg)('data')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [EditChildren_1.default]),
-    __metadata("design:returntype", Promise)
-], AdminCollectionResolver.prototype, "editChildrenInCollectionFortesting", null);
-__decorate([
-    (0, type_graphql_1.Mutation)(() => String),
+    (0, type_graphql_1.Mutation)(() => String) // admin
+    ,
     __param(0, (0, type_graphql_1.Arg)('collectionId')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], AdminCollectionResolver.prototype, "removeAdminCollection", null);
 __decorate([
-    (0, type_graphql_1.Query)(() => [AdminCollection_1.default]),
+    (0, type_graphql_1.Query)(() => [AdminCollection_1.default]) // admin
+    ,
     __param(0, (0, type_graphql_1.Arg)('collectionType')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], AdminCollectionResolver.prototype, "getAllAdminCollection", null);
 __decorate([
-    (0, type_graphql_1.Query)(() => [SimpleAdminCollection_1.default]),
+    (0, type_graphql_1.Query)(() => [SimpleAdminCollection_1.default]) // admin
+    ,
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], AdminCollectionResolver.prototype, "getSimpleAdminCollections", null);
 __decorate([
-    (0, type_graphql_1.Query)(() => [String]),
+    (0, type_graphql_1.Query)(() => [String]) // admin
+    ,
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], AdminCollectionResolver.prototype, "getAllAdminCollectionType", null);
+__decorate([
+    (0, type_graphql_1.Query)(() => String) //admin
+    ,
+    __param(0, (0, type_graphql_1.Arg)('collectionType')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], AdminCollectionResolver.prototype, "emptyCollections", null);
 AdminCollectionResolver = __decorate([
     (0, type_graphql_1.Resolver)()
 ], AdminCollectionResolver);

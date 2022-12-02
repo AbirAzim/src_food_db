@@ -22,7 +22,7 @@ const Brand_1 = __importDefault(require("../schemas/Brand"));
 const brand_1 = __importDefault(require("../../../models/brand"));
 let BrandResolver = class BrandResolver {
     async getAllBrands() {
-        let brands = await brand_1.default.find();
+        let brands = await brand_1.default.find().sort({ order: 1 });
         return brands;
     }
     async getASingleBrand(brandId) {
@@ -30,7 +30,10 @@ let BrandResolver = class BrandResolver {
         return brand;
     }
     async createBrand(data) {
-        let newBrand = await brand_1.default.create(data);
+        let brands = await brand_1.default.find().select('_id');
+        let newData = data;
+        newData.order = brands.length + 1;
+        let newBrand = await brand_1.default.create(newData);
         return 'new brand created successfully';
     }
     async editARecipeBrand(data) {
@@ -40,6 +43,23 @@ let BrandResolver = class BrandResolver {
     async deleteARecipeBrand(brandId) {
         await brand_1.default.findByIdAndDelete(brandId);
         return 'brand deleted successfully';
+    }
+    async orderingRecipeBrand(data) {
+        for (let i = 0; i < data.length; i++) {
+            await brand_1.default.findByIdAndUpdate(data[i], {
+                order: i + 1,
+            });
+        }
+        return 'Recipe Brand Ordered';
+    }
+    async setOrderBrand() {
+        let brands = await brand_1.default.find().select('_id');
+        for (let i = 0; i < brands.length; i++) {
+            await brand_1.default.findByIdAndUpdate(brands[i], {
+                order: i + 1,
+            });
+        }
+        return 'Recipe Brand Ordered';
     }
 };
 __decorate([
@@ -76,6 +96,19 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], BrandResolver.prototype, "deleteARecipeBrand", null);
+__decorate([
+    (0, type_graphql_1.Mutation)((type) => String),
+    __param(0, (0, type_graphql_1.Arg)('data', (type) => [String])),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Array]),
+    __metadata("design:returntype", Promise)
+], BrandResolver.prototype, "orderingRecipeBrand", null);
+__decorate([
+    (0, type_graphql_1.Mutation)((type) => String),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], BrandResolver.prototype, "setOrderBrand", null);
 BrandResolver = __decorate([
     (0, type_graphql_1.Resolver)()
 ], BrandResolver);

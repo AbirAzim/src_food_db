@@ -28,6 +28,18 @@ __decorate([
     (0, type_graphql_1.Field)(() => type_graphql_1.ID, { nullable: true }),
     __metadata("design:type", String)
 ], NutrientDailyDescription.prototype, "blendNutrientRef", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Boolean)
+], NutrientDailyDescription.prototype, "showPercentage", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Number)
+], NutrientDailyDescription.prototype, "percentage", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Number)
+], NutrientDailyDescription.prototype, "calorieGram", void 0);
 NutrientDailyDescription = __decorate([
     (0, type_graphql_1.ObjectType)()
 ], NutrientDailyDescription);

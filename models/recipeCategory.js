@@ -24,6 +24,7 @@ const recipeCategorySchema = new mongoose_1.Schema({
         type: Boolean,
         default: false,
     },
+    order: Number,
 });
 const RecipeCategory = (0, mongoose_1.model)('RecipeCategory', recipeCategorySchema);
 exports.default = RecipeCategory;
