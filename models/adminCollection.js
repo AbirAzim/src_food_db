@@ -10,7 +10,7 @@ const adminCollectionSchema = new mongoose_1.Schema({
     collectionType: {
         type: String,
         required: [true, 'collection type is required'],
-        enum: ['Ingredient', 'Recipe', "Wiki"],
+        enum: ['Ingredient', 'Recipe', 'Wiki'],
     },
 });
 const AdminCollection = (0, mongoose_1.model)('AdminCollection', adminCollectionSchema);

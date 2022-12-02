@@ -275,6 +275,9 @@ let WigdetResolver = class WigdetResolver {
             return returnWidgetCollection;
         }
     }
+    async qsq() {
+        return 'done';
+    }
 };
 __decorate([
     (0, type_graphql_1.Mutation)(() => String),
@@ -376,6 +379,12 @@ __decorate([
         String]),
     __metadata("design:returntype", Promise)
 ], WigdetResolver.prototype, "getWidgetCollectionbySlugForClient", null);
+__decorate([
+    (0, type_graphql_1.Query)(() => String),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], WigdetResolver.prototype, "qsq", null);
 WigdetResolver = __decorate([
     (0, type_graphql_1.Resolver)()
 ], WigdetResolver);
