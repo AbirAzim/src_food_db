@@ -28,6 +28,7 @@ let RecipeCategoryResolver = class RecipeCategoryResolver {
         return recipeCategories;
     }
     async getASingleCategory(recipeCategoryName) {
+        console.log('hello');
         let recipeCategory = await recipeCategory_1.default.findOne({
             name: recipeCategoryName,
         });
