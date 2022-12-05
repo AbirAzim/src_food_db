@@ -1228,6 +1228,9 @@ let WikiResolver = class WikiResolver {
         }
         return 'done';
     }
+    async getData() {
+        return 'data';
+    }
 };
 __decorate([
     (0, type_graphql_1.Query)(() => WikiListWithPagination_1.default),
@@ -1443,6 +1446,12 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], WikiResolver.prototype, "createBookMark2", null);
+__decorate([
+    (0, type_graphql_1.Query)(() => String),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], WikiResolver.prototype, "getData", null);
 WikiResolver = __decorate([
     (0, type_graphql_1.Resolver)()
 ], WikiResolver);

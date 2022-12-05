@@ -29,7 +29,7 @@ const ChallengeSchema = new mongoose_1.Schema({
     sharedWith: [
         {
             memberId: { type: mongoose_1.Schema.Types.ObjectId, ref: 'User' },
-            hasAccepted: Boolean,
+            hasAccepted: { type: Boolean, default: false },
             blendScore: Number,
         },
     ],
