@@ -88,6 +88,24 @@ let GeneralBlogResolver = class GeneralBlogResolver {
         let blogs = await generalBlog_1.default.find();
         return blogs;
     }
+    async getAllGeneralBlogForClient(currentDate) {
+        let today = new Date(new Date(currentDate).toISOString().slice(0, 10));
+        await generalBlog_1.default.updateMany({
+            publishDate: {
+                $lte: today,
+            },
+            isPublished: false,
+        }, { isPublished: true });
+        let blogs = await generalBlog_1.default.find({ isPublished: true });
+        let returnBlogs = [];
+        for (let i = 0; i < blogs.length; i++) {
+            let blog = blogs[i];
+            blog.commentsCount = 0;
+            blog.hasInCollection = false;
+            returnBlogs.push(blog);
+        }
+        return returnBlogs;
+    }
     async deleteAGeneralBlog(blogId) {
         await generalBlog_1.default.findOneAndDelete({ _id: blogId });
         return 'Successfully deleted general blog';
@@ -129,6 +147,13 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], GeneralBlogResolver.prototype, "getAllGeneralBlog", null);
+__decorate([
+    (0, type_graphql_1.Query)(() => [GeneralBlog_1.default]),
+    __param(0, (0, type_graphql_1.Arg)('currentDate')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], GeneralBlogResolver.prototype, "getAllGeneralBlogForClient", null);
 __decorate([
     (0, type_graphql_1.Mutation)(() => String),
     __param(0, (0, type_graphql_1.Arg)('blogId', (type) => type_graphql_1.ID)),
