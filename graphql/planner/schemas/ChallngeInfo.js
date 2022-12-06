@@ -14,6 +14,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
 const Member_1 = __importDefault(require("../../member/schemas/Member"));
+const SharedWith_1 = __importDefault(require("./SharedWith"));
+const TopIngredient_1 = __importDefault(require("./TopIngredient"));
 let ChallengeInfo = class ChallengeInfo {
 };
 __decorate([
@@ -60,6 +62,14 @@ __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", Member_1.default)
 ], ChallengeInfo.prototype, "memberInfo", void 0);
+__decorate([
+    (0, type_graphql_1.Field)((type) => [SharedWith_1.default], { nullable: true }),
+    __metadata("design:type", Array)
+], ChallengeInfo.prototype, "sharedWith", void 0);
+__decorate([
+    (0, type_graphql_1.Field)((type) => [TopIngredient_1.default], { nullable: true }),
+    __metadata("design:type", Array)
+], ChallengeInfo.prototype, "topIngredients", void 0);
 ChallengeInfo = __decorate([
     (0, type_graphql_1.ObjectType)()
 ], ChallengeInfo);

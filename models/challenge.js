@@ -29,13 +29,14 @@ const ChallengeSchema = new mongoose_1.Schema({
     sharedWith: [
         {
             memberId: { type: mongoose_1.Schema.Types.ObjectId, ref: 'User' },
-            hasAccepted: { type: Boolean, default: false },
+            canInviteWithOthers: { type: Boolean, default: false },
+            isDefault: { type: Boolean, default: false },
             blendScore: Number,
         },
     ],
     topIngredients: [
         {
-            ingredientId: { type: mongoose_1.Schema.Types.ObjectId, ref: 'Ingredient' },
+            ingredientId: { type: mongoose_1.Schema.Types.ObjectId, ref: 'BlendIngredient' },
             count: Number,
         },
     ],
