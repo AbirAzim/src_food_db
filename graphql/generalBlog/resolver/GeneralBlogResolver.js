@@ -71,6 +71,8 @@ let GeneralBlogResolver = class GeneralBlogResolver {
             isPublished: false,
         }, { isPublished: true });
         let blog = await generalBlog_1.default.findOne({ _id: blogId });
+        blog.commentsCount = 0;
+        blog.hasInCollection = false;
         return blog;
     }
     async getAgeneralBlogBySlug(slug) {
