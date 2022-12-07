@@ -27,6 +27,10 @@ __decorate([
 __decorate([
     (0, type_graphql_1.Field)(),
     __metadata("design:type", String)
+], GeneralBlog.prototype, "type", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(),
+    __metadata("design:type", String)
 ], GeneralBlog.prototype, "body", void 0);
 __decorate([
     (0, type_graphql_1.Field)((type) => [String]),
@@ -65,9 +69,9 @@ __decorate([
     __metadata("design:type", Number)
 ], GeneralBlog.prototype, "mediaLength", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(),
-    __metadata("design:type", Boolean)
-], GeneralBlog.prototype, "isPublished", void 0);
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], GeneralBlog.prototype, "publishDateString", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", Date)
@@ -84,3 +88,16 @@ GeneralBlog = __decorate([
     (0, type_graphql_1.ObjectType)()
 ], GeneralBlog);
 exports.default = GeneralBlog;
+// title: String!
+//   slug: String!
+//   body: String!
+//   keywords: [String!]
+//   type: String
+//   createdBy: ID
+//   category: String
+//   description: String
+//   coverImage: String
+//   mediaUrl: String
+//   mediaLength: Float
+//   isPublished: Boolean!
+//   publishDateString: String
