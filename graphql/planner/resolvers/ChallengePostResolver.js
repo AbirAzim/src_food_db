@@ -128,72 +128,74 @@ let ChallengePostResolver = class ChallengePostResolver {
         if (String(challenge.memberId) !== invitedBy) {
             return new AppError_1.default('You are not the owner of this challenge', 400);
         }
+        let invite = await InviteForChallenge_1.default.findOne({ challengeId });
         let members = [];
-        for (let i = 0; i < invitedWith.length; i++) {
-            let member = await memberModel_1.default.findOne({
-                email: invitedWith[i],
-            }).select('_id');
-            members.push({
-                memberId: member._id,
-                hasAccepted: false,
-            });
-        }
-        // await UserChallengeModel.findOneAndUpdate(
-        //   {
-        //     _id: challengeId,
-        //   },
-        //   {
-        //     sharedWith: [],
-        //   }
-        // );
-        // for (let i = 0; i < invitedWith.length; i++) {
-        //   let member = await MemberModel.findOne({ email: invitedWith[i] });
-        //   if (!member) {
-        //     console.log('not member');
-        //     continue;
-        //   }
-        //   let challengeInfo = await this.getChallengeInfo(
-        //     String(member._id),
-        //     false,
-        //     '',
-        //     challengeId
-        //   );
-        //   await UserChallengeModel.findOneAndUpdate(
-        //     {
-        //       _id: challengeId,
-        //     },
-        //     {
-        //       $push: {
-        //         sharedWith: {
-        //           memberId: member._id,
-        //           canInviteWithOthers: canInviteWithOthers,
-        //           blendScore: challengeInfo.blendScore,
-        //           hasAccepted: false,
-        //         },
-        //       },
-        //     }
-        //   );
-        // }
-        let myStats = await this.getChallengeInfo(invitedBy, false, '', challengeId);
-        await challenge_1.default.findOneAndUpdate({
-            _id: challengeId,
-        }, {
-            $push: {
-                sharedWith: {
-                    memberId: invitedBy,
-                    canInviteWithOthers: true,
-                    blendScore: Math.round(myStats.blendScore),
-                    hasAccepted: true,
+        if (!invite) {
+            for (let i = 0; i < invitedWith.length; i++) {
+                let member = await memberModel_1.default.findOne({
+                    email: invitedWith[i],
+                }).select('_id');
+                members.push({
+                    memberId: member._id,
+                    hasAccepted: false,
+                });
+            }
+            let myStats = await this.getChallengeInfo(invitedBy, false, '', challengeId);
+            await challenge_1.default.findOneAndUpdate({
+                _id: challengeId,
+            }, {
+                $push: {
+                    sharedWith: {
+                        memberId: invitedBy,
+                        canInviteWithOthers: true,
+                        blendScore: Math.round(myStats.blendScore),
+                        hasAccepted: true,
+                    },
                 },
-            },
-        });
-        // await this.upgradeTopIngredient(challengeId);
-        let inviteChallenge = await InviteForChallenge_1.default.create({
-            challengeId: challengeId,
-            invitedBy: invitedBy,
-            invitedWith: members,
-        });
-        return inviteChallenge._id;
+            });
+            // await this.upgradeTopIngredient(challengeId);
+            let inviteChallenge = await InviteForChallenge_1.default.create({
+                challengeId: challengeId,
+                invitedBy: invitedBy,
+                invitedWith: members,
+            });
+            return inviteChallenge._id;
+        }
+        else {
+            for (let i = 0; i < invitedWith.length; i++) {
+                let member = await memberModel_1.default.findOne({
+                    email: invitedWith[i],
+                }).select('_id');
+                let data = invite.invitedWith.filter((inv) => String(inv.memberId) === String(member._id))[0];
+                if (!data) {
+                    let blendInfo = await this.getChallengeInfo(member._id, false, '', challengeId);
+                    await challenge_1.default.findOneAndUpdate({
+                        _id: challengeId,
+                    }, {
+                        $push: {
+                            sharedWith: {
+                                memberId: invitedBy,
+                                canInviteWithOthers: canInviteWithOthers,
+                                blendScore: Math.round(blendInfo.blendScore),
+                                isDefault: false,
+                            },
+                        },
+                    });
+                    await InviteForChallenge_1.default.findOneAndUpdate({
+                        _id: invite._id,
+                    }, {
+                        $push: {
+                            invitedWith: {
+                                memberId: member._id,
+                                hasAccepted: false,
+                                canInviteWithOthers: canInviteWithOthers,
+                            },
+                        },
+                    });
+                }
+            }
+            return invite._id;
+        }
     }
     async getInviteChallengeInfo(inviteId) {
         let invite = await InviteForChallenge_1.default.findOne({ _id: inviteId })
@@ -411,7 +413,7 @@ let ChallengePostResolver = class ChallengePostResolver {
         }
     }
     async getMyThirtyDaysChallenge(memberId, startDate, token, challengeId) {
-        let challenge = {};
+        let challenge = null;
         let viewOnly = false;
         if (challengeId && token) {
             let check = await this.checkIfChallengeIsGlobal(challengeId, token);
@@ -427,7 +429,7 @@ let ChallengePostResolver = class ChallengePostResolver {
             }
         }
         else {
-            if (challenge) {
+            if (challengeId) {
                 challenge = await challenge_1.default.findOne({ _id: challengeId });
             }
             else {
