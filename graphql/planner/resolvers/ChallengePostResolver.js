@@ -41,6 +41,7 @@ const OrganizeByTypes_1 = __importDefault(require("../../../utils/OrganizeByType
 const OrganizeByTypesForNutrition_1 = __importDefault(require("../../../utils/OrganizeByTypesForNutrition"));
 const GetDailyRecomendedAndUpperLimit_1 = __importDefault(require("../../../utils/GetDailyRecomendedAndUpperLimit"));
 const InviteForChallenge_1 = __importDefault(require("../../../models/InviteForChallenge"));
+const inviteInfo_1 = __importDefault(require("../schemas/inviteInfo"));
 let ChallengePostResolver = class ChallengePostResolver {
     async getIngredientsFromARecipe(recipeId) {
         let recipe = await recipe_1.default.findOne({ _id: recipeId }).populate({
@@ -193,6 +194,18 @@ let ChallengePostResolver = class ChallengePostResolver {
             invitedWith: members,
         });
         return inviteChallenge._id;
+    }
+    async getInviteChallengeInfo(inviteId) {
+        let invite = await InviteForChallenge_1.default.findOne({ _id: inviteId })
+            .populate({
+            path: 'challengeId',
+            select: 'challengeName',
+        })
+            .populate({
+            path: 'invitedBy',
+            select: 'firstName lastName displayName email',
+        });
+        return invite;
     }
     async acceptChallenge(inviteId, memberId) {
         let invite = await InviteForChallenge_1.default.findOne({ _id: inviteId });
@@ -1277,6 +1290,13 @@ __decorate([
         String, Array, Boolean]),
     __metadata("design:returntype", Promise)
 ], ChallengePostResolver.prototype, "inviteToChallenge", null);
+__decorate([
+    (0, type_graphql_1.Query)(() => inviteInfo_1.default),
+    __param(0, (0, type_graphql_1.Arg)('inviteId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], ChallengePostResolver.prototype, "getInviteChallengeInfo", null);
 __decorate([
     (0, type_graphql_1.Mutation)(() => ChallengeAndChallengeDocs_1.default),
     __param(0, (0, type_graphql_1.Arg)('inviteId')),

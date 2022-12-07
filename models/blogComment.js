@@ -7,7 +7,7 @@ const blogCommentSchema = new mongoose_1.Schema({
         required: [true, 'comment name is required'],
     },
     blogId: { type: mongoose_1.SchemaTypes.ObjectId, ref: 'GeneraBlog' },
-    userId: { type: mongoose_1.SchemaTypes.ObjectId, ref: 'Member' },
+    memberId: { type: mongoose_1.SchemaTypes.ObjectId, ref: 'User' },
     createdAt: { type: Date, default: Date.now },
     updatedAt: Date,
 });

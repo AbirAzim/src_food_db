@@ -4,14 +4,14 @@ const mongoose_1 = require("mongoose");
 const inviteChallengeSchema = new mongoose_1.Schema({
     invitedBy: {
         type: mongoose_1.SchemaTypes.ObjectId,
-        ref: 'Member',
+        ref: 'User',
         required: [true, 'MemberId is required'],
     },
     invitedWith: [
         {
             memberId: {
                 type: mongoose_1.SchemaTypes.ObjectId,
-                ref: 'Member',
+                ref: 'User',
             },
             hasAccepted: { type: Boolean, default: false },
             canInviteWithOthers: { type: Boolean, default: false },
