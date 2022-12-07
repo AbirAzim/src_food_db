@@ -181,7 +181,7 @@ let ChallengePostResolver = class ChallengePostResolver {
                 sharedWith: {
                     memberId: invitedBy,
                     canInviteWithOthers: true,
-                    blendScore: myStats.blendScore,
+                    blendScore: Math.round(myStats.blendScore),
                     hasAccepted: true,
                 },
             },
@@ -226,7 +226,7 @@ let ChallengePostResolver = class ChallengePostResolver {
                 sharedWith: {
                     memberId: data.memberId,
                     canInviteWithOthers: data.canInviteWithOthers,
-                    blendScore: challengeInfo.blendScore,
+                    blendScore: Math.round(challengeInfo.blendScore),
                 },
             },
         });
@@ -634,7 +634,7 @@ let ChallengePostResolver = class ChallengePostResolver {
         if (challengeId) {
             challenge = await challenge_1.default.findOne({
                 _id: challengeId,
-            })
+            }, { topIngredients: { $slice: 5 } })
                 .populate({
                 path: 'sharedWith.memberId',
                 select: 'image displayName fistName lastName email',
@@ -642,14 +642,14 @@ let ChallengePostResolver = class ChallengePostResolver {
                 .sort({ blendScore: -1 })
                 .populate({
                 path: 'topIngredients.ingredientId',
-                select: 'ingredientName',
+                select: 'ingredientName featuredImage',
             });
         }
         else {
             challenge = await challenge_1.default.findOne({
                 memberId: memberId,
                 isActive: true,
-            })
+            }, { topIngredients: { $slice: 5 } })
                 .populate({
                 path: 'sharedWith.memberId',
                 select: 'image displayName fistName lastName email',
@@ -657,7 +657,7 @@ let ChallengePostResolver = class ChallengePostResolver {
                 .sort({ blendScore: -1 })
                 .populate({
                 path: 'topIngredients.ingredientId',
-                select: 'ingredientName',
+                select: 'ingredientName featuredImage',
             });
         }
         let challengeDocs = await ChallengePost_2.default.find({
