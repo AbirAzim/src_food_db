@@ -35,6 +35,7 @@ const ThemeChannelResolver_1 = __importDefault(require("../graphql/theme/resolve
 const BannerResolver_1 = __importDefault(require("../graphql/theme/resolvers/BannerResolver"));
 const ShareResolver_1 = __importDefault(require("../graphql/share/resolvers/ShareResolver"));
 const GeneralBlogResolver_1 = __importDefault(require("../graphql/generalBlog/resolver/GeneralBlogResolver"));
+const BlogCommentResolvers_1 = __importDefault(require("../graphql/generalBlog/resolver/BlogCommentResolvers"));
 function getAllResolvers() {
     return [
         FoodResolver_1.default,
@@ -69,6 +70,7 @@ function getAllResolvers() {
         BannerResolver_1.default,
         ShareResolver_1.default,
         GeneralBlogResolver_1.default,
+        BlogCommentResolvers_1.default,
     ];
 }
 exports.default = getAllResolvers;

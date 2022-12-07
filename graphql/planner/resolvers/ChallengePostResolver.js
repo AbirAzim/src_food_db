@@ -244,95 +244,7 @@ let ChallengePostResolver = class ChallengePostResolver {
             },
         });
         await this.upgradeTopIngredient(String(invite.challengeId));
-        let returnData = await this.showInvitedChallenge(memberId, String(invite.challengeId));
-        return returnData;
-    }
-    async showInvitedChallenge(memberId, challengeId) {
-        let startDate = '';
-        let challenge = {};
-        challenge = await challenge_1.default.findOne({
-            _id: challengeId,
-        });
-        let tempDay;
-        if (!startDate || startDate === '') {
-            tempDay = new Date(new Date().toISOString().slice(0, 10));
-            if (challenge.days > 30) {
-                if (challenge.startDate <= tempDay && challenge.endDate >= tempDay) {
-                    //@ts-ignore
-                    let diffTime = Math.abs(tempDay - challenge.startDate);
-                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                    if (diffDays >= 30) {
-                        let StartCount = Math.abs(diffDays - 30) + 1;
-                        let day = challenge.startDate;
-                        tempDay = new Date(day.setDate(day.getDate() + StartCount));
-                    }
-                    else {
-                        tempDay = challenge.startDate;
-                    }
-                }
-                else {
-                    let day = challenge.endDate;
-                    tempDay = new Date(day.setDate(day.getDate() - 30));
-                }
-            }
-            else {
-                tempDay = challenge.startDate;
-            }
-        }
-        else {
-            tempDay = new Date(new Date(startDate).toISOString().slice(0, 10));
-        }
-        let challengeDocs = [];
-        for (let i = 0; i < 30; i++) {
-            let challengeDoc = await ChallengePost_2.default.findOne({
-                memberId: memberId,
-                assignDate: tempDay,
-            })
-                .populate('posts.recipeBlendCategory')
-                .populate('posts.ingredients.ingredientId');
-            if (tempDay > challenge.endDate) {
-                challengeDocs.push({
-                    _id: (0, FormateDate_1.default)(tempDay),
-                    assignDate: new Date(tempDay.setDate(tempDay.getDate() + 0)),
-                    date: new Date(tempDay.setDate(tempDay.getDate() + 0)).getDate(),
-                    dayName: new Date(tempDay.setDate(tempDay.getDate() + 0)).toLocaleString('default', { weekday: 'short' }),
-                    disabled: true,
-                    posts: [],
-                    formattedDate: (0, FormateDate_1.default)(tempDay),
-                });
-                tempDay = new Date(tempDay.setDate(tempDay.getDate() + 1));
-                continue;
-            }
-            if (challengeDoc) {
-                challengeDocs.push({
-                    _id: challengeDoc._id,
-                    images: challengeDoc.images,
-                    assignDate: challengeDoc.assignDate,
-                    date: new Date(challengeDoc.assignDate).getDate(),
-                    dayName: new Date(challengeDoc.assignDate).toLocaleString('default', {
-                        weekday: 'short',
-                    }),
-                    formattedDate: (0, FormateDate_1.default)(challengeDoc.assignDate),
-                    posts: challengeDoc.posts,
-                });
-                tempDay = new Date(tempDay.setDate(tempDay.getDate() + 1));
-                continue;
-            }
-            else {
-                challengeDocs.push({
-                    _id: (0, FormateDate_1.default)(tempDay),
-                    assignDate: new Date(tempDay.setDate(tempDay.getDate() + 0)),
-                    date: new Date(tempDay.setDate(tempDay.getDate() + 0)).getDate(),
-                    dayName: new Date(tempDay.setDate(tempDay.getDate() + 0)).toLocaleString('default', { weekday: 'short' }),
-                    formattedDate: (0, FormateDate_1.default)(tempDay),
-                    posts: [],
-                });
-            }
-            tempDay = new Date(tempDay.setDate(tempDay.getDate() + 1));
-        }
-        let challengeInfoDate = startDate ? startDate : '';
-        let challengeInfo = await this.getChallengeInfo(memberId, true, challengeInfoDate, challenge._id);
-        return { challenge: challengeDocs, challengeInfo: challengeInfo };
+        return invite.challengeId;
     }
     async upgradeTopIngredient(challengeId) {
         let challenge = await challenge_1.default.findOne({
@@ -501,7 +413,7 @@ let ChallengePostResolver = class ChallengePostResolver {
     async getMyThirtyDaysChallenge(memberId, startDate, token, challengeId) {
         let challenge = {};
         let viewOnly = false;
-        if (challengeId) {
+        if (challengeId && token) {
             let check = await this.checkIfChallengeIsGlobal(challengeId, token);
             if (!check) {
                 return new AppError_1.default('you are not authorized', 404);
@@ -515,10 +427,15 @@ let ChallengePostResolver = class ChallengePostResolver {
             }
         }
         else {
-            challenge = await challenge_1.default.findOne({
-                memberId: memberId,
-                isActive: true,
-            });
+            if (challenge) {
+                challenge = await challenge_1.default.findOne({ _id: challengeId });
+            }
+            else {
+                challenge = await challenge_1.default.findOne({
+                    memberId: memberId,
+                    isActive: true,
+                });
+            }
         }
         if (!challenge) {
             return new AppError_1.default('No default challenge found', 404);
@@ -1298,7 +1215,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ChallengePostResolver.prototype, "getInviteChallengeInfo", null);
 __decorate([
-    (0, type_graphql_1.Mutation)(() => ChallengeAndChallengeDocs_1.default),
+    (0, type_graphql_1.Mutation)(() => String),
     __param(0, (0, type_graphql_1.Arg)('inviteId')),
     __param(1, (0, type_graphql_1.Arg)('memberId')),
     __metadata("design:type", Function),
@@ -1306,14 +1223,6 @@ __decorate([
         String]),
     __metadata("design:returntype", Promise)
 ], ChallengePostResolver.prototype, "acceptChallenge", null);
-__decorate([
-    __param(0, (0, type_graphql_1.Arg)('memberId')),
-    __param(1, (0, type_graphql_1.Arg)('challengeId', { nullable: true })),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String,
-        String]),
-    __metadata("design:returntype", Promise)
-], ChallengePostResolver.prototype, "showInvitedChallenge", null);
 __decorate([
     (0, type_graphql_1.Query)(() => String),
     __param(0, (0, type_graphql_1.Arg)('challengeId')),
