@@ -30,11 +30,6 @@ let ChallengeResolver = class ChallengeResolver {
         let userChallenges = await challenge_1.default.find({
             memberId: data.memberId,
         });
-        // var Difference_In_Time = Math.abs(
-        //   data.startDate.getTime() - data.endDate.getTime()
-        // );
-        // var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
-        // data.days = Difference_In_Days;
         if (userChallenges.length === 0) {
             let modifiedData = data;
             modifiedData.isActive = true;
@@ -44,6 +39,42 @@ let ChallengeResolver = class ChallengeResolver {
         let userChallenge = await challenge_1.default.create(data);
         return userChallenge._id;
     }
+    async activateChallenge(memberId, challengeId, previousDefaultChallengeId) {
+        let previousDefaultChallenge = await challenge_1.default.findOne({
+            _id: previousDefaultChallengeId,
+        });
+        if (String(previousDefaultChallenge.memberId) === memberId) {
+            await challenge_1.default.updateMany({
+                memberId: memberId,
+            }, {
+                isActive: false,
+            });
+        }
+        else {
+            await challenge_1.default.findOneAndUpdate({
+                _id: previousDefaultChallengeId,
+                'sharedWith.memberId': memberId,
+            }, {
+                $set: { 'sharedWith.$.isDefault': false },
+            });
+        }
+        let userChallenge = await challenge_1.default.findOne({ _id: challengeId });
+        if (String(userChallenge.memberId) === memberId) {
+            await challenge_1.default.findOneAndUpdate({ _id: challengeId }, {
+                isActive: true,
+            });
+        }
+        else {
+            await challenge_1.default.findOneAndUpdate({
+                _id: challengeId,
+                'sharedWith.memberId': memberId,
+            }, {
+                $set: { 'sharedWith.$.isDefault': true },
+            });
+            await memberModel_1.default.findOneAndUpdate({ _id: memberId }, { defaultChallengeId: challengeId });
+        }
+        return 'done';
+    }
     async editUserChallenge(data) {
         if (data.isActive) {
             await challenge_1.default.updateMany({
@@ -52,33 +83,46 @@ let ChallengeResolver = class ChallengeResolver {
                 isActive: false,
             });
         }
-        let userChallenge = await challenge_1.default.findOneAndUpdate({ _id: data.challengeId }, data, { new: true });
-        return userChallenge._id;
-    }
-    async getMyChallengeList(memberId) {
-        let userChallenges = await challenge_1.default.find({
-            memberId: memberId,
-        });
-        let list = [];
-        for (let i = 0; i < userChallenges.length; i++) {
-            list.push({
-                _id: userChallenges[i]._id,
-                challengeName: userChallenges[i].challengeName,
-                memberId: userChallenges[i].memberId,
-                description: userChallenges[i].description,
-                notification: userChallenges[i].notification,
-                startingDate: userChallenges[i].startDate.toLocaleString('default', {
+        let modifiedData = data;
+        if (data.startDate) {
+            modifiedData.startingDate =
+                data.startDate.toLocaleString('default', {
                     month: 'short',
                 }) +
                     ' ' +
-                    userChallenges[i].startDate.getDate() +
+                    data.startDate.getDate() +
                     ', ' +
-                    userChallenges[i].startDate.getFullYear(),
-                startDate: (0, FormateDate_1.default)(userChallenges[i].startDate),
-                endDate: (0, FormateDate_1.default)(userChallenges[i].endDate),
-                days: userChallenges[i].days,
-                isActive: userChallenges[i].isActive,
-            });
+                    data.startDate.getFullYear();
+            modifiedData.startDateString = (0, FormateDate_1.default)(data.startDate);
+        }
+        if (data.endDate) {
+            modifiedData.endDateString = (0, FormateDate_1.default)(data.endDate);
+        }
+        let userChallenge = await challenge_1.default.findOneAndUpdate({ _id: data.challengeId }, modifiedData, { new: true });
+        return userChallenge._id;
+    }
+    async getMyChallengeList(memberId) {
+        let list = [];
+        let userChallenges = await challenge_1.default.find({
+            memberId: memberId,
+        }).select('-sharedWith -topIngredients');
+        for (let i = 0; i < userChallenges.length; i++) {
+            let userChallenge = userChallenges[i];
+            userChallenge.hasCreatedByMe = true;
+            list.push(userChallenge);
+        }
+        let sharedChallenges = await challenge_1.default.find({
+            memberId: { $ne: memberId.toString() },
+            'sharedWith.memberId': {
+                $in: memberId.toString(),
+            },
+        }).select('-isActive -topIngredients');
+        for (let i = 0; i < sharedChallenges.length; i++) {
+            let sharedChallenge = sharedChallenges[i];
+            let sharedWith = sharedChallenge.sharedWith.filter((sw) => String(sw.memberId) === memberId)[0];
+            sharedChallenge.hasCreatedByMe = false;
+            sharedChallenge.isActive = sharedWith.isDefault;
+            list.push(sharedChallenge);
         }
         return list;
     }
@@ -102,29 +146,6 @@ let ChallengeResolver = class ChallengeResolver {
         let userChallenge = await challenge_1.default.findOne({
             _id: challengeId,
         });
-        let data = {
-            _id: userChallenge._id,
-            challengeName: userChallenge.challengeName,
-            memberId: userChallenge.memberId,
-            description: userChallenge.description,
-            notification: userChallenge.notification,
-            startDate: userChallenge.startDate.toLocaleString('default', {
-                month: 'short',
-            }) +
-                ' ' +
-                userChallenge.start.getDate() +
-                ', ' +
-                userChallenge.start.getFullYear(),
-            endDate: userChallenge.endDate.toLocaleString('default', {
-                month: 'short',
-            }) +
-                ' ' +
-                userChallenge.endDate.getDate() +
-                ', ' +
-                userChallenge.endDate.getFullYear(),
-            days: userChallenge.days,
-            isActive: userChallenge.isActive,
-        };
         return userChallenge;
     }
     async deleteUserChallenge(challengeId) {
@@ -151,6 +172,17 @@ __decorate([
     __metadata("design:paramtypes", [CreateUserChallenge_1.default]),
     __metadata("design:returntype", Promise)
 ], ChallengeResolver.prototype, "createUserChallenge", null);
+__decorate([
+    (0, type_graphql_1.Mutation)(() => String),
+    __param(0, (0, type_graphql_1.Arg)('memberId')),
+    __param(1, (0, type_graphql_1.Arg)('challengeId')),
+    __param(2, (0, type_graphql_1.Arg)('previousDefaultChallengeId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String,
+        String,
+        String]),
+    __metadata("design:returntype", Promise)
+], ChallengeResolver.prototype, "activateChallenge", null);
 __decorate([
     (0, type_graphql_1.Mutation)(() => String),
     __param(0, (0, type_graphql_1.Arg)('data')),

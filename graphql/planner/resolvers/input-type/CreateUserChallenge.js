@@ -40,10 +40,6 @@ __decorate([
     (0, type_graphql_1.Field)(),
     __metadata("design:type", Number)
 ], CreateUserChallenge.prototype, "days", void 0);
-__decorate([
-    (0, type_graphql_1.Field)({ nullable: true }),
-    __metadata("design:type", Boolean)
-], CreateUserChallenge.prototype, "isActive", void 0);
 CreateUserChallenge = __decorate([
     (0, type_graphql_1.InputType)()
 ], CreateUserChallenge);

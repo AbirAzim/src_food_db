@@ -168,19 +168,6 @@ let ChallengePostResolver = class ChallengePostResolver {
                 }).select('_id');
                 let data = invite.invitedWith.filter((inv) => String(inv.memberId) === String(member._id))[0];
                 if (!data) {
-                    let blendInfo = await this.getChallengeInfo(member._id, false, '', challengeId);
-                    await challenge_1.default.findOneAndUpdate({
-                        _id: challengeId,
-                    }, {
-                        $push: {
-                            sharedWith: {
-                                memberId: invitedBy,
-                                canInviteWithOthers: canInviteWithOthers,
-                                blendScore: Math.round(blendInfo.blendScore),
-                                isDefault: false,
-                            },
-                        },
-                    });
                     await InviteForChallenge_1.default.findOneAndUpdate({
                         _id: invite._id,
                     }, {
@@ -412,6 +399,30 @@ let ChallengePostResolver = class ChallengePostResolver {
             return false;
         }
     }
+    async checkIfChallengeIsInvitedWithMe(memberId) {
+        let member = await memberModel_1.default.findOne({ _id: memberId }).select('defaultChallengeId');
+        if (!member.defaultChallengeId) {
+            return null;
+        }
+        let challengeId = String(member.defaultChallengeId);
+        let userChallenge = await challenge_1.default.findOne({
+            _id: challengeId,
+            'sharedWith.memberId': {
+                $in: memberId.toString(),
+            },
+        }).select('sharedWith');
+        if (!userChallenge) {
+            return null;
+        }
+        let sharedWith = userChallenge.sharedWith.filter((sw) => String(sw.memberId) === memberId)[0];
+        if (!sharedWith) {
+            return null;
+        }
+        if (!sharedWith.isDefault) {
+            return null;
+        }
+        return userChallenge._id;
+    }
     async getMyThirtyDaysChallenge(memberId, startDate, token, challengeId) {
         let challenge = null;
         let viewOnly = false;
@@ -437,6 +448,14 @@ let ChallengePostResolver = class ChallengePostResolver {
                     memberId: memberId,
                     isActive: true,
                 });
+                if (!challenge) {
+                    let inviteChallengeId = await this.checkIfChallengeIsInvitedWithMe(memberId);
+                    if (inviteChallengeId) {
+                        challenge = await challenge_1.default.findOne({
+                            _id: inviteChallengeId,
+                        });
+                    }
+                }
             }
         }
         if (!challenge) {
@@ -581,16 +600,19 @@ let ChallengePostResolver = class ChallengePostResolver {
             challenge = await challenge_1.default.findOne({
                 memberId: memberId,
                 isActive: true,
-            }, { topIngredients: { $slice: 5 } })
+            }, { topIngredients: { $slice: 5 }, sharedWith: { $slice: 5 } })
                 .populate({
                 path: 'sharedWith.memberId',
                 select: 'image displayName fistName lastName email',
             })
-                .sort({ blendScore: -1 })
                 .populate({
                 path: 'topIngredients.ingredientId',
                 select: 'ingredientName featuredImage',
             });
+        }
+        let shareWithData = [];
+        if (challenge.sharedWith.length > 1) {
+            shareWithData = challenge.sharedWith.sort((m1, m2) => m2.blendScore - m1.blendScore);
         }
         let challengeDocs = await ChallengePost_2.default.find({
             memberId: memberId,
@@ -629,7 +651,7 @@ let ChallengePostResolver = class ChallengePostResolver {
                     displayName: memberInfo.displayName,
                     image: memberInfo.image,
                 },
-                sharedWith: challenge.sharedWith,
+                sharedWith: shareWithData,
                 topIngredients: challenge.topIngredients,
             };
         }
@@ -687,7 +709,7 @@ let ChallengePostResolver = class ChallengePostResolver {
                 displayName: memberInfo.displayName,
                 image: memberInfo.image,
             },
-            sharedWith: challenge.sharedWith,
+            sharedWith: shareWithData,
             topIngredients: challenge.topIngredients,
         };
         return challengeInfo;

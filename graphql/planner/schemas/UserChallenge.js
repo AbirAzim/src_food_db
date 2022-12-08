@@ -35,23 +35,27 @@ __decorate([
 __decorate([
     (0, type_graphql_1.Field)((type) => String),
     __metadata("design:type", String)
-], UserChallenge.prototype, "startDate", void 0);
+], UserChallenge.prototype, "startDateString", void 0);
 __decorate([
-    (0, type_graphql_1.Field)((type) => String),
+    (0, type_graphql_1.Field)((type) => String, { nullable: true }),
     __metadata("design:type", String)
 ], UserChallenge.prototype, "startingDate", void 0);
 __decorate([
     (0, type_graphql_1.Field)((type) => String),
     __metadata("design:type", String)
-], UserChallenge.prototype, "endDate", void 0);
+], UserChallenge.prototype, "endDateString", void 0);
 __decorate([
     (0, type_graphql_1.Field)(),
     __metadata("design:type", Number)
 ], UserChallenge.prototype, "days", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", Boolean)
 ], UserChallenge.prototype, "isActive", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(),
+    __metadata("design:type", Boolean)
+], UserChallenge.prototype, "hasCreatedByMe", void 0);
 UserChallenge = __decorate([
     (0, type_graphql_1.ObjectType)()
 ], UserChallenge);
