@@ -34,7 +34,8 @@ let BlogCommentsResolver = class BlogCommentsResolver {
             memberId: user,
         };
     }
-    async editWikiComment(data) {
+    async editBlogComment(data) {
+        let user = await memberModel_1.default.findOne({ _id: data.memberId });
         let blogComment = await blogComment_1.default.findOne({ _id: data.editId });
         if (!blogComment) {
             return new AppError_1.default('Comment not found', 404);
@@ -49,19 +50,29 @@ let BlogCommentsResolver = class BlogCommentsResolver {
         }, {
             new: true,
         });
-        return editedComment;
+        return {
+            ...editedComment._doc,
+            memberId: user,
+        };
     }
     async getAllCommentsForABlog(blogId) {
         let comments = await blogComment_1.default.find({
             blogId,
         }).populate({
-            path: 'userId',
+            path: 'memberId',
             model: 'User',
             select: 'displayName email firsName lastName',
         });
         return comments;
     }
-    async removeABlogComment(commentId, userId) {
+    async removeABlogComment(commentId, memberId) {
+        let blogComment = await blogComment_1.default.findOne({ _id: commentId });
+        if (!blogComment) {
+            return new AppError_1.default('Comment not found', 404);
+        }
+        if (String(memberId) !== String(blogComment.memberId)) {
+            return new AppError_1.default('You are not the owner of this comment', 400);
+        }
         await blogComment_1.default.findOneAndDelete({ _id: commentId });
         return 'success';
     }
@@ -79,7 +90,7 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [EditBlogComment_1.default]),
     __metadata("design:returntype", Promise)
-], BlogCommentsResolver.prototype, "editWikiComment", null);
+], BlogCommentsResolver.prototype, "editBlogComment", null);
 __decorate([
     (0, type_graphql_1.Query)(() => [BlogComment_1.default]),
     __param(0, (0, type_graphql_1.Arg)('blogId')),
@@ -90,7 +101,7 @@ __decorate([
 __decorate([
     (0, type_graphql_1.Mutation)(() => String),
     __param(0, (0, type_graphql_1.Arg)('commentId')),
-    __param(1, (0, type_graphql_1.Arg)('userId')),
+    __param(1, (0, type_graphql_1.Arg)('memberId')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String,
         String]),

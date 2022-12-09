@@ -423,6 +423,43 @@ let ChallengePostResolver = class ChallengePostResolver {
         }
         return userChallenge._id;
     }
+    async getLastSevenDaysChallenge(memberId, startDate) {
+        let tempDay = new Date(new Date(startDate).toISOString().slice(0, 10));
+        let challengeDocs = [];
+        for (let i = 0; i < 7; i++) {
+            let challengeDoc = await ChallengePost_2.default.findOne({
+                memberId: memberId,
+                assignDate: tempDay,
+            }).populate('posts.recipeBlendCategory');
+            if (challengeDoc) {
+                challengeDocs.push({
+                    _id: challengeDoc._id,
+                    images: challengeDoc.images,
+                    assignDate: challengeDoc.assignDate,
+                    date: new Date(challengeDoc.assignDate).getDate(),
+                    dayName: new Date(challengeDoc.assignDate).toLocaleString('default', {
+                        weekday: 'short',
+                    }),
+                    formattedDate: (0, FormateDate_1.default)(challengeDoc.assignDate),
+                    posts: challengeDoc.posts,
+                });
+                tempDay = new Date(tempDay.setDate(tempDay.getDate() + 1));
+                continue;
+            }
+            else {
+                challengeDocs.push({
+                    _id: (0, FormateDate_1.default)(tempDay),
+                    assignDate: new Date(tempDay.setDate(tempDay.getDate() + 0)),
+                    date: new Date(tempDay.setDate(tempDay.getDate() + 0)).getDate(),
+                    dayName: new Date(tempDay.setDate(tempDay.getDate() + 0)).toLocaleString('default', { weekday: 'short' }),
+                    formattedDate: (0, FormateDate_1.default)(tempDay),
+                    posts: [],
+                });
+            }
+            tempDay = new Date(tempDay.setDate(tempDay.getDate() + 1));
+        }
+        return challengeDocs;
+    }
     async getMyThirtyDaysChallenge(memberId, startDate, token, challengeId) {
         let challenge = null;
         let viewOnly = false;
@@ -1270,6 +1307,14 @@ __decorate([
     __metadata("design:paramtypes", [EditChallengePost_1.default]),
     __metadata("design:returntype", Promise)
 ], ChallengePostResolver.prototype, "editAChallengePost", null);
+__decorate([
+    (0, type_graphql_1.Query)(() => [Challenge_1.default]),
+    __param(0, (0, type_graphql_1.Arg)('memberId')),
+    __param(1, (0, type_graphql_1.Arg)('startDate', { nullable: true })),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:returntype", Promise)
+], ChallengePostResolver.prototype, "getLastSevenDaysChallenge", null);
 __decorate([
     (0, type_graphql_1.Query)(() => ChallengeAndChallengeDocs_1.default),
     __param(0, (0, type_graphql_1.Arg)('memberId')),

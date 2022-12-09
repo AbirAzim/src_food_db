@@ -17,6 +17,10 @@ const Member_1 = __importDefault(require("../../member/schemas/Member"));
 let BlogComment = class BlogComment {
 };
 __decorate([
+    (0, type_graphql_1.Field)((type) => type_graphql_1.ID),
+    __metadata("design:type", String)
+], BlogComment.prototype, "_id", void 0);
+__decorate([
     (0, type_graphql_1.Field)(),
     __metadata("design:type", String)
 ], BlogComment.prototype, "comment", void 0);
