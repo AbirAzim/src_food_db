@@ -424,6 +424,23 @@ let ChallengePostResolver = class ChallengePostResolver {
         return userChallenge._id;
     }
     async getLastSevenDaysChallenge(memberId, startDate) {
+        let challenge = null;
+        let viewOnly = false;
+        challenge = await challenge_1.default.findOne({
+            memberId: memberId,
+            isActive: true,
+        });
+        if (!challenge) {
+            let inviteChallengeId = await this.checkIfChallengeIsInvitedWithMe(memberId);
+            if (inviteChallengeId) {
+                challenge = await challenge_1.default.findOne({
+                    _id: inviteChallengeId,
+                });
+            }
+        }
+        if (!challenge) {
+            return new AppError_1.default('No default challenge found', 404);
+        }
         let tempDay = new Date(new Date(startDate).toISOString().slice(0, 10));
         let challengeDocs = [];
         for (let i = 0; i < 7; i++) {
@@ -458,7 +475,8 @@ let ChallengePostResolver = class ChallengePostResolver {
             }
             tempDay = new Date(tempDay.setDate(tempDay.getDate() + 1));
         }
-        return challengeDocs;
+        let challengeInfo = await this.getChallengeInfo(memberId, viewOnly, '', challenge._id);
+        return { challenge: challengeDocs, challengeInfo: challengeInfo };
     }
     async getMyThirtyDaysChallenge(memberId, startDate, token, challengeId) {
         let challenge = null;
@@ -1308,7 +1326,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ChallengePostResolver.prototype, "editAChallengePost", null);
 __decorate([
-    (0, type_graphql_1.Query)(() => [Challenge_1.default]),
+    (0, type_graphql_1.Query)(() => ChallengeAndChallengeDocs_1.default),
     __param(0, (0, type_graphql_1.Arg)('memberId')),
     __param(1, (0, type_graphql_1.Arg)('startDate', { nullable: true })),
     __metadata("design:type", Function),
