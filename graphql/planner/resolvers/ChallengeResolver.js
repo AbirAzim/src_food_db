@@ -40,23 +40,25 @@ let ChallengeResolver = class ChallengeResolver {
         return userChallenge._id;
     }
     async activateChallenge(memberId, challengeId, previousDefaultChallengeId) {
-        let previousDefaultChallenge = await challenge_1.default.findOne({
-            _id: previousDefaultChallengeId,
-        });
-        if (String(previousDefaultChallenge.memberId) === memberId) {
-            await challenge_1.default.updateMany({
-                memberId: memberId,
-            }, {
-                isActive: false,
-            });
-        }
-        else {
-            await challenge_1.default.findOneAndUpdate({
+        if (previousDefaultChallengeId) {
+            let previousDefaultChallenge = await challenge_1.default.findOne({
                 _id: previousDefaultChallengeId,
-                'sharedWith.memberId': memberId,
-            }, {
-                $set: { 'sharedWith.$.isDefault': false },
             });
+            if (String(previousDefaultChallenge.memberId) === memberId) {
+                await challenge_1.default.updateMany({
+                    memberId: memberId,
+                }, {
+                    isActive: false,
+                });
+            }
+            else {
+                await challenge_1.default.findOneAndUpdate({
+                    _id: previousDefaultChallengeId,
+                    'sharedWith.memberId': memberId,
+                }, {
+                    $set: { 'sharedWith.$.isDefault': false },
+                });
+            }
         }
         let userChallenge = await challenge_1.default.findOne({ _id: challengeId });
         if (String(userChallenge.memberId) === memberId) {
@@ -176,7 +178,7 @@ __decorate([
     (0, type_graphql_1.Mutation)(() => String),
     __param(0, (0, type_graphql_1.Arg)('memberId')),
     __param(1, (0, type_graphql_1.Arg)('challengeId')),
-    __param(2, (0, type_graphql_1.Arg)('previousDefaultChallengeId')),
+    __param(2, (0, type_graphql_1.Arg)('previousDefaultChallengeId', { nullable: true })),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String,
         String,

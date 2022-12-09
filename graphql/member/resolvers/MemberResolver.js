@@ -248,6 +248,10 @@ let MemberResolver = class MemberResolver {
         let users = await memberModel_1.default.find().populate('configuration');
         return users;
     }
+    async getAllusersForClient() {
+        let users = await memberModel_1.default.find().select('firstName lastName displayName email');
+        return users;
+    }
     async removeAUserById(userId) {
         await memberModel_1.default.findByIdAndRemove(userId);
         return 'successfully Removed';
@@ -363,6 +367,12 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], MemberResolver.prototype, "getAllusers", null);
+__decorate([
+    (0, type_graphql_1.Query)(() => [Member_1.default]),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], MemberResolver.prototype, "getAllusersForClient", null);
 __decorate([
     (0, type_graphql_1.Mutation)(() => String),
     __param(0, (0, type_graphql_1.Arg)('userId')),
