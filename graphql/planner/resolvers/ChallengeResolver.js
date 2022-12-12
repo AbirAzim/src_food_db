@@ -78,6 +78,12 @@ let ChallengeResolver = class ChallengeResolver {
         return 'done';
     }
     async editUserChallenge(data) {
+        let userChallengeValid = await challenge_1.default.findOne({
+            _id: data.challengeId,
+        }).select('memberId');
+        if (String(data.memberId) !== String(userChallengeValid.memberId)) {
+            return new AppError_1.default('you are not authorized to update', 401);
+        }
         if (data.isActive) {
             await challenge_1.default.updateMany({
                 memberId: data.memberId,
@@ -178,7 +184,7 @@ __decorate([
     (0, type_graphql_1.Mutation)(() => String),
     __param(0, (0, type_graphql_1.Arg)('memberId')),
     __param(1, (0, type_graphql_1.Arg)('challengeId')),
-    __param(2, (0, type_graphql_1.Arg)('previousDefaultChallengeId', { nullable: true })),
+    __param(2, (0, type_graphql_1.Arg)('previousDefaultChallengeId')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String,
         String,

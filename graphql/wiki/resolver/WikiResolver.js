@@ -960,7 +960,7 @@ let WikiResolver = class WikiResolver {
             return new AppError_1.default('bookmarkId is null and remove is undefiend', 401);
         }
         let wiki = await wiki_1.default.findOne({ _id: wikiId }).select('ingredientBookmarkList nutrientBookmarkList');
-        // if (!(type === 'Nutrient') || !(type === 'Ingredient')) {
+        // if (!(type === 'Nutrient') || !(type === 'Ingredient')) {801930
         //   return new AppError('Invalid type for bookmarks', 401);
         // }
         if (type === 'Nutrient') {

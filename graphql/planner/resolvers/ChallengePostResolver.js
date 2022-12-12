@@ -196,8 +196,16 @@ let ChallengePostResolver = class ChallengePostResolver {
         });
         return invite;
     }
-    async acceptChallenge(inviteId, memberId) {
+    async acceptChallenge(inviteId, memberId, currentDate) {
         let invite = await InviteForChallenge_1.default.findOne({ _id: inviteId });
+        let tempDay = new Date(new Date(currentDate).toISOString().slice(0, 10));
+        let userChallenge = await challenge_1.default.findOne({
+            _id: invite.challengeId,
+        }).select('startDate');
+        let alreadyStarted = tempDay < userChallenge.startDate;
+        if (!alreadyStarted) {
+            return new AppError_1.default('Challenge already Started', 400);
+        }
         if (!invite) {
             return new AppError_1.default('Invalid invite', 400);
         }
@@ -1297,9 +1305,10 @@ __decorate([
     (0, type_graphql_1.Mutation)(() => String),
     __param(0, (0, type_graphql_1.Arg)('inviteId')),
     __param(1, (0, type_graphql_1.Arg)('memberId')),
+    __param(2, (0, type_graphql_1.Arg)('currentDate')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String,
-        String]),
+        String, String]),
     __metadata("design:returntype", Promise)
 ], ChallengePostResolver.prototype, "acceptChallenge", null);
 __decorate([

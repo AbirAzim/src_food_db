@@ -28,6 +28,12 @@ const GeneraBlogSchema = new mongoose_1.Schema({
     isPublished: Boolean,
     publishDate: Date,
     createdBy: { type: mongoose_1.SchemaTypes.ObjectId, ref: 'Admin' },
+    collections: [
+        {
+            type: mongoose_1.Schema.Types.ObjectId,
+            ref: 'AdminCollection',
+        },
+    ],
 });
 const GeneralBlog = (0, mongoose_1.model)('GeneraBlog', GeneraBlogSchema);
 exports.default = GeneralBlog;
