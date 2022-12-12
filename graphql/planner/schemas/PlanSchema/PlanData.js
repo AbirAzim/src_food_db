@@ -26,8 +26,8 @@ __decorate([
 ], PlanData.prototype, "recipes", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
-    __metadata("design:type", String)
-], PlanData.prototype, "assignDateString", void 0);
+    __metadata("design:type", Number)
+], PlanData.prototype, "day", void 0);
 PlanData = __decorate([
     (0, type_graphql_1.ObjectType)()
 ], PlanData);

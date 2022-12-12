@@ -18,8 +18,8 @@ __decorate([
 ], CreatePlanData.prototype, "recipes", void 0);
 __decorate([
     (0, type_graphql_1.Field)(),
-    __metadata("design:type", String)
-], CreatePlanData.prototype, "assignDateString", void 0);
+    __metadata("design:type", Number)
+], CreatePlanData.prototype, "day", void 0);
 CreatePlanData = __decorate([
     (0, type_graphql_1.InputType)()
 ], CreatePlanData);

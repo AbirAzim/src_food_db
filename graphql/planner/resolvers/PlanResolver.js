@@ -30,13 +30,6 @@ let PlanResolver = class PlanResolver {
         if (input.endDateString) {
             myPlan.endDate = new Date(new Date(input.endDateString.toString()).toISOString().slice(0, 10));
         }
-        myPlan.planData = input.planData.map((pd) => {
-            return {
-                recipes: pd.recipes,
-                assignDate: new Date(new Date(pd.assignDateString.toString()).toISOString().slice(0, 10)),
-                assignDateString: pd.assignDateString,
-            };
-        });
         //TODO
         myPlan.isGlobal = true;
         await Plan_1.default.create(myPlan);
@@ -57,15 +50,6 @@ let PlanResolver = class PlanResolver {
             myPlan.endDate = new Date(new Date(input.editableObject.endDateString.toString())
                 .toISOString()
                 .slice(0, 10));
-        }
-        if (input.editableObject.planData) {
-            myPlan.planData = input.editableObject.planData.map((pd) => {
-                return {
-                    recipes: pd.recipes,
-                    assignDate: new Date(new Date(pd.assignDateString.toString()).toISOString().slice(0, 10)),
-                    assignDateString: pd.assignDateString,
-                };
-            });
         }
         myPlan.updatedAt = Date.now();
         console.log(myPlan);

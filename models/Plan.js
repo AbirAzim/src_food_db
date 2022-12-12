@@ -16,8 +16,7 @@ const PlanSchema = new mongoose_1.Schema({
     planData: [
         {
             recipes: [{ type: mongoose_1.SchemaTypes.ObjectId, ref: 'Recipe' }],
-            assignDate: Date,
-            assignDateString: String,
+            day: Number,
         },
     ],
     createdAt: { type: Date, default: Date.now() },
