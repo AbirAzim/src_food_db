@@ -65,7 +65,34 @@ let PlanResolver = class PlanResolver {
     async getAPlan(planId) {
         let plan = await Plan_1.default.findOne({
             _id: planId,
-        }).populate('planData.recipes');
+        }).populate({
+            path: 'planData.recipes',
+            populate: [
+                {
+                    path: 'ingredients',
+                },
+                {
+                    path: 'defaultVersion',
+                    populate: {
+                        path: 'ingredients.ingredientId',
+                        model: 'BlendIngredient',
+                        select: 'ingredientName',
+                    },
+                    select: 'postfixTitle ingredients',
+                },
+                {
+                    path: 'userId',
+                    model: 'User',
+                    select: '_id displayName image firstName lastName email',
+                },
+                {
+                    path: 'brand',
+                },
+                {
+                    path: 'recipeBlendCategory',
+                },
+            ],
+        });
         return plan;
     }
     async deletePlan(planId, memberId) {
