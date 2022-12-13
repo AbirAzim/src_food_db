@@ -28,6 +28,7 @@ const PlannerRecipe_1 = __importDefault(require("../../planner/schemas/PlannerRe
 const PlannerWithRecipes_1 = __importDefault(require("../schemas/PlannerWithRecipes"));
 const AppError_1 = __importDefault(require("../../../utils/AppError"));
 const MovePlanner_1 = __importDefault(require("./input-type/MovePlanner"));
+const FormateDate_1 = __importDefault(require("../../../utils/FormateDate"));
 let PlannerResolver = class PlannerResolver {
     async createPlanner(data) {
         let isoDate = new Date(data.assignDate).toISOString();
@@ -99,37 +100,58 @@ let PlannerResolver = class PlannerResolver {
         return 'Planner recipe removed';
     }
     async getPlannerByDates(startDate, endDate, userId) {
-        let startDateISO = new Date(startDate).toISOString();
-        let endDateISO = new Date(endDate).toISOString();
-        let planners = await Planner_1.default.find({
-            memberId: userId,
-            recipes: { $ne: [] },
-            assignDate: { $gte: startDateISO, $lte: endDateISO },
-        })
-            .populate({
-            path: 'recipes',
-            populate: [
-                { path: 'recipeBlendCategory' },
-                { path: 'brand' },
-                {
-                    path: 'defaultVersion',
-                    model: 'RecipeVersion',
-                    populate: {
+        let startDateISO = new Date(startDate);
+        let endDateISO = new Date(endDate);
+        let days = await this.getDifferenceInDays(startDateISO, endDateISO);
+        let planners = [];
+        let tempDay = startDateISO;
+        for (let i = 0; i <= Number(days); i++) {
+            let planner = await Planner_1.default.findOne({
+                memberId: userId,
+                recipes: { $ne: [] },
+                assignDate: tempDay,
+            })
+                .populate({
+                path: 'recipes',
+                populate: [
+                    { path: 'recipeBlendCategory' },
+                    { path: 'brand' },
+                    {
+                        path: 'defaultVersion',
+                        model: 'RecipeVersion',
+                        populate: {
+                            path: 'ingredients.ingredientId',
+                            model: 'BlendIngredient',
+                            select: 'ingredientName',
+                        },
+                        select: 'postfixTitle',
+                    },
+                    {
                         path: 'ingredients.ingredientId',
                         model: 'BlendIngredient',
-                        select: 'ingredientName',
                     },
-                    select: 'postfixTitle',
-                },
-                {
-                    path: 'ingredients.ingredientId',
-                    model: 'BlendIngredient',
-                },
-            ],
-        })
-            .sort({ assignDate: 1 })
-            .lean();
+                ],
+            })
+                .sort({ assignDate: 1 })
+                .lean();
+            if (planner) {
+                planners.push(planner);
+            }
+            else {
+                planners.push({
+                    _id: new mongoose_1.default.mongo.ObjectId(),
+                    memberId: userId,
+                    recipes: [],
+                    formatedDate: (0, FormateDate_1.default)(tempDay),
+                });
+            }
+            tempDay = new Date(tempDay.setDate(tempDay.getDate() + 1));
+        }
         return planners;
+    }
+    async getDifferenceInDays(date1, date2) {
+        const diffInMs = Math.abs(date2 - date1);
+        return diffInMs / (1000 * 60 * 60 * 24);
     }
     async clearPlannerByDates(startDate, endDate, userId) {
         let startDateISO = new Date(startDate).toISOString();
@@ -367,7 +389,7 @@ __decorate([
 __decorate([
     (0, type_graphql_1.Query)(() => [PlannerWithRecipes_1.default]),
     __param(0, (0, type_graphql_1.Arg)('startDate')),
-    __param(1, (0, type_graphql_1.Arg)('endDate', { nullable: true })),
+    __param(1, (0, type_graphql_1.Arg)('endDate')),
     __param(2, (0, type_graphql_1.Arg)('userId')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, String, String]),
