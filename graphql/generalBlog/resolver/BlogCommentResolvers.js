@@ -61,7 +61,7 @@ let BlogCommentsResolver = class BlogCommentsResolver {
         }).populate({
             path: 'memberId',
             model: 'User',
-            select: 'displayName email firsName lastName',
+            select: 'displayName email firstName lastName image',
         });
         return comments;
     }

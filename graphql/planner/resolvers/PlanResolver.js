@@ -21,6 +21,8 @@ const Plan_1 = __importDefault(require("../../../models/Plan"));
 const EditPlan_1 = __importDefault(require("./input-type/planInput/EditPlan"));
 const AppError_1 = __importDefault(require("../../../utils/AppError"));
 const Plan_2 = __importDefault(require("../schemas/PlanSchema/Plan"));
+const recipe_1 = __importDefault(require("../../../models/recipe"));
+const blendIngredient_1 = __importDefault(require("../../../models/blendIngredient"));
 let PlanResolver = class PlanResolver {
     async createAPlan(input) {
         let myPlan = input;
@@ -93,7 +95,84 @@ let PlanResolver = class PlanResolver {
                 },
             ],
         });
+        let recipeCategories = [];
+        let recipes = [];
+        for (let i = 0; i < plan.planData.length; i++) {
+            if (plan.planData[i].recipes.length > 0) {
+                for (let j = 0; j < plan.planData[i].recipes.length; j++) {
+                    recipes.push(plan.planData[i].recipes[j]._id);
+                    recipeCategories.push({
+                        _id: plan.planData[i].recipes[j].recipeBlendCategory._id,
+                        name: plan.planData[i].recipes[j].recipeBlendCategory.name,
+                    });
+                }
+            }
+        }
+        await this.getRecipeCategoryPercentage(recipeCategories);
+        await this.getIngredientsStats(recipes);
         return plan;
+    }
+    async getIngredientsStats(recipes) {
+        let ingredients = await recipe_1.default.aggregate([
+            {
+                $match: {
+                    _id: {
+                        $in: recipes,
+                    },
+                },
+            },
+            {
+                $unwind: '$ingredients',
+            },
+            {
+                $group: {
+                    _id: '$ingredients.ingredientId',
+                    count: {
+                        $sum: 1,
+                    },
+                },
+            },
+            {
+                $sort: { count: -1 },
+            },
+            {
+                $limit: 5,
+            },
+        ]);
+        let populatedIngredients = [];
+        for (let i = 0; i < ingredients.length; i++) {
+            let ingredient = await blendIngredient_1.default.findOne({
+                _id: ingredients[i]._id,
+            }).select('ingredientName');
+            populatedIngredients.push({
+                _id: ingredients[i]._id,
+                name: ingredient.ingredientName,
+                count: ingredients[i].count,
+            });
+        }
+        console.log(populatedIngredients);
+    }
+    async getRecipeCategoryPercentage(recipeIds) {
+        let categories = {};
+        for (let i = 0; i < recipeIds.length; i++) {
+            if (categories[recipeIds[i].name]) {
+                categories[recipeIds[i].name].count += 1;
+                let percentage = (categories[recipeIds[i].name].count / recipeIds.length) * 100;
+                categories[recipeIds[i].name].percentage = percentage;
+            }
+            else {
+                categories[recipeIds[i].name] = {
+                    ...recipeIds[i],
+                    count: 1,
+                    percentage: (1 / recipeIds.length) * 100,
+                };
+            }
+        }
+        let keys = Object.keys(categories);
+        let sortedCategories = keys
+            .map((key) => categories[key])
+            .sort((a, b) => b.percentage - a.percentage);
+        return sortedCategories;
     }
     async deletePlan(planId, memberId) {
         let plan = await Plan_1.default.findOne({ _id: planId }).select('memberId');
