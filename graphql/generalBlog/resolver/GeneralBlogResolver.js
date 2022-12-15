@@ -20,6 +20,8 @@ const CreateNewGeneralBlog_1 = __importDefault(require("./inputType/CreateNewGen
 const EditGeneralBlog_1 = __importDefault(require("./inputType/EditGeneralBlog"));
 const GeneralBlog_1 = __importDefault(require("../schema/GeneralBlog"));
 const generalBlog_1 = __importDefault(require("../../../models/generalBlog"));
+const blogComment_1 = __importDefault(require("../../../models/blogComment"));
+const mongoose_1 = __importDefault(require("mongoose"));
 const AppError_1 = __importDefault(require("../../../utils/AppError"));
 let GeneralBlogResolver = class GeneralBlogResolver {
     async addGeneralBlog(data) {
@@ -71,13 +73,15 @@ let GeneralBlogResolver = class GeneralBlogResolver {
             isPublished: false,
         }, { isPublished: true });
         let blog = await generalBlog_1.default.findOne({ _id: blogId });
-        blog.commentsCount = 0;
+        blog.commentsCount = new mongoose_1.default.mongo.ObjectId(blog._id);
         blog.hasInCollection = false;
         return blog;
     }
     async getAgeneralBlogBySlug(slug) {
         let blog = await generalBlog_1.default.findOne({ slug: slug });
-        blog.commentsCount = 0;
+        blog.commentsCount = await blogComment_1.default.countDocuments({
+            blogId: new mongoose_1.default.mongo.ObjectId(blog._id),
+        });
         blog.hasInCollection = false;
         return blog;
     }
@@ -104,7 +108,9 @@ let GeneralBlogResolver = class GeneralBlogResolver {
         let returnBlogs = [];
         for (let i = 0; i < blogs.length; i++) {
             let blog = blogs[i];
-            blog.commentsCount = 0;
+            blog.commentsCount = await blogComment_1.default.countDocuments({
+                blogId: new mongoose_1.default.mongo.ObjectId(blog._id),
+            });
             blog.hasInCollection = false;
             returnBlogs.push(blog);
         }

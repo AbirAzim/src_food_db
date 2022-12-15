@@ -48,13 +48,6 @@ let WikiCommentsResolver = class WikiCommentsResolver {
         else {
             return new AppError_1.default('Invalid type', 400);
         }
-        let comment = await wikiComment_1.default.findOne({
-            entityId: data.entityId,
-            userId: data.userId,
-        }).select('_id');
-        if (comment) {
-            return new AppError_1.default('Comment already exists', 400);
-        }
         let newComment = await wikiComment_1.default.create(data);
         return newComment;
     }
@@ -79,17 +72,15 @@ let WikiCommentsResolver = class WikiCommentsResolver {
     async getAllWikiCommentsForAWikiEntity(entityId, userId) {
         let comments = await wikiComment_1.default.find({
             entityId,
-            userId: { $ne: userId },
-        }).populate({
+        })
+            .populate({
             path: 'userId',
             model: 'User',
-        });
-        let UserComment = await wikiComment_1.default.findOne({
-            entityId,
-            userId,
+        })
+            .sort({
+            createdAt: -1,
         });
         return {
-            userComment: UserComment,
             comments: comments,
         };
     }

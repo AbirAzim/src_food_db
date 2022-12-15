@@ -13,19 +13,24 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
-const Comment_1 = __importDefault(require("./Comment"));
-const Recipe_1 = __importDefault(require("../../recipe/schemas/Recipe"));
-let RecipeComments = class RecipeComments {
+const CategoryPercentage_1 = __importDefault(require("./CategoryPercentage"));
+const Plan_1 = __importDefault(require("./Plan"));
+const TopIngredient_1 = __importDefault(require("./TopIngredient"));
+let PlanIngredientAndCategory = class PlanIngredientAndCategory {
 };
 __decorate([
-    (0, type_graphql_1.Field)((type) => [Comment_1.default]),
-    __metadata("design:type", Array)
-], RecipeComments.prototype, "comments", void 0);
+    (0, type_graphql_1.Field)((type) => Plan_1.default),
+    __metadata("design:type", Plan_1.default)
+], PlanIngredientAndCategory.prototype, "plan", void 0);
 __decorate([
-    (0, type_graphql_1.Field)({ nullable: true }),
-    __metadata("design:type", Recipe_1.default)
-], RecipeComments.prototype, "recipe", void 0);
-RecipeComments = __decorate([
+    (0, type_graphql_1.Field)((type) => [TopIngredient_1.default], { nullable: true }),
+    __metadata("design:type", Array)
+], PlanIngredientAndCategory.prototype, "topIngredients", void 0);
+__decorate([
+    (0, type_graphql_1.Field)((type) => [CategoryPercentage_1.default], { nullable: true }),
+    __metadata("design:type", Array)
+], PlanIngredientAndCategory.prototype, "recipeCategoriesPercentage", void 0);
+PlanIngredientAndCategory = __decorate([
     (0, type_graphql_1.ObjectType)()
-], RecipeComments);
-exports.default = RecipeComments;
+], PlanIngredientAndCategory);
+exports.default = PlanIngredientAndCategory;

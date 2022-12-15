@@ -35,14 +35,6 @@ let UserCommentsResolver = class UserCommentsResolver {
         if (!recipe) {
             return new AppError_1.default('Recipe not found', 404);
         }
-        let comments = await comment_1.default.find({
-            recipeId: data.recipeId,
-        }).select('userId');
-        for (let i = 0; i < comments.length; i++) {
-            if (String(comments[i].userId) === String(data.userId)) {
-                return new AppError_1.default('Comment already exists with that recipe for this user', 400);
-            }
-        }
         await comment_1.default.create(data);
         let averageRating = (recipe.totalRating + data.rating) / (recipe.numberOfRating + 1);
         let returnRecipe = await recipe_1.default.findOneAndUpdate({ _id: data.recipeId }, {
@@ -50,14 +42,13 @@ let UserCommentsResolver = class UserCommentsResolver {
             $set: { averageRating },
         }, { new: true });
         let otherComments = await comment_1.default.find({
-            userId: { $ne: data.userId },
             recipeId: data.recipeId,
-        }).populate('userId');
-        let userComment = await comment_1.default.findOne({
-            userId: data.userId,
-            recipeId: data.recipeId,
-        }).populate('userId');
-        return { userComment, comments: otherComments, recipe: returnRecipe };
+        })
+            .populate('userId')
+            .sort({
+            createdAt: -1,
+        });
+        return { comments: otherComments, recipe: returnRecipe };
     }
     async getAllCommentsForARecipe(data) {
         let user = await memberModel_1.default.findOne({ _id: data.userId });
@@ -69,14 +60,13 @@ let UserCommentsResolver = class UserCommentsResolver {
             return new AppError_1.default('Recipe not found', 404);
         }
         let comments = await comment_1.default.find({
-            userId: { $ne: data.userId },
             recipeId: data.recipeId,
-        }).populate('userId');
-        let userComment = await comment_1.default.findOne({
-            userId: data.userId,
-            recipeId: data.recipeId,
-        }).populate('userId');
-        return { userComment, comments, recipe };
+        })
+            .populate('userId')
+            .sort({
+            createdAt: -1,
+        });
+        return { comments, recipe };
     }
     async removeComment(data) {
         let user = await memberModel_1.default.findOne({ _id: data.userId });
@@ -112,7 +102,11 @@ let UserCommentsResolver = class UserCommentsResolver {
         let returnRecipe = await recipe_1.default.findOneAndUpdate({ _id: data.recipeId }, { numberOfRating, totalRating, averageRating }, { new: true });
         let comments = await comment_1.default.find({
             recipeId: data.recipeId,
-        }).populate('userId');
+        })
+            .populate('userId')
+            .sort({
+            createdAt: -1,
+        });
         return { comments, recipe: returnRecipe };
     }
     async editComment(data) {
@@ -147,17 +141,13 @@ let UserCommentsResolver = class UserCommentsResolver {
         console.log(newComment);
         console.log(data.editId);
         let comments = await comment_1.default.find({
-            _id: { $ne: data.editId },
             recipeId: data.recipeId,
-        }).populate('userId');
-        return { userComment: newComment, comments, recipe: returnRecipe };
-    }
-    async xxxx() {
-        let recipies = await recipe_1.default.find();
-        for (let i = 0; i < recipies.length; i++) {
-            await recipe_1.default.findOneAndUpdate({ _id: recipies[i]._id }, { averageRating: 0, numberOfRating: 0, totalRating: 0, totalViews: 0 });
-        }
-        return 'done';
+        })
+            .populate('userId')
+            .sort({
+            createdAt: -1,
+        });
+        return { comments, recipe: returnRecipe };
     }
 };
 __decorate([
@@ -188,12 +178,6 @@ __decorate([
     __metadata("design:paramtypes", [EditComment_1.default]),
     __metadata("design:returntype", Promise)
 ], UserCommentsResolver.prototype, "editComment", null);
-__decorate([
-    (0, type_graphql_1.Mutation)((type) => String),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
-], UserCommentsResolver.prototype, "xxxx", null);
 UserCommentsResolver = __decorate([
     (0, type_graphql_1.Resolver)()
 ], UserCommentsResolver);

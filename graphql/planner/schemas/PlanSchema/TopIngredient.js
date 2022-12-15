@@ -8,24 +8,23 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
-const Comment_1 = __importDefault(require("./Comment"));
-const Recipe_1 = __importDefault(require("../../recipe/schemas/Recipe"));
-let RecipeComments = class RecipeComments {
+let TopIngredient = class TopIngredient {
 };
 __decorate([
-    (0, type_graphql_1.Field)((type) => [Comment_1.default]),
-    __metadata("design:type", Array)
-], RecipeComments.prototype, "comments", void 0);
+    (0, type_graphql_1.Field)((type) => type_graphql_1.ID),
+    __metadata("design:type", String)
+], TopIngredient.prototype, "_id", void 0);
+__decorate([
+    (0, type_graphql_1.Field)((type) => String, { nullable: true }),
+    __metadata("design:type", String)
+], TopIngredient.prototype, "name", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
-    __metadata("design:type", Recipe_1.default)
-], RecipeComments.prototype, "recipe", void 0);
-RecipeComments = __decorate([
+    __metadata("design:type", Number)
+], TopIngredient.prototype, "count", void 0);
+TopIngredient = __decorate([
     (0, type_graphql_1.ObjectType)()
-], RecipeComments);
-exports.default = RecipeComments;
+], TopIngredient);
+exports.default = TopIngredient;
