@@ -202,6 +202,84 @@ let PlanResolver = class PlanResolver {
             totalPlans: await Plan_1.default.countDocuments({ isGlobal: true }),
         };
     }
+    async getAllRecentPlans(limit) {
+        let plans = await Plan_1.default.find({ isGlobal: true })
+            .populate({
+            path: 'planData.recipes',
+            populate: [
+                {
+                    path: 'defaultVersion',
+                    populate: {
+                        path: 'ingredients.ingredientId',
+                        model: 'BlendIngredient',
+                        select: 'ingredientName',
+                    },
+                    select: 'postfixTitle ingredients',
+                },
+                {
+                    path: 'brand',
+                },
+                {
+                    path: 'recipeBlendCategory',
+                },
+            ],
+        })
+            .sort({ createdAt: -1 })
+            .limit(limit);
+        return plans;
+    }
+    async getAllRecommendedPlans(limit) {
+        let plans = await Plan_1.default.find({ isGlobal: true })
+            .populate({
+            path: 'planData.recipes',
+            populate: [
+                {
+                    path: 'defaultVersion',
+                    populate: {
+                        path: 'ingredients.ingredientId',
+                        model: 'BlendIngredient',
+                        select: 'ingredientName',
+                    },
+                    select: 'postfixTitle ingredients',
+                },
+                {
+                    path: 'brand',
+                },
+                {
+                    path: 'recipeBlendCategory',
+                },
+            ],
+        })
+            .sort({ createdAt: -1 })
+            .limit(limit);
+        return plans;
+    }
+    async getAllPopularPlans(limit) {
+        let plans = await Plan_1.default.find({ isGlobal: true })
+            .populate({
+            path: 'planData.recipes',
+            populate: [
+                {
+                    path: 'defaultVersion',
+                    populate: {
+                        path: 'ingredients.ingredientId',
+                        model: 'BlendIngredient',
+                        select: 'ingredientName',
+                    },
+                    select: 'postfixTitle ingredients',
+                },
+                {
+                    path: 'brand',
+                },
+                {
+                    path: 'recipeBlendCategory',
+                },
+            ],
+        })
+            .sort({ createdAt: 1 })
+            .limit(limit);
+        return plans;
+    }
 };
 __decorate([
     (0, type_graphql_1.Mutation)(() => String),
@@ -248,6 +326,27 @@ __decorate([
     __metadata("design:paramtypes", [Number, Number]),
     __metadata("design:returntype", Promise)
 ], PlanResolver.prototype, "getAllGlobalPlans", null);
+__decorate([
+    (0, type_graphql_1.Query)(() => [Plan_2.default]),
+    __param(0, (0, type_graphql_1.Arg)('limit')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", Promise)
+], PlanResolver.prototype, "getAllRecentPlans", null);
+__decorate([
+    (0, type_graphql_1.Query)(() => [Plan_2.default]),
+    __param(0, (0, type_graphql_1.Arg)('limit')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", Promise)
+], PlanResolver.prototype, "getAllRecommendedPlans", null);
+__decorate([
+    (0, type_graphql_1.Query)(() => [Plan_2.default]),
+    __param(0, (0, type_graphql_1.Arg)('limit')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", Promise)
+], PlanResolver.prototype, "getAllPopularPlans", null);
 PlanResolver = __decorate([
     (0, type_graphql_1.Resolver)()
 ], PlanResolver);

@@ -58,7 +58,6 @@ let GroceryResolver = class GroceryResolver {
             model: 'BlendIngredient',
             select: 'ingredientName portions featuredImage',
         });
-        console.log('groceryList', groceryList);
         return groceryList.list;
     }
     async deleteSomeFromList(groceryIngredients, pantryIngredients, stapleIngredients, memberId) {
