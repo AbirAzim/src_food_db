@@ -24,6 +24,7 @@ const Plan_2 = __importDefault(require("../schemas/PlanSchema/Plan"));
 const PlanIngredientAndCategory_1 = __importDefault(require("../schemas/PlanSchema/PlanIngredientAndCategory"));
 const getRecipeCategoryPercentage_1 = __importDefault(require("./utils/getRecipeCategoryPercentage"));
 const getIngredientStats_1 = __importDefault(require("./utils/getIngredientStats"));
+const PlanWithTotal_1 = __importDefault(require("../schemas/PlanSchema/PlanWithTotal"));
 let PlanResolver = class PlanResolver {
     async createAPlan(input) {
         let myPlan = input;
@@ -171,9 +172,35 @@ let PlanResolver = class PlanResolver {
         });
         return 'Plan deleted';
     }
-    async getAllGlobalPlans() {
-        let plans = await Plan_1.default.find({ isGlobal: true }).populate('planData.recipes');
-        return plans;
+    async getAllGlobalPlans(page, limit) {
+        let plans = await Plan_1.default.find({ isGlobal: true })
+            .populate({
+            path: 'planData.recipes',
+            populate: [
+                {
+                    path: 'defaultVersion',
+                    populate: {
+                        path: 'ingredients.ingredientId',
+                        model: 'BlendIngredient',
+                        select: 'ingredientName',
+                    },
+                    select: 'postfixTitle ingredients',
+                },
+                {
+                    path: 'brand',
+                },
+                {
+                    path: 'recipeBlendCategory',
+                },
+            ],
+        })
+            .sort({ createdAt: -1 })
+            .limit(limit)
+            .skip(limit * (page - 1));
+        return {
+            plans: plans,
+            totalPlans: await Plan_1.default.countDocuments({ isGlobal: true }),
+        };
     }
 };
 __decorate([
@@ -214,9 +241,11 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], PlanResolver.prototype, "deletePlan", null);
 __decorate([
-    (0, type_graphql_1.Query)(() => [Plan_2.default]),
+    (0, type_graphql_1.Query)(() => PlanWithTotal_1.default),
+    __param(0, (0, type_graphql_1.Arg)('page')),
+    __param(1, (0, type_graphql_1.Arg)('limit')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [Number, Number]),
     __metadata("design:returntype", Promise)
 ], PlanResolver.prototype, "getAllGlobalPlans", null);
 PlanResolver = __decorate([
