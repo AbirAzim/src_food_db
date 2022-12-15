@@ -77,7 +77,7 @@ let PlanResolver = class PlanResolver {
                     populate: {
                         path: 'ingredients.ingredientId',
                         model: 'BlendIngredient',
-                        select: 'ingredientName',
+                        select: 'ingredientName featuredImage',
                     },
                     select: 'postfixTitle ingredients',
                 },

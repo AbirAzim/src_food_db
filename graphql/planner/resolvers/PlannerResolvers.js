@@ -126,7 +126,7 @@ let PlannerResolver = class PlannerResolver {
                         populate: {
                             path: 'ingredients.ingredientId',
                             model: 'BlendIngredient',
-                            select: 'ingredientName',
+                            select: 'ingredientName featuredImage',
                         },
                         select: 'postfixTitle ingredients',
                     },
@@ -201,7 +201,7 @@ let PlannerResolver = class PlannerResolver {
                     populate: {
                         path: 'ingredients.ingredientId',
                         model: 'BlendIngredient',
-                        select: 'ingredientName',
+                        select: 'ingredientName featuredImage',
                     },
                     select: 'postfixTitle',
                 },
