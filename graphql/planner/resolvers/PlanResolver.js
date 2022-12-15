@@ -21,6 +21,9 @@ const Plan_1 = __importDefault(require("../../../models/Plan"));
 const EditPlan_1 = __importDefault(require("./input-type/planInput/EditPlan"));
 const AppError_1 = __importDefault(require("../../../utils/AppError"));
 const Plan_2 = __importDefault(require("../schemas/PlanSchema/Plan"));
+const PlanIngredientAndCategory_1 = __importDefault(require("../schemas/PlanSchema/PlanIngredientAndCategory"));
+const getRecipeCategoryPercentage_1 = __importDefault(require("./utils/getRecipeCategoryPercentage"));
+const getIngredientStats_1 = __importDefault(require("./utils/getIngredientStats"));
 let PlanResolver = class PlanResolver {
     async createAPlan(input) {
         let myPlan = input;
@@ -69,9 +72,6 @@ let PlanResolver = class PlanResolver {
             path: 'planData.recipes',
             populate: [
                 {
-                    path: 'ingredients',
-                },
-                {
                     path: 'defaultVersion',
                     populate: {
                         path: 'ingredients.ingredientId',
@@ -79,11 +79,6 @@ let PlanResolver = class PlanResolver {
                         select: 'ingredientName',
                     },
                     select: 'postfixTitle ingredients',
-                },
-                {
-                    path: 'userId',
-                    model: 'User',
-                    select: '_id displayName image firstName lastName email',
                 },
                 {
                     path: 'brand',
@@ -115,58 +110,57 @@ let PlanResolver = class PlanResolver {
                 }
             }
         }
-        let categoryPercentages = await this.getRecipeCategoryPercentage(recipeCategories);
-        let ingredientsStats = await this.getIngredientsStats(ingredients);
+        let categoryPercentages = await (0, getRecipeCategoryPercentage_1.default)(recipeCategories);
+        let ingredientsStats = await (0, getIngredientStats_1.default)(ingredients);
         return {
             plan: plan,
             topIngredients: ingredientsStats,
             recipeCategoriesPercentage: categoryPercentages,
         };
     }
-    async getIngredientsStats(recipes) {
-        let ingredients = {};
-        for (let i = 0; i < recipes.length; i++) {
-            if (ingredients[recipes[i].name]) {
-                ingredients[recipes[i].name].count += 1;
-            }
-            else {
-                ingredients[recipes[i].name] = {
-                    ...recipes[i],
-                    count: 1,
-                };
-            }
-        }
-        let keys = Object.keys(ingredients);
-        let sortedIngredients = keys
-            .map((key) => ingredients[key])
-            .sort((a, b) => b.count - a.count)
-            .slice(0, 5);
-        console.log(sortedIngredients);
-        return sortedIngredients;
-    }
-    async getRecipeCategoryPercentage(recipeIds) {
-        let categories = {};
-        for (let i = 0; i < recipeIds.length; i++) {
-            if (categories[recipeIds[i].name]) {
-                categories[recipeIds[i].name].count += 1;
-                let percentage = (categories[recipeIds[i].name].count / recipeIds.length) * 100;
-                categories[recipeIds[i].name].percentage = percentage;
-            }
-            else {
-                categories[recipeIds[i].name] = {
-                    ...recipeIds[i],
-                    count: 1,
-                    percentage: (1 / recipeIds.length) * 100,
-                };
-            }
-        }
-        let keys = Object.keys(categories);
-        let sortedCategories = keys
-            .map((key) => categories[key])
-            .sort((a, b) => b.percentage - a.percentage);
-        console.log(sortedCategories);
-        return sortedCategories;
-    }
+    // async getIngredientsStats(recipes: any[]) {
+    //   let ingredients: any = {};
+    //   for (let i = 0; i < recipes.length; i++) {
+    //     if (ingredients[recipes[i].name]) {
+    //       ingredients[recipes[i].name].count += 1;
+    //     } else {
+    //       ingredients[recipes[i].name] = {
+    //         ...recipes[i],
+    //         count: 1,
+    //       };
+    //     }
+    //   }
+    //   let keys = Object.keys(ingredients);
+    //   let sortedIngredients = keys
+    //     .map((key: any) => ingredients[key])
+    //     .sort((a: any, b: any) => b.count - a.count)
+    //     .slice(0, 5);
+    //   console.log(sortedIngredients);
+    //   return sortedIngredients;
+    // }
+    // async getRecipeCategoryPercentage(recipeIds: any[]) {
+    //   let categories: any = {};
+    //   for (let i = 0; i < recipeIds.length; i++) {
+    //     if (categories[recipeIds[i].name]) {
+    //       categories[recipeIds[i].name].count += 1;
+    //       let percentage =
+    //         (categories[recipeIds[i].name].count / recipeIds.length) * 100;
+    //       categories[recipeIds[i].name].percentage = percentage;
+    //     } else {
+    //       categories[recipeIds[i].name] = {
+    //         ...recipeIds[i],
+    //         count: 1,
+    //         percentage: (1 / recipeIds.length) * 100,
+    //       };
+    //     }
+    //   }
+    //   let keys = Object.keys(categories);
+    //   let sortedCategories = keys
+    //     .map((key: any) => categories[key])
+    //     .sort((a, b) => b.percentage - a.percentage);
+    //   console.log(sortedCategories);
+    //   return sortedCategories;
+    // }
     async deletePlan(planId, memberId) {
         let plan = await Plan_1.default.findOne({ _id: planId }).select('memberId');
         if (String(plan.memberId) !== memberId) {
@@ -204,7 +198,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], PlanResolver.prototype, "getMyPlans", null);
 __decorate([
-    (0, type_graphql_1.Query)(() => Plan_2.default),
+    (0, type_graphql_1.Query)(() => PlanIngredientAndCategory_1.default),
     __param(0, (0, type_graphql_1.Arg)('planId')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),

@@ -29,6 +29,9 @@ const PlannerWithRecipes_1 = __importDefault(require("../schemas/PlannerWithReci
 const AppError_1 = __importDefault(require("../../../utils/AppError"));
 const MovePlanner_1 = __importDefault(require("./input-type/MovePlanner"));
 const FormateDate_1 = __importDefault(require("../../../utils/FormateDate"));
+const getRecipeCategoryPercentage_1 = __importDefault(require("./utils/getRecipeCategoryPercentage"));
+const getIngredientStats_1 = __importDefault(require("./utils/getIngredientStats"));
+const PlannersIngredientAndCategoryPercentage_1 = __importDefault(require("../schemas/PlannersIngredientAndCategoryPercentage"));
 let PlannerResolver = class PlannerResolver {
     async createPlanner(data) {
         let isoDate = new Date(data.assignDate).toISOString();
@@ -104,6 +107,8 @@ let PlannerResolver = class PlannerResolver {
         let endDateISO = new Date(endDate);
         let days = await this.getDifferenceInDays(startDateISO, endDateISO);
         let planners = [];
+        let recipeCategories = [];
+        let ingredients = [];
         let tempDay = startDateISO;
         for (let i = 0; i <= Number(days); i++) {
             let planner = await Planner_1.default.findOne({
@@ -118,17 +123,12 @@ let PlannerResolver = class PlannerResolver {
                     { path: 'brand' },
                     {
                         path: 'defaultVersion',
-                        model: 'RecipeVersion',
                         populate: {
                             path: 'ingredients.ingredientId',
                             model: 'BlendIngredient',
                             select: 'ingredientName',
                         },
-                        select: 'postfixTitle',
-                    },
-                    {
-                        path: 'ingredients.ingredientId',
-                        model: 'BlendIngredient',
+                        select: 'postfixTitle ingredients',
                     },
                 ],
             })
@@ -136,6 +136,22 @@ let PlannerResolver = class PlannerResolver {
                 .lean();
             if (planner) {
                 planners.push(planner);
+                if (planner.recipes.length > 0) {
+                    for (let j = 0; j < planner.recipes.length; j++) {
+                        recipeCategories.push({
+                            _id: planner.recipes[j].recipeBlendCategory._id,
+                            name: planner.recipes[j].recipeBlendCategory.name,
+                        });
+                        for (let k = 0; k < planner.recipes[j].defaultVersion.ingredients.length; k++) {
+                            ingredients.push({
+                                _id: planner.recipes[j].defaultVersion.ingredients[k]
+                                    .ingredientId._id,
+                                name: planner.recipes[j].defaultVersion.ingredients[k]
+                                    .ingredientId.ingredientName,
+                            });
+                        }
+                    }
+                }
             }
             else {
                 planners.push({
@@ -147,7 +163,13 @@ let PlannerResolver = class PlannerResolver {
             }
             tempDay = new Date(tempDay.setDate(tempDay.getDate() + 1));
         }
-        return planners;
+        let categoryPercentages = await (0, getRecipeCategoryPercentage_1.default)(recipeCategories);
+        let ingredientsStats = await (0, getIngredientStats_1.default)(ingredients);
+        return {
+            planners,
+            topIngredients: ingredientsStats,
+            recipeCategoriesPercentage: categoryPercentages,
+        };
     }
     async getDifferenceInDays(date1, date2) {
         const diffInMs = Math.abs(date2 - date1);
@@ -387,7 +409,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], PlannerResolver.prototype, "deletePlanner", null);
 __decorate([
-    (0, type_graphql_1.Query)(() => [PlannerWithRecipes_1.default]),
+    (0, type_graphql_1.Query)(() => PlannersIngredientAndCategoryPercentage_1.default),
     __param(0, (0, type_graphql_1.Arg)('startDate')),
     __param(1, (0, type_graphql_1.Arg)('endDate')),
     __param(2, (0, type_graphql_1.Arg)('userId')),

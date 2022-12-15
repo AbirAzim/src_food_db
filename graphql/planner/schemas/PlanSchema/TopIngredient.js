@@ -10,21 +10,21 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
-let TopIngredient = class TopIngredient {
+let TopIngredientData = class TopIngredientData {
 };
 __decorate([
     (0, type_graphql_1.Field)((type) => type_graphql_1.ID),
     __metadata("design:type", String)
-], TopIngredient.prototype, "_id", void 0);
+], TopIngredientData.prototype, "_id", void 0);
 __decorate([
     (0, type_graphql_1.Field)((type) => String, { nullable: true }),
     __metadata("design:type", String)
-], TopIngredient.prototype, "name", void 0);
+], TopIngredientData.prototype, "name", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", Number)
-], TopIngredient.prototype, "count", void 0);
-TopIngredient = __decorate([
+], TopIngredientData.prototype, "count", void 0);
+TopIngredientData = __decorate([
     (0, type_graphql_1.ObjectType)()
-], TopIngredient);
-exports.default = TopIngredient;
+], TopIngredientData);
+exports.default = TopIngredientData;
