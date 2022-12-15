@@ -106,6 +106,8 @@ let PlanResolver = class PlanResolver {
                                 .ingredientId._id,
                             name: plan.planData[i].recipes[j].defaultVersion.ingredients[k]
                                 .ingredientId.ingredientName,
+                            featuredImage: plan.planData[i].recipes[j].defaultVersion.ingredients[k]
+                                .ingredientId.featuredImage,
                         });
                     }
                 }

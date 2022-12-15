@@ -148,6 +148,8 @@ let PlannerResolver = class PlannerResolver {
                                     .ingredientId._id,
                                 name: planner.recipes[j].defaultVersion.ingredients[k]
                                     .ingredientId.ingredientName,
+                                featuredImage: planner.recipes[j].defaultVersion.ingredients[k].ingredientId
+                                    .featuredImage,
                             });
                         }
                     }

@@ -24,6 +24,10 @@ __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", Number)
 ], TopIngredientData.prototype, "count", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", String)
+], TopIngredientData.prototype, "featuredImage", void 0);
 TopIngredientData = __decorate([
     (0, type_graphql_1.ObjectType)()
 ], TopIngredientData);
