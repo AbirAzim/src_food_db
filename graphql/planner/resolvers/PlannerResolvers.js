@@ -18,6 +18,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
 const mongoose_1 = __importDefault(require("mongoose"));
 const CreatePlanner_1 = __importDefault(require("./input-type/CreatePlanner"));
+const Plan_1 = __importDefault(require("../../../models/Plan"));
 const Planner_1 = __importDefault(require("../../../models/Planner"));
 const memberModel_1 = __importDefault(require("../../../models/memberModel"));
 const userCollection_1 = __importDefault(require("../../../models/userCollection"));
@@ -396,8 +397,79 @@ let PlannerResolver = class PlannerResolver {
         return 'successfully added to grocery';
     }
     async mergeOrReplacePlanner(startDate, endDate, memberId, planId, mergeOrReplace) {
-        let startDateISO = new Date(startDate);
-        return 'donme';
+        let tempDay = new Date(startDate);
+        let plan = await Plan_1.default.findOne({
+            _id: planId,
+        });
+        if (!plan) {
+            return new AppError_1.default('Plan not found', 404);
+        }
+        let planData = plan.planData;
+        if (!(planData.length === 7)) {
+            return new AppError_1.default('Plan data is not valid', 400);
+        }
+        if (mergeOrReplace === 'MERGE') {
+            await this.mergeToPlanner(planData, tempDay, memberId);
+        }
+        else {
+            await this.replaceToPlanner(planData, tempDay, memberId);
+        }
+        return 'done';
+    }
+    async mergeToPlanner(planData, tempDate, memberId) {
+        for (let i = 0; i < 7; i++) {
+            let planner = await Planner_1.default.findOne({
+                memberId: memberId,
+                assignDate: tempDate,
+            });
+            let recipes = planData[i].recipes.map((recipe) => String(recipe));
+            if (planner) {
+                await Planner_1.default.findOneAndUpdate({
+                    _id: planner._id,
+                }, {
+                    $addToSet: {
+                        recipes: recipes,
+                    },
+                });
+            }
+            else {
+                console.log('hello');
+                await Planner_1.default.create({
+                    memberId: memberId,
+                    assignDate: tempDate,
+                    recipes: recipes,
+                    formatedDate: (0, FormateDate_1.default)(tempDate),
+                });
+            }
+            tempDate = new Date(tempDate.setDate(tempDate.getDate() + 1));
+        }
+        return 'done';
+    }
+    async replaceToPlanner(planData, tempDate, memberId) {
+        for (let i = 0; i < 7; i++) {
+            let planner = await Planner_1.default.findOne({
+                memberId: memberId,
+                assignDate: tempDate,
+            });
+            let recipes = planData[i].recipes.map((recipe) => String(recipe));
+            if (planner) {
+                await Planner_1.default.findOneAndUpdate({
+                    _id: planner._id,
+                }, {
+                    recipes: recipes,
+                });
+            }
+            else {
+                await Planner_1.default.create({
+                    memberId: memberId,
+                    assignDate: tempDate,
+                    recipes: recipes,
+                    formatedDate: (0, FormateDate_1.default)(tempDate),
+                });
+            }
+            tempDate = new Date(tempDate.setDate(tempDate.getDate() + 1));
+        }
+        return 'done';
     }
 };
 __decorate([
@@ -487,7 +559,7 @@ __decorate([
     __param(1, (0, type_graphql_1.Arg)('endDate', { nullable: true })),
     __param(2, (0, type_graphql_1.Arg)('memberId')),
     __param(3, (0, type_graphql_1.Arg)('planId')),
-    __param(4, (0, type_graphql_1.Arg)('mergeOrReplace')),
+    __param(4, (0, type_graphql_1.Arg)('mergeOrReplace', (type) => MergeOrReplace)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, String,
         String,
