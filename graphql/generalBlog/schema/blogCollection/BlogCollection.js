@@ -10,37 +10,41 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
-let WikiComment = class WikiComment {
+let BlogCollection = class BlogCollection {
 };
 __decorate([
-    (0, type_graphql_1.Field)((type) => type_graphql_1.ID),
+    (0, type_graphql_1.Field)(),
     __metadata("design:type", String)
-], WikiComment.prototype, "_id", void 0);
+], BlogCollection.prototype, "name", void 0);
 __decorate([
     (0, type_graphql_1.Field)(),
     __metadata("design:type", String)
-], WikiComment.prototype, "comment", void 0);
+], BlogCollection.prototype, "slug", void 0);
 __decorate([
     (0, type_graphql_1.Field)(),
     __metadata("design:type", String)
-], WikiComment.prototype, "type", void 0);
+], BlogCollection.prototype, "image", void 0);
 __decorate([
     (0, type_graphql_1.Field)((type) => type_graphql_1.ID),
     __metadata("design:type", String)
-], WikiComment.prototype, "entityId", void 0);
+], BlogCollection.prototype, "memberId", void 0);
 __decorate([
-    (0, type_graphql_1.Field)((type) => type_graphql_1.ID),
-    __metadata("design:type", String)
-], WikiComment.prototype, "userId", void 0);
+    (0, type_graphql_1.Field)((type) => [type_graphql_1.ID]),
+    __metadata("design:type", Array)
+], BlogCollection.prototype, "blogs", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)((type) => Date),
     __metadata("design:type", Date)
-], WikiComment.prototype, "createdAt", void 0);
+], BlogCollection.prototype, "createdAt", void 0);
 __decorate([
-    (0, type_graphql_1.Field)({ nullable: true }),
+    (0, type_graphql_1.Field)(),
+    __metadata("design:type", Number)
+], BlogCollection.prototype, "collectionDataCount", void 0);
+__decorate([
+    (0, type_graphql_1.Field)((type) => Date, { nullable: true }),
     __metadata("design:type", Date)
-], WikiComment.prototype, "updatedAt", void 0);
-WikiComment = __decorate([
+], BlogCollection.prototype, "updatedAt", void 0);
+BlogCollection = __decorate([
     (0, type_graphql_1.ObjectType)()
-], WikiComment);
-exports.default = WikiComment;
+], BlogCollection);
+exports.default = BlogCollection;

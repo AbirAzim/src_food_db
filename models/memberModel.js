@@ -47,6 +47,14 @@ const memberSchema = new mongoose_1.Schema({
     wikiCompareCount: { type: Number, default: 0 },
     isCreated: Boolean,
     defaultChallengeId: { type: String, ref: 'challenge' },
+    lastModifiedBlogCollection: {
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: 'BlogCollection',
+    },
+    lastModifiedPlanCollection: {
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: 'PlanCollection',
+    },
 });
 const Member = (0, mongoose_1.model)('User', memberSchema);
 exports.default = Member;
