@@ -22,7 +22,7 @@ const AppError_1 = __importDefault(require("../../../utils/AppError"));
 const BlogCollection_1 = __importDefault(require("../schema/blogCollection/BlogCollection"));
 const AddNewBlogCollection_1 = __importDefault(require("./inputType/BlogCollection/AddNewBlogCollection"));
 let GeneralBlogCollectionResolver = class GeneralBlogCollectionResolver {
-    async getAllBlogCollection(memberId) {
+    async getAllBlogCollections(memberId) {
         let collections = await generalBlogCollection_1.default.find({
             memberId: memberId,
         });
@@ -130,7 +130,7 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
-], GeneralBlogCollectionResolver.prototype, "getAllBlogCollection", null);
+], GeneralBlogCollectionResolver.prototype, "getAllBlogCollections", null);
 __decorate([
     (0, type_graphql_1.Mutation)(() => String),
     __param(0, (0, type_graphql_1.Arg)('collectionId', { nullable: true })),

@@ -80,9 +80,7 @@ let WikiCommentsResolver = class WikiCommentsResolver {
             .sort({
             createdAt: -1,
         });
-        return {
-            comments: comments,
-        };
+        return comments;
     }
     async removeAWikiComment(entityId, userId) {
         let comment = await wikiComment_1.default.findOne({ entityId, userId });
