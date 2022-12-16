@@ -25,6 +25,7 @@ const PlanIngredientAndCategory_1 = __importDefault(require("../schemas/PlanSche
 const getRecipeCategoryPercentage_1 = __importDefault(require("./utils/getRecipeCategoryPercentage"));
 const getIngredientStats_1 = __importDefault(require("./utils/getIngredientStats"));
 const PlanWithTotal_1 = __importDefault(require("../schemas/PlanSchema/PlanWithTotal"));
+const planComment_1 = __importDefault(require("../../../models/planComment"));
 let PlanResolver = class PlanResolver {
     async createAPlan(input) {
         let myPlan = input;
@@ -199,8 +200,16 @@ let PlanResolver = class PlanResolver {
             .sort({ createdAt: -1 })
             .limit(limit)
             .skip(limit * (page - 1));
+        let planWithCollectionAndComments;
+        [];
+        for (let i = 0; i < plans.length; i++) {
+            let plan = plans[i];
+            plan.commentsCount = this.attachCommentsCountWithPlan(plan._id);
+            plan.planCollection = null;
+            planWithCollectionAndComments.push(plan);
+        }
         return {
-            plans: plans,
+            plans: planWithCollectionAndComments,
             totalPlans: await Plan_1.default.countDocuments({ isGlobal: true }),
         };
     }
@@ -228,7 +237,15 @@ let PlanResolver = class PlanResolver {
         })
             .sort({ createdAt: -1 })
             .limit(limit);
-        return plans;
+        let planWithCollectionAndComments;
+        [];
+        for (let i = 0; i < plans.length; i++) {
+            let plan = plans[i];
+            plan.commentsCount = this.attachCommentsCountWithPlan(plan._id);
+            plan.planCollection = null;
+            planWithCollectionAndComments.push(plan);
+        }
+        return planWithCollectionAndComments;
     }
     async getAllRecommendedPlans(limit) {
         let plans = await Plan_1.default.find({ isGlobal: true })
@@ -254,7 +271,15 @@ let PlanResolver = class PlanResolver {
         })
             .sort({ createdAt: -1 })
             .limit(limit);
-        return plans;
+        let planWithCollectionAndComments;
+        [];
+        for (let i = 0; i < plans.length; i++) {
+            let plan = plans[i];
+            plan.commentsCount = this.attachCommentsCountWithPlan(plan._id);
+            plan.planCollection = null;
+            planWithCollectionAndComments.push(plan);
+        }
+        return planWithCollectionAndComments;
     }
     async getAllPopularPlans(limit) {
         let plans = await Plan_1.default.find({ isGlobal: true })
@@ -280,7 +305,21 @@ let PlanResolver = class PlanResolver {
         })
             .sort({ createdAt: 1 })
             .limit(limit);
-        return plans;
+        let planWithCollectionAndComments;
+        [];
+        for (let i = 0; i < plans.length; i++) {
+            let plan = plans[i];
+            plan.commentsCount = this.attachCommentsCountWithPlan(plan._id);
+            plan.planCollection = null;
+            planWithCollectionAndComments.push(plan);
+        }
+        return planWithCollectionAndComments;
+    }
+    async attachCommentsCountWithPlan(planId) {
+        let commentsCount = await planComment_1.default.countDocuments({
+            planId: planId,
+        });
+        return commentsCount;
     }
 };
 __decorate([

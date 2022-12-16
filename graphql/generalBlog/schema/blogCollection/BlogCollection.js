@@ -25,7 +25,7 @@ __decorate([
     __metadata("design:type", String)
 ], BlogCollection.prototype, "slug", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
 ], BlogCollection.prototype, "image", void 0);
 __decorate([

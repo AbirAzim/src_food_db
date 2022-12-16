@@ -46,18 +46,30 @@ let GeneralBlogCollectionResolver = class GeneralBlogCollectionResolver {
             memberId: memberId,
         });
     }
-    async addToBlogCollection(collectionId, memberId, blogId, previousBlogCollection) {
-        let collection = await generalBlogCollection_1.default.findOne({
-            _id: collectionId,
-            memberId: memberId,
-        });
-        if (!collection) {
-            return new AppError_1.default('Collection not found', 404);
+    async addOrRemoveToBlogCollection(collectionId, memberId, blogId, previousBlogCollection) {
+        let collection;
+        let myCollectionId;
+        if (collectionId) {
+            collection = await generalBlogCollection_1.default.findOne({
+                _id: collectionId,
+                memberId: memberId,
+            });
+            myCollectionId = collectionId;
         }
-        if (!blogId && !previousBlogCollection) {
-            return new AppError_1.default('No blog id or previous blog collection provided', 404);
+        else {
+            let member = await memberModel_1.default.findOne({
+                _id: memberId,
+            }).select('lastModifiedBlogCollection');
+            myCollectionId = member.lastModifiedBlogCollection;
+            collection = await generalBlogCollection_1.default.findOne({
+                _id: member.lastModifiedBlogCollection,
+            });
         }
-        if (!blogId && previousBlogCollection) {
+        if (!collectionId && previousBlogCollection) {
+            let hasInCollection = collection.blogs.filter((blog) => String(blog) === String(blogId))[0];
+            if (!hasInCollection) {
+                return new AppError_1.default('Blog not found in collection', 404);
+            }
             await generalBlogCollection_1.default.findOneAndUpdate({
                 _id: previousBlogCollection,
                 memberId: memberId,
@@ -65,10 +77,10 @@ let GeneralBlogCollectionResolver = class GeneralBlogCollectionResolver {
                 $pull: {
                     blogs: blogId,
                 },
+                collectionDataCount: collection.blogs.length - 1,
             });
             return 'Removed from collection';
         }
-        let myCollectionId;
         if (previousBlogCollection) {
             await generalBlogCollection_1.default.findOneAndUpdate({
                 _id: previousBlogCollection,
@@ -77,24 +89,18 @@ let GeneralBlogCollectionResolver = class GeneralBlogCollectionResolver {
                 $pull: {
                     blogs: blogId,
                 },
+                collectionDataCount: collection.blogs.length - 1,
             });
         }
-        if (collectionId) {
-            myCollectionId = collectionId;
-        }
-        else {
-            let member = await memberModel_1.default.findOne({
-                _id: memberId,
-            }).select('lastModifiedBlogCollection');
-            myCollectionId = member.lastModifiedPlanCollection;
-        }
+        console.log(myCollectionId);
         await generalBlogCollection_1.default.findOneAndUpdate({
             _id: myCollectionId,
             memberId: memberId,
         }, {
             $push: {
-                plans: blogId,
+                blogs: blogId,
             },
+            collectionDataCount: collection.blogs.length + 1,
         });
         await memberModel_1.default.findOneAndUpdate({
             _id: memberId,
@@ -104,8 +110,8 @@ let GeneralBlogCollectionResolver = class GeneralBlogCollectionResolver {
         return 'Added to collection';
     }
     async addNewBlogCollection(data) {
-        await generalBlogCollection_1.default.create(data);
-        return 'new blog collection added';
+        let newBlogCollection = await generalBlogCollection_1.default.create(data);
+        return newBlogCollection;
     }
     async deleteBlogCollection(collectionId, memberId) {
         let blogCollection = await generalBlogCollection_1.default.findOne({
@@ -114,6 +120,16 @@ let GeneralBlogCollectionResolver = class GeneralBlogCollectionResolver {
         }).select('isDefault');
         if (blogCollection.isDefault) {
             return new AppError_1.default('Default collection cannot be deleted', 400);
+        }
+        let member = await memberModel_1.default.findOne({
+            _id: memberId,
+        }).select('lastModifiedBlogCollection');
+        if (String(member.lastModifiedBlogCollection) === collectionId) {
+            let defaultCollection = await generalBlogCollection_1.default.findOne({
+                memberId: memberId,
+                isDefault: true,
+            }).select('_id');
+            await memberModel_1.default.findOneAndUpdate({ _id: memberId }, { lastModifiedBlogCollection: defaultCollection._id });
         }
         if (!blogCollection) {
             return new AppError_1.default('Collection not found', 404);
@@ -135,7 +151,7 @@ __decorate([
     (0, type_graphql_1.Mutation)(() => String),
     __param(0, (0, type_graphql_1.Arg)('collectionId', { nullable: true })),
     __param(1, (0, type_graphql_1.Arg)('memberId')),
-    __param(2, (0, type_graphql_1.Arg)('blogId', { nullable: true })),
+    __param(2, (0, type_graphql_1.Arg)('blogId')),
     __param(3, (0, type_graphql_1.Arg)('previousBlogCollection', { nullable: true })),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String,
@@ -143,9 +159,9 @@ __decorate([
         String,
         String]),
     __metadata("design:returntype", Promise)
-], GeneralBlogCollectionResolver.prototype, "addToBlogCollection", null);
+], GeneralBlogCollectionResolver.prototype, "addOrRemoveToBlogCollection", null);
 __decorate([
-    (0, type_graphql_1.Mutation)(() => String),
+    (0, type_graphql_1.Mutation)(() => BlogCollection_1.default),
     __param(0, (0, type_graphql_1.Arg)('data')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [AddNewBlogCollection_1.default]),

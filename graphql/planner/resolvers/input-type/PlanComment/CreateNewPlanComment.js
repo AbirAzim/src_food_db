@@ -10,21 +10,21 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
-let CreateNewBlogCollection = class CreateNewBlogCollection {
+let CreateNewPlanComment = class CreateNewPlanComment {
 };
 __decorate([
     (0, type_graphql_1.Field)(),
     __metadata("design:type", String)
-], CreateNewBlogCollection.prototype, "name", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(),
-    __metadata("design:type", String)
-], CreateNewBlogCollection.prototype, "slug", void 0);
+], CreateNewPlanComment.prototype, "comment", void 0);
 __decorate([
     (0, type_graphql_1.Field)((type) => type_graphql_1.ID),
     __metadata("design:type", String)
-], CreateNewBlogCollection.prototype, "memberId", void 0);
-CreateNewBlogCollection = __decorate([
+], CreateNewPlanComment.prototype, "planId", void 0);
+__decorate([
+    (0, type_graphql_1.Field)((type) => type_graphql_1.ID),
+    __metadata("design:type", String)
+], CreateNewPlanComment.prototype, "memberId", void 0);
+CreateNewPlanComment = __decorate([
     (0, type_graphql_1.InputType)()
-], CreateNewBlogCollection);
-exports.default = CreateNewBlogCollection;
+], CreateNewPlanComment);
+exports.default = CreateNewPlanComment;

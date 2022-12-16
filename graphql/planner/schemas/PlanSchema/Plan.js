@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
+const PlanCollection_1 = __importDefault(require("../PlanCollection/PlanCollection"));
 const PlanData_1 = __importDefault(require("./PlanData"));
 let Plan = class Plan {
 };
@@ -60,6 +61,14 @@ __decorate([
     (0, type_graphql_1.Field)((type) => [type_graphql_1.ID], { nullable: true }),
     __metadata("design:type", Array)
 ], Plan.prototype, "collections", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Number)
+], Plan.prototype, "commentsCount", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", PlanCollection_1.default)
+], Plan.prototype, "planCollection", void 0);
 Plan = __decorate([
     (0, type_graphql_1.ObjectType)()
 ], Plan);

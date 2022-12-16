@@ -113,7 +113,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], WikiCommentsResolver.prototype, "editWikiComment", null);
 __decorate([
-    (0, type_graphql_1.Query)(() => PopulatedWikiComment_1.default),
+    (0, type_graphql_1.Query)(() => [PopulatedWikiComment_1.default]),
     __param(0, (0, type_graphql_1.Arg)('entityId')),
     __param(1, (0, type_graphql_1.Arg)('userId')),
     __metadata("design:type", Function),

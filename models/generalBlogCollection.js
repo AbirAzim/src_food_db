@@ -33,14 +33,5 @@ const blogCollectionSchema = new mongoose_1.Schema({
     },
     updatedAt: { type: Date, default: Date.now },
 });
-blogCollectionSchema.pre('save', async function (next) {
-    this.collectionDataCount = this.blogs.length;
-    next();
-});
-blogCollectionSchema.post('update', async function (next) {
-    //@ts-ignore
-    this.collectionDataCount = this.blogs.length;
-    next();
-});
 const BlogCollection = (0, mongoose_1.model)('BlogCollection', blogCollectionSchema);
 exports.default = BlogCollection;

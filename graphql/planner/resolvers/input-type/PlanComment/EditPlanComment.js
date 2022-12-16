@@ -8,23 +8,27 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
-let CreateNewBlogCollection = class CreateNewBlogCollection {
+const CreateEditPlanComment_1 = __importDefault(require("./CreateEditPlanComment"));
+let EditPlanComment = class EditPlanComment {
 };
 __decorate([
     (0, type_graphql_1.Field)(),
     __metadata("design:type", String)
-], CreateNewBlogCollection.prototype, "name", void 0);
-__decorate([
-    (0, type_graphql_1.Field)(),
-    __metadata("design:type", String)
-], CreateNewBlogCollection.prototype, "slug", void 0);
+], EditPlanComment.prototype, "editId", void 0);
 __decorate([
     (0, type_graphql_1.Field)((type) => type_graphql_1.ID),
     __metadata("design:type", String)
-], CreateNewBlogCollection.prototype, "memberId", void 0);
-CreateNewBlogCollection = __decorate([
+], EditPlanComment.prototype, "memberId", void 0);
+__decorate([
+    (0, type_graphql_1.Field)((type) => CreateEditPlanComment_1.default),
+    __metadata("design:type", CreateEditPlanComment_1.default)
+], EditPlanComment.prototype, "editableObject", void 0);
+EditPlanComment = __decorate([
     (0, type_graphql_1.InputType)()
-], CreateNewBlogCollection);
-exports.default = CreateNewBlogCollection;
+], EditPlanComment);
+exports.default = EditPlanComment;
