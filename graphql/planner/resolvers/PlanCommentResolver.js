@@ -47,6 +47,7 @@ let PlanCommentsResolver = class PlanCommentsResolver {
             _id: data.editId,
         }, {
             comment: data.editableObject.comment,
+            updatedAt: Date.now(),
         }, {
             new: true,
         });

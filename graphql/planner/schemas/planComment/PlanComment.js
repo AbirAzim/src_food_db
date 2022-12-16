@@ -27,7 +27,7 @@ __decorate([
 __decorate([
     (0, type_graphql_1.Field)((type) => type_graphql_1.ID),
     __metadata("design:type", String)
-], PlanComment.prototype, "blogId", void 0);
+], PlanComment.prototype, "planId", void 0);
 __decorate([
     (0, type_graphql_1.Field)((type) => Member_1.default),
     __metadata("design:type", Member_1.default)

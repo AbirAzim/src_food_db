@@ -200,11 +200,10 @@ let PlanResolver = class PlanResolver {
             .sort({ createdAt: -1 })
             .limit(limit)
             .skip(limit * (page - 1));
-        let planWithCollectionAndComments;
-        [];
+        let planWithCollectionAndComments = [];
         for (let i = 0; i < plans.length; i++) {
             let plan = plans[i];
-            plan.commentsCount = this.attachCommentsCountWithPlan(plan._id);
+            plan.commentsCount = await this.attachCommentsCountWithPlan(plan._id);
             plan.planCollection = null;
             planWithCollectionAndComments.push(plan);
         }
@@ -237,11 +236,10 @@ let PlanResolver = class PlanResolver {
         })
             .sort({ createdAt: -1 })
             .limit(limit);
-        let planWithCollectionAndComments;
-        [];
+        let planWithCollectionAndComments = [];
         for (let i = 0; i < plans.length; i++) {
             let plan = plans[i];
-            plan.commentsCount = this.attachCommentsCountWithPlan(plan._id);
+            plan.commentsCount = await this.attachCommentsCountWithPlan(plan._id);
             plan.planCollection = null;
             planWithCollectionAndComments.push(plan);
         }
@@ -271,11 +269,10 @@ let PlanResolver = class PlanResolver {
         })
             .sort({ createdAt: -1 })
             .limit(limit);
-        let planWithCollectionAndComments;
-        [];
+        let planWithCollectionAndComments = [];
         for (let i = 0; i < plans.length; i++) {
             let plan = plans[i];
-            plan.commentsCount = this.attachCommentsCountWithPlan(plan._id);
+            plan.commentsCount = await this.attachCommentsCountWithPlan(plan._id);
             plan.planCollection = null;
             planWithCollectionAndComments.push(plan);
         }
@@ -305,11 +302,10 @@ let PlanResolver = class PlanResolver {
         })
             .sort({ createdAt: 1 })
             .limit(limit);
-        let planWithCollectionAndComments;
-        [];
+        let planWithCollectionAndComments = [];
         for (let i = 0; i < plans.length; i++) {
             let plan = plans[i];
-            plan.commentsCount = this.attachCommentsCountWithPlan(plan._id);
+            plan.commentsCount = await this.attachCommentsCountWithPlan(plan._id);
             plan.planCollection = null;
             planWithCollectionAndComments.push(plan);
         }
