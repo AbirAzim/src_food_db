@@ -8,15 +8,27 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
-let CreateEditWikiComment = class CreateEditWikiComment {
+const CreateEditWikiComment_1 = __importDefault(require("./CreateEditWikiComment"));
+let EditWikiComment = class EditWikiComment {
 };
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)((type) => type_graphql_1.ID),
     __metadata("design:type", String)
-], CreateEditWikiComment.prototype, "comment", void 0);
-CreateEditWikiComment = __decorate([
+], EditWikiComment.prototype, "editId", void 0);
+__decorate([
+    (0, type_graphql_1.Field)((type) => type_graphql_1.ID),
+    __metadata("design:type", String)
+], EditWikiComment.prototype, "userId", void 0);
+__decorate([
+    (0, type_graphql_1.Field)((type) => CreateEditWikiComment_1.default),
+    __metadata("design:type", CreateEditWikiComment_1.default)
+], EditWikiComment.prototype, "editableObject", void 0);
+EditWikiComment = __decorate([
     (0, type_graphql_1.InputType)()
-], CreateEditWikiComment);
-exports.default = CreateEditWikiComment;
+], EditWikiComment);
+exports.default = EditWikiComment;
