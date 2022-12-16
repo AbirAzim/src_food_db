@@ -32,6 +32,15 @@ const FormateDate_1 = __importDefault(require("../../../utils/FormateDate"));
 const getRecipeCategoryPercentage_1 = __importDefault(require("./utils/getRecipeCategoryPercentage"));
 const getIngredientStats_1 = __importDefault(require("./utils/getIngredientStats"));
 const PlannersIngredientAndCategoryPercentage_1 = __importDefault(require("../schemas/PlannersIngredientAndCategoryPercentage"));
+var MergeOrReplace;
+(function (MergeOrReplace) {
+    MergeOrReplace["MERGE"] = "MERGE";
+    MergeOrReplace["REMOVE"] = "REMOVE";
+})(MergeOrReplace || (MergeOrReplace = {}));
+(0, type_graphql_1.registerEnumType)(MergeOrReplace, {
+    name: 'mergerOrRemove',
+    description: 'The basic directions', // this one is optional
+});
 let PlannerResolver = class PlannerResolver {
     async createPlanner(data) {
         let isoDate = new Date(data.assignDate).toISOString();
@@ -386,6 +395,10 @@ let PlannerResolver = class PlannerResolver {
         }
         return 'successfully added to grocery';
     }
+    async mergeOrReplacePlanner(startDate, endDate, memberId, planId, mergeOrReplace) {
+        let startDateISO = new Date(startDate);
+        return 'donme';
+    }
 };
 __decorate([
     (0, type_graphql_1.Mutation)(() => Planner_2.default),
@@ -468,6 +481,19 @@ __decorate([
         String]),
     __metadata("design:returntype", Promise)
 ], PlannerResolver.prototype, "addToGroceryFromPlanner", null);
+__decorate([
+    (0, type_graphql_1.Mutation)(() => String),
+    __param(0, (0, type_graphql_1.Arg)('startDate')),
+    __param(1, (0, type_graphql_1.Arg)('endDate', { nullable: true })),
+    __param(2, (0, type_graphql_1.Arg)('memberId')),
+    __param(3, (0, type_graphql_1.Arg)('planId')),
+    __param(4, (0, type_graphql_1.Arg)('mergeOrReplace')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String,
+        String,
+        String, String]),
+    __metadata("design:returntype", Promise)
+], PlannerResolver.prototype, "mergeOrReplacePlanner", null);
 PlannerResolver = __decorate([
     (0, type_graphql_1.Resolver)()
 ], PlannerResolver);

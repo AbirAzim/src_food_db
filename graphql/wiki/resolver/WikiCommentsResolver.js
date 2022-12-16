@@ -85,12 +85,15 @@ let WikiCommentsResolver = class WikiCommentsResolver {
         });
         return comments;
     }
-    async removeAWikiComment(entityId, userId) {
-        let comment = await wikiComment_1.default.findOne({ entityId, userId });
+    async removeAWikiComment(commentId, userId) {
+        let comment = await wikiComment_1.default.findOne({
+            _id: commentId,
+            userId: userId,
+        });
         if (!comment) {
             return new AppError_1.default('Comment not found', 400);
         }
-        await wikiComment_1.default.findOneAndDelete({ entityId, userId });
+        await wikiComment_1.default.findOneAndDelete({ _id: commentId, userId });
         return 'success';
     }
 };
@@ -119,7 +122,7 @@ __decorate([
 ], WikiCommentsResolver.prototype, "getAllWikiCommentsForAWikiEntity", null);
 __decorate([
     (0, type_graphql_1.Mutation)(() => String),
-    __param(0, (0, type_graphql_1.Arg)('entityId')),
+    __param(0, (0, type_graphql_1.Arg)('commentId')),
     __param(1, (0, type_graphql_1.Arg)('userId')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String,
