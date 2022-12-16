@@ -17,7 +17,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const type_graphql_1 = require("type-graphql");
 const CreateWikiComment_1 = __importDefault(require("./input-type/CreateWikiComment"));
-const WikiComment_1 = __importDefault(require("../schemas/WikiComment"));
 const blendNutrient_1 = __importDefault(require("../../../models/blendNutrient"));
 const blendIngredient_1 = __importDefault(require("../../../models/blendIngredient"));
 const memberModel_1 = __importDefault(require("../../../models/memberModel"));
@@ -49,7 +48,11 @@ let WikiCommentsResolver = class WikiCommentsResolver {
             return new AppError_1.default('Invalid type', 400);
         }
         let newComment = await wikiComment_1.default.create(data);
-        return newComment;
+        delete newComment.userId;
+        return {
+            ...newComment._doc,
+            userId: user,
+        };
     }
     async editWikiComment(data) {
         let user = await memberModel_1.default.findOne({ _id: data.userId });
@@ -67,7 +70,11 @@ let WikiCommentsResolver = class WikiCommentsResolver {
             entityId: data.entityId,
             userId: data.userId,
         }, { $set: { comment: data.comment, updatedAt: Date.now() } }, { new: true });
-        return newComment;
+        delete newComment.userId;
+        return {
+            ...newComment._doc,
+            userId: user,
+        };
     }
     async getAllWikiCommentsForAWikiEntity(entityId, userId) {
         let comments = await wikiComment_1.default.find({
@@ -92,14 +99,14 @@ let WikiCommentsResolver = class WikiCommentsResolver {
     }
 };
 __decorate([
-    (0, type_graphql_1.Mutation)(() => WikiComment_1.default),
+    (0, type_graphql_1.Mutation)(() => PopulatedWikiComment_1.default),
     __param(0, (0, type_graphql_1.Arg)('data')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [CreateWikiComment_1.default]),
     __metadata("design:returntype", Promise)
 ], WikiCommentsResolver.prototype, "createWikiComment", null);
 __decorate([
-    (0, type_graphql_1.Mutation)(() => WikiComment_1.default),
+    (0, type_graphql_1.Mutation)(() => PopulatedWikiComment_1.default),
     __param(0, (0, type_graphql_1.Arg)('data')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [CreateEditWikiComment_1.default]),
