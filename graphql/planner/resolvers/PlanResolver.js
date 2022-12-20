@@ -26,6 +26,10 @@ const getRecipeCategoryPercentage_1 = __importDefault(require("./utils/getRecipe
 const getIngredientStats_1 = __importDefault(require("./utils/getIngredientStats"));
 const PlanWithTotal_1 = __importDefault(require("../schemas/PlanSchema/PlanWithTotal"));
 const planComment_1 = __importDefault(require("../../../models/planComment"));
+const planShare_1 = __importDefault(require("../../../models/planShare"));
+const recipe_1 = __importDefault(require("../../../models/recipe"));
+const memberModel_1 = __importDefault(require("../../../models/memberModel"));
+const PlansAndRecipes_1 = __importDefault(require("../schemas/PlanSchema/PlansAndRecipes"));
 let PlanResolver = class PlanResolver {
     async createAPlan(input) {
         let myPlan = input;
@@ -338,6 +342,68 @@ let PlanResolver = class PlanResolver {
         }
         return planWithCollectionAndComments;
     }
+    async sharePlan(planId, memberId) {
+        let planShare = await planShare_1.default.findOne({
+            planId: planId,
+            invitedBy: memberId,
+        });
+        if (!planShare) {
+            let newPlanShare = await planShare_1.default.create({
+                planId: planId,
+                invitedBy: memberId,
+            });
+            return newPlanShare._id;
+        }
+        return planShare._id;
+    }
+    async getPlanShareInfo(planShareId) {
+        let planShare = await planShare_1.default.findOne({
+            _id: planShareId,
+        });
+        if (!planShare) {
+            return new AppError_1.default('Plan share not found', 404);
+        }
+        let plan = await Plan_1.default.findOne({
+            _id: planShare.planId,
+        });
+        let recipeCounts = 0;
+        let recipeIds = [];
+        for (let i = 0; i < plan.planData.length; i++) {
+            for (let j = 0; j < plan.planData[i].recipes.length; j++) {
+                recipeIds.push(String(plan.planData[i].recipes[j]));
+                recipeCounts++;
+            }
+        }
+        let recipeIdsSet = [...new Set(recipeIds)].slice(0, 3);
+        let recipes = await recipe_1.default.find({
+            _id: { $in: recipeIdsSet },
+        })
+            .populate('recipeBlendCategory')
+            .populate({
+            path: 'ingredients.ingredientId',
+            model: 'BlendIngredient',
+        })
+            .populate({
+            path: 'defaultVersion',
+            model: 'RecipeVersion',
+            populate: {
+                path: 'ingredients.ingredientId',
+                model: 'BlendIngredient',
+                select: 'ingredientName',
+            },
+            select: 'postfixTitle',
+        })
+            .populate('brand');
+        let invitedBy = await memberModel_1.default.findOne({
+            _id: planShare.invitedBy,
+        });
+        return {
+            plan: plan,
+            recipeCount: recipeCounts,
+            invitedBy: invitedBy,
+            recipes: recipes,
+        };
+    }
     async attachCommentsCountWithPlan(planId) {
         let commentsCount = await planComment_1.default.countDocuments({
             planId: planId,
@@ -411,6 +477,22 @@ __decorate([
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Promise)
 ], PlanResolver.prototype, "getAllPopularPlans", null);
+__decorate([
+    (0, type_graphql_1.Mutation)(() => String),
+    __param(0, (0, type_graphql_1.Arg)('planId')),
+    __param(1, (0, type_graphql_1.Arg)('memberId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String,
+        String]),
+    __metadata("design:returntype", Promise)
+], PlanResolver.prototype, "sharePlan", null);
+__decorate([
+    (0, type_graphql_1.Query)(() => PlansAndRecipes_1.default),
+    __param(0, (0, type_graphql_1.Arg)('planShareId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], PlanResolver.prototype, "getPlanShareInfo", null);
 PlanResolver = __decorate([
     (0, type_graphql_1.Resolver)()
 ], PlanResolver);
