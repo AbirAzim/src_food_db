@@ -28,8 +28,8 @@ let PlanCollectionResolver = class PlanCollectionResolver {
         });
         if (collections.length === 0) {
             let defaultBlogCollection = await planCollection_1.default.create({
-                name: 'My Favorite',
-                slug: 'my-favorite',
+                name: 'PLAN',
+                slug: 'plan',
                 memberId: memberId,
                 isDefault: true,
             });
@@ -47,17 +47,29 @@ let PlanCollectionResolver = class PlanCollectionResolver {
         });
     }
     async addOrRemovePlanCollection(collectionId, memberId, planId, previousPlanCollection) {
-        let collection = await planCollection_1.default.findOne({
-            _id: collectionId,
-            memberId: memberId,
-        });
-        if (!collection) {
-            return new AppError_1.default('Collection not found', 404);
+        let collection;
+        let myCollectionId;
+        if (collectionId) {
+            collection = await planCollection_1.default.findOne({
+                _id: collectionId,
+                memberId: memberId,
+            });
+            myCollectionId = collectionId;
         }
-        if (!planId && !previousPlanCollection) {
-            return new AppError_1.default('No blog id or previous blog collection provided', 404);
+        else {
+            let member = await memberModel_1.default.findOne({
+                _id: memberId,
+            }).select('lastModifiedPlanCollection');
+            myCollectionId = member.lastModifiedBlogCollection;
+            collection = await planCollection_1.default.findOne({
+                _id: member.lastModifiedBlogCollection,
+            });
         }
-        if (!planId && previousPlanCollection) {
+        if (!collectionId && previousPlanCollection) {
+            let hasInCollection = collection.blogs.filter((blog) => String(blog) === String(planId))[0];
+            if (!hasInCollection) {
+                return new AppError_1.default('Blog not found in collection', 404);
+            }
             await planCollection_1.default.findOneAndUpdate({
                 _id: previousPlanCollection,
                 memberId: memberId,
@@ -65,10 +77,10 @@ let PlanCollectionResolver = class PlanCollectionResolver {
                 $pull: {
                     plans: planId,
                 },
+                collectionDataCount: collection.blogs.length - 1,
             });
             return 'Removed from collection';
         }
-        let myCollectionId;
         if (previousPlanCollection) {
             await planCollection_1.default.findOneAndUpdate({
                 _id: previousPlanCollection,
@@ -77,17 +89,10 @@ let PlanCollectionResolver = class PlanCollectionResolver {
                 $pull: {
                     plans: planId,
                 },
+                collectionDataCount: collection.blogs.length - 1,
             });
         }
-        if (collectionId) {
-            myCollectionId = collectionId;
-        }
-        else {
-            let member = await memberModel_1.default.findOne({
-                _id: memberId,
-            }).select('lastModifiedPlan');
-            myCollectionId = member.lastModifiedPlanCollection;
-        }
+        console.log(myCollectionId);
         await planCollection_1.default.findOneAndUpdate({
             _id: myCollectionId,
             memberId: memberId,
@@ -95,6 +100,7 @@ let PlanCollectionResolver = class PlanCollectionResolver {
             $push: {
                 plans: planId,
             },
+            collectionDataCount: collection.blogs.length + 1,
         });
         await memberModel_1.default.findOneAndUpdate({
             _id: memberId,
@@ -104,8 +110,38 @@ let PlanCollectionResolver = class PlanCollectionResolver {
         return 'Added to collection';
     }
     async addNewPlanCollection(data) {
-        await planCollection_1.default.create(data);
-        return 'new blog collection added';
+        let newPlanCollection = await planCollection_1.default.create(data);
+        return newPlanCollection;
+    }
+    async deletePlanCollection(collectionId, memberId) {
+        let collection = await planCollection_1.default.findOne({
+            _id: collectionId,
+            memberId: memberId,
+        }).select('isDefault');
+        if (collection.isDefault) {
+            return new AppError_1.default('Cannot delete default collection', 400);
+        }
+        let member = await memberModel_1.default.findOne({
+            _id: memberId,
+        }).select('lastModifiedPlanCollection');
+        if (String(member.lastModifiedPlanCollection) === String(collectionId)) {
+            let defaultCollection = await planCollection_1.default.findOne({
+                memberId: memberId,
+                isDefault: true,
+            }).select('_id');
+            await memberModel_1.default.findOneAndUpdate({
+                _id: memberId,
+            }, {
+                lastModifiedPlanCollection: defaultCollection._id,
+            });
+        }
+        if (!collection) {
+            return new AppError_1.default('Collection not found', 404);
+        }
+        await planCollection_1.default.findOneAndDelete({
+            _id: collectionId,
+        });
+        return 'Collection Deleted';
     }
 };
 __decorate([
@@ -119,7 +155,7 @@ __decorate([
     (0, type_graphql_1.Mutation)(() => String),
     __param(0, (0, type_graphql_1.Arg)('collectionId', { nullable: true })),
     __param(1, (0, type_graphql_1.Arg)('memberId')),
-    __param(2, (0, type_graphql_1.Arg)('planId', { nullable: true })),
+    __param(2, (0, type_graphql_1.Arg)('planId')),
     __param(3, (0, type_graphql_1.Arg)('previousPlanCollection', { nullable: true })),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String,
@@ -129,12 +165,21 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], PlanCollectionResolver.prototype, "addOrRemovePlanCollection", null);
 __decorate([
-    (0, type_graphql_1.Mutation)(() => String),
+    (0, type_graphql_1.Mutation)(() => PlanCollection_1.default),
     __param(0, (0, type_graphql_1.Arg)('data')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [AddNewPlanCollection_1.default]),
     __metadata("design:returntype", Promise)
 ], PlanCollectionResolver.prototype, "addNewPlanCollection", null);
+__decorate([
+    (0, type_graphql_1.Mutation)(() => String),
+    __param(0, (0, type_graphql_1.Arg)('collectionId')),
+    __param(1, (0, type_graphql_1.Arg)('memberId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String,
+        String]),
+    __metadata("design:returntype", Promise)
+], PlanCollectionResolver.prototype, "deletePlanCollection", null);
 PlanCollectionResolver = __decorate([
     (0, type_graphql_1.Resolver)()
 ], PlanCollectionResolver);

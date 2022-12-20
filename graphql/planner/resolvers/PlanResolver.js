@@ -176,30 +176,57 @@ let PlanResolver = class PlanResolver {
         return 'Plan deleted';
     }
     async getAllGlobalPlans(page, limit) {
-        let plans = await Plan_1.default.find({ isGlobal: true })
-            .populate({
-            path: 'planData.recipes',
-            populate: [
-                {
-                    path: 'defaultVersion',
-                    populate: {
-                        path: 'ingredients.ingredientId',
-                        model: 'BlendIngredient',
-                        select: 'ingredientName',
+        let plans = [];
+        if (page && limit) {
+            plans = await Plan_1.default.find({ isGlobal: true })
+                .populate({
+                path: 'planData.recipes',
+                populate: [
+                    {
+                        path: 'defaultVersion',
+                        populate: {
+                            path: 'ingredients.ingredientId',
+                            model: 'BlendIngredient',
+                            select: 'ingredientName',
+                        },
+                        select: 'postfixTitle ingredients',
                     },
-                    select: 'postfixTitle ingredients',
-                },
-                {
-                    path: 'brand',
-                },
-                {
-                    path: 'recipeBlendCategory',
-                },
-            ],
-        })
-            .sort({ createdAt: -1 })
-            .limit(limit)
-            .skip(limit * (page - 1));
+                    {
+                        path: 'brand',
+                    },
+                    {
+                        path: 'recipeBlendCategory',
+                    },
+                ],
+            })
+                .sort({ createdAt: -1 })
+                .limit(limit)
+                .skip(limit * (page - 1));
+        }
+        else {
+            plans = await Plan_1.default.find({ isGlobal: true })
+                .populate({
+                path: 'planData.recipes',
+                populate: [
+                    {
+                        path: 'defaultVersion',
+                        populate: {
+                            path: 'ingredients.ingredientId',
+                            model: 'BlendIngredient',
+                            select: 'ingredientName',
+                        },
+                        select: 'postfixTitle ingredients',
+                    },
+                    {
+                        path: 'brand',
+                    },
+                    {
+                        path: 'recipeBlendCategory',
+                    },
+                ],
+            })
+                .sort({ createdAt: -1 });
+        }
         let planWithCollectionAndComments = [];
         for (let i = 0; i < plans.length; i++) {
             let plan = plans[i];
@@ -357,8 +384,8 @@ __decorate([
 ], PlanResolver.prototype, "deletePlan", null);
 __decorate([
     (0, type_graphql_1.Query)(() => PlanWithTotal_1.default),
-    __param(0, (0, type_graphql_1.Arg)('page')),
-    __param(1, (0, type_graphql_1.Arg)('limit')),
+    __param(0, (0, type_graphql_1.Arg)('page', { nullable: true })),
+    __param(1, (0, type_graphql_1.Arg)('limit', { nullable: true })),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number, Number]),
     __metadata("design:returntype", Promise)
