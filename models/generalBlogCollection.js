@@ -15,7 +15,6 @@ const blogCollectionSchema = new mongoose_1.Schema({
     blogs: [
         {
             type: mongoose_1.Schema.Types.ObjectId,
-            unique: true,
             ref: 'GeneraBlog',
         },
     ],

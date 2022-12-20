@@ -15,7 +15,6 @@ const planCollectionSchema = new mongoose_1.Schema({
     plans: [
         {
             type: mongoose_1.Schema.Types.ObjectId,
-            unique: true,
             ref: 'GeneraBlog',
         },
     ],
