@@ -22,6 +22,7 @@ const AppError_1 = __importDefault(require("../../../utils/AppError"));
 const BlogCollection_1 = __importDefault(require("../schema/blogCollection/BlogCollection"));
 const AddNewBlogCollection_1 = __importDefault(require("./inputType/BlogCollection/AddNewBlogCollection"));
 const BlogCollectionsWithDefaultCollection_1 = __importDefault(require("../schema/blogCollection/BlogCollectionsWithDefaultCollection"));
+const GeneralBlog_1 = __importDefault(require("../schema/GeneralBlog"));
 let GeneralBlogCollectionResolver = class GeneralBlogCollectionResolver {
     async getAllBlogCollections(memberId) {
         let collections = await generalBlogCollection_1.default.find({
@@ -170,6 +171,12 @@ let GeneralBlogCollectionResolver = class GeneralBlogCollectionResolver {
             defaultCollection: defaultCollection,
         };
     }
+    async getAllBlogsForACollection(collectionId) {
+        let collection = await generalBlogCollection_1.default.findOne({
+            _id: collectionId,
+        }).populate('blogs');
+        return collection.blogs;
+    }
 };
 __decorate([
     (0, type_graphql_1.Query)(() => BlogCollectionsWithDefaultCollection_1.default),
@@ -213,6 +220,13 @@ __decorate([
         String]),
     __metadata("design:returntype", Promise)
 ], GeneralBlogCollectionResolver.prototype, "deleteBlogCollection", null);
+__decorate([
+    (0, type_graphql_1.Query)(() => [GeneralBlog_1.default]),
+    __param(0, (0, type_graphql_1.Arg)('collectionId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], GeneralBlogCollectionResolver.prototype, "getAllBlogsForACollection", null);
 GeneralBlogCollectionResolver = __decorate([
     (0, type_graphql_1.Resolver)()
 ], GeneralBlogCollectionResolver);

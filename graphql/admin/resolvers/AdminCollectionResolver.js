@@ -48,6 +48,8 @@ let AdminCollectionResolver = class AdminCollectionResolver {
                 'Recipe',
                 'Ingredient',
                 'Wiki',
+                'GeneraBlog',
+                'Plan',
             ].join(', ')}`, 404);
         }
         if (data.checked) {
@@ -86,6 +88,8 @@ let AdminCollectionResolver = class AdminCollectionResolver {
                 'Recipe',
                 'Ingredient',
                 'Wiki',
+                'GeneraBlog',
+                'Plan',
             ].join(', ')}`, 404);
         }
         for (let i = 0; i < collection.children.length; i++) {
@@ -113,7 +117,7 @@ let AdminCollectionResolver = class AdminCollectionResolver {
         return collections;
     }
     async getAllAdminCollectionType() {
-        return ['Recipe', 'Ingredient', 'Wiki'];
+        return ['Recipe', 'Ingredient', 'Wiki', 'GeneralBlog', 'Plan'];
     }
     async emptyCollections(collectionType) {
         await Widget_1.default.updateMany({}, {

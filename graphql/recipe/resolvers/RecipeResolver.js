@@ -992,6 +992,17 @@ let RecipeResolver = class RecipeResolver {
         }
         return 'recipe added successfully';
     }
+    async CheckScrappedRecipeFromUser(url) {
+        let scrappedRecipe = await scrappedRecipe_1.default.findOne({
+            url: url,
+        });
+        if (scrappedRecipe) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
     async getA() {
         let recipes = await recipe_1.default.find();
         for (let i = 0; i < recipes.length; i++) {
@@ -1514,6 +1525,13 @@ __decorate([
     __metadata("design:paramtypes", [Array]),
     __metadata("design:returntype", Promise)
 ], RecipeResolver.prototype, "addBulkScrappedRecipeFromUser", null);
+__decorate([
+    (0, type_graphql_1.Query)((type) => Boolean),
+    __param(0, (0, type_graphql_1.Arg)('url')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], RecipeResolver.prototype, "CheckScrappedRecipeFromUser", null);
 __decorate([
     (0, type_graphql_1.Mutation)((type) => String),
     __metadata("design:type", Function),

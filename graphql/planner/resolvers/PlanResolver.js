@@ -71,7 +71,7 @@ let PlanResolver = class PlanResolver {
         let plans = await Plan_1.default.find({ memberId: memberId }).populate('planData.recipes');
         return plans;
     }
-    async getAPlan(planId) {
+    async getAPlan(planId, token) {
         let plan = await Plan_1.default.findOne({
             _id: planId,
         }).populate({
@@ -435,8 +435,10 @@ __decorate([
 __decorate([
     (0, type_graphql_1.Query)(() => PlanIngredientAndCategory_1.default),
     __param(0, (0, type_graphql_1.Arg)('planId')),
+    __param(1, (0, type_graphql_1.Arg)('token', { nullable: true })),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [String,
+        String]),
     __metadata("design:returntype", Promise)
 ], PlanResolver.prototype, "getAPlan", null);
 __decorate([
