@@ -56,6 +56,10 @@ __decorate([
 ], ChallengeInfo.prototype, "endDate", void 0);
 __decorate([
     (0, type_graphql_1.Field)({ nullable: true }),
+    __metadata("design:type", Number)
+], ChallengeInfo.prototype, "days", void 0);
+__decorate([
+    (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", Boolean)
 ], ChallengeInfo.prototype, "viewOnly", void 0);
 __decorate([
