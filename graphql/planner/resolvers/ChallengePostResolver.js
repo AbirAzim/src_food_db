@@ -754,6 +754,7 @@ let ChallengePostResolver = class ChallengePostResolver {
             currentStreak: myCurrentStreak,
             viewOnly: viewOnly,
             blendScore: blendScore,
+            days: challenge.days,
             daysRemaining: daysRemaining,
             challengeName: challenge.challengeName,
             challengeId: challenge._id,
