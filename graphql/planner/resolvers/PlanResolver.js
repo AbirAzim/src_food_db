@@ -477,6 +477,7 @@ __decorate([
 __decorate([
     (0, type_graphql_1.Query)(() => [Plan_2.default]),
     __param(0, (0, type_graphql_1.Arg)('limit')),
+    __param(1, (0, type_graphql_1.Arg)('memberId')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number, String]),
     __metadata("design:returntype", Promise)
