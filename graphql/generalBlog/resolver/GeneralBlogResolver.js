@@ -65,7 +65,7 @@ let GeneralBlogResolver = class GeneralBlogResolver {
         await generalBlog_1.default.findOneAndUpdate({ _id: data.editId }, modifiedData);
         return 'Successfully edited general blog';
     }
-    async getAgeneralBlog(blogId, memberId, currentDate) {
+    async getAgeneralBlog(blogId, currentDate) {
         let today = new Date(new Date(currentDate).toISOString().slice(0, 10));
         await generalBlog_1.default.updateMany({
             publishDate: {
@@ -74,6 +74,13 @@ let GeneralBlogResolver = class GeneralBlogResolver {
             isPublished: false,
         }, { isPublished: true });
         let blog = await generalBlog_1.default.findOne({ _id: blogId });
+        return blog;
+    }
+    async getAgeneralBlogBySlug(slug, memberId) {
+        let blog = await generalBlog_1.default.findOne({ slug: slug });
+        blog.commentsCount = await blogComment_1.default.countDocuments({
+            blogId: new mongoose_1.default.mongo.ObjectId(blog._id),
+        });
         blog.commentsCount = await blogComment_1.default.countDocuments({
             blogId: new mongoose_1.default.mongo.ObjectId(blog._id),
         });
@@ -89,14 +96,6 @@ let GeneralBlogResolver = class GeneralBlogResolver {
         else {
             blog.hasInCollection = false;
         }
-        return blog;
-    }
-    async getAgeneralBlogBySlug(slug) {
-        let blog = await generalBlog_1.default.findOne({ slug: slug });
-        blog.commentsCount = await blogComment_1.default.countDocuments({
-            blogId: new mongoose_1.default.mongo.ObjectId(blog._id),
-        });
-        blog.hasInCollection = false;
         return blog;
     }
     async getAllGeneralBlog(currentDate) {
@@ -163,17 +162,17 @@ __decorate([
 __decorate([
     (0, type_graphql_1.Query)(() => GeneralBlog_1.default),
     __param(0, (0, type_graphql_1.Arg)('blogId', (type) => type_graphql_1.ID)),
-    __param(1, (0, type_graphql_1.Arg)('memberId', (type) => type_graphql_1.ID)),
-    __param(2, (0, type_graphql_1.Arg)('currentDate')),
+    __param(1, (0, type_graphql_1.Arg)('currentDate')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String, String]),
+    __metadata("design:paramtypes", [String, String]),
     __metadata("design:returntype", Promise)
 ], GeneralBlogResolver.prototype, "getAgeneralBlog", null);
 __decorate([
     (0, type_graphql_1.Query)(() => GeneralBlog_1.default),
     __param(0, (0, type_graphql_1.Arg)('slug')),
+    __param(1, (0, type_graphql_1.Arg)('memberId', (type) => type_graphql_1.ID)),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [String, String]),
     __metadata("design:returntype", Promise)
 ], GeneralBlogResolver.prototype, "getAgeneralBlogBySlug", null);
 __decorate([
