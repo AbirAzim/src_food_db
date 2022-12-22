@@ -88,7 +88,7 @@ let AdminCollectionResolver = class AdminCollectionResolver {
                 'Recipe',
                 'Ingredient',
                 'Wiki',
-                'GeneralBlog',
+                'GeneraBlog',
                 'Plan',
             ].join(', ')}`, 404);
         }

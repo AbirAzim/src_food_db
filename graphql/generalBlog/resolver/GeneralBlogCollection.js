@@ -58,7 +58,7 @@ let GeneralBlogCollectionResolver = class GeneralBlogCollectionResolver {
             };
         }
     }
-    async addToLastModifiedCollection(memberId, blogId) {
+    async addToLastModifiedBlogCollection(memberId, blogId) {
         let member = await memberModel_1.default.findOne({
             _id: memberId,
         }).select('lastModifiedBlogCollection');
@@ -193,7 +193,7 @@ __decorate([
     __metadata("design:paramtypes", [String,
         String]),
     __metadata("design:returntype", Promise)
-], GeneralBlogCollectionResolver.prototype, "addToLastModifiedCollection", null);
+], GeneralBlogCollectionResolver.prototype, "addToLastModifiedBlogCollection", null);
 __decorate([
     (0, type_graphql_1.Mutation)(() => BlogCollectionsWithDefaultCollection_1.default),
     __param(0, (0, type_graphql_1.Arg)('collectionIds', (type) => [String])),
