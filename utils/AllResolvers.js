@@ -39,6 +39,7 @@ const BlogCommentResolvers_1 = __importDefault(require("../graphql/generalBlog/r
 const PlanResolver_1 = __importDefault(require("../graphql/planner/resolvers/PlanResolver"));
 const GeneralBlogCollection_1 = __importDefault(require("../graphql/generalBlog/resolver/GeneralBlogCollection"));
 const PlanCommentResolver_1 = __importDefault(require("../graphql/planner/resolvers/PlanCommentResolver"));
+const PlanCollectionResolver_1 = __importDefault(require("../graphql/planner/resolvers/PlanCollectionResolver"));
 function getAllResolvers() {
     return [
         FoodResolver_1.default,
@@ -77,6 +78,7 @@ function getAllResolvers() {
         PlanResolver_1.default,
         GeneralBlogCollection_1.default,
         PlanCommentResolver_1.default,
+        PlanCollectionResolver_1.default,
     ];
 }
 exports.default = getAllResolvers;

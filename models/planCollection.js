@@ -15,7 +15,7 @@ const planCollectionSchema = new mongoose_1.Schema({
     plans: [
         {
             type: mongoose_1.Schema.Types.ObjectId,
-            ref: 'GeneraBlog',
+            ref: 'Plan',
         },
     ],
     createdAt: {
@@ -32,14 +32,5 @@ const planCollectionSchema = new mongoose_1.Schema({
     },
     updatedAt: { type: Date, default: Date.now },
 });
-planCollectionSchema.pre('save', async function (next) {
-    this.collectionDataCount = this.blogs.length;
-    next();
-});
-planCollectionSchema.post('update', async function (next) {
-    //@ts-ignore
-    this.collectionDataCount = this.blogs.length;
-    next();
-});
-const BlogCollection = (0, mongoose_1.model)('BlogCollection', planCollectionSchema);
-exports.default = BlogCollection;
+const PlanCollection = (0, mongoose_1.model)('PlanCollection', planCollectionSchema);
+exports.default = PlanCollection;

@@ -22,7 +22,7 @@ const AppError_1 = __importDefault(require("../../../utils/AppError"));
 const BlogCollection_1 = __importDefault(require("../schema/blogCollection/BlogCollection"));
 const AddNewBlogCollection_1 = __importDefault(require("./inputType/BlogCollection/AddNewBlogCollection"));
 const BlogCollectionsWithDefaultCollection_1 = __importDefault(require("../schema/blogCollection/BlogCollectionsWithDefaultCollection"));
-const GeneralBlog_1 = __importDefault(require("../schema/GeneralBlog"));
+const GeneralBlogCollectionWithPagination_1 = __importDefault(require("../schema/GeneralBlogCollectionWithPagination"));
 let GeneralBlogCollectionResolver = class GeneralBlogCollectionResolver {
     async getAllBlogCollections(memberId) {
         let collections = await generalBlogCollection_1.default.find({
@@ -34,6 +34,7 @@ let GeneralBlogCollectionResolver = class GeneralBlogCollectionResolver {
                 slug: 'my-favorite',
                 memberId: memberId,
                 isDefault: true,
+                collectionDataCount: 1,
             });
             await memberModel_1.default.findOneAndUpdate({
                 _id: memberId,
@@ -62,6 +63,22 @@ let GeneralBlogCollectionResolver = class GeneralBlogCollectionResolver {
         let member = await memberModel_1.default.findOne({
             _id: memberId,
         }).select('lastModifiedBlogCollection');
+        if (!member.lastModifiedBlogCollection) {
+            let defaultBlogCollection = await generalBlogCollection_1.default.create({
+                name: 'My Favorite',
+                slug: 'my-favorite',
+                memberId: memberId,
+                isDefault: true,
+                blogs: [blogId],
+                collectionDataCount: 1,
+            });
+            await memberModel_1.default.findOneAndUpdate({
+                _id: memberId,
+            }, {
+                lastModifiedBlogCollection: defaultBlogCollection._id,
+            });
+            return defaultBlogCollection;
+        }
         let blogCollection = await generalBlogCollection_1.default.findOneAndUpdate({
             _id: member.lastModifiedBlogCollection,
             memberId: memberId,
@@ -73,8 +90,8 @@ let GeneralBlogCollectionResolver = class GeneralBlogCollectionResolver {
         }, {
             new: true,
         });
-        await generalBlogCollection_1.default.findOneAndUpdate({ _id: blogCollection._id }, { collectionDataCount: blogCollection.blogs.length });
-        return 'Blog added to last modified collection';
+        let newBlogCollection = await generalBlogCollection_1.default.findOneAndUpdate({ _id: blogCollection._id }, { collectionDataCount: blogCollection.blogs.length }, { new: true });
+        return newBlogCollection;
     }
     async addOrRemoveToBlogCollection(collectionIds, memberId, blogId) {
         let collections = await generalBlogCollection_1.default.find({
@@ -171,11 +188,27 @@ let GeneralBlogCollectionResolver = class GeneralBlogCollectionResolver {
             defaultCollection: defaultCollection,
         };
     }
-    async getAllBlogsForACollection(collectionId) {
+    async getAllBlogsForACollection(collectionId, limit, page) {
+        if (!limit) {
+            limit = 12;
+        }
+        if (!page) {
+            page = 1;
+        }
         let collection = await generalBlogCollection_1.default.findOne({
             _id: collectionId,
-        }).populate('blogs');
-        return collection.blogs;
+        })
+            .populate('blogs')
+            .limit(limit)
+            .skip((page - 1) * limit);
+        let coll = await generalBlogCollection_1.default.findOne({
+            _id: collectionId,
+        });
+        return {
+            blogs: collection.blogs,
+            collectionInfo: coll,
+            totalBlogs: coll.collectionDataCount,
+        };
     }
 };
 __decorate([
@@ -186,7 +219,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], GeneralBlogCollectionResolver.prototype, "getAllBlogCollections", null);
 __decorate([
-    (0, type_graphql_1.Mutation)(() => String),
+    (0, type_graphql_1.Mutation)(() => BlogCollection_1.default),
     __param(0, (0, type_graphql_1.Arg)('memberId')),
     __param(1, (0, type_graphql_1.Arg)('blogId')),
     __metadata("design:type", Function),
@@ -221,10 +254,12 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], GeneralBlogCollectionResolver.prototype, "deleteBlogCollection", null);
 __decorate([
-    (0, type_graphql_1.Query)(() => [GeneralBlog_1.default]),
+    (0, type_graphql_1.Query)(() => GeneralBlogCollectionWithPagination_1.default),
     __param(0, (0, type_graphql_1.Arg)('collectionId')),
+    __param(1, (0, type_graphql_1.Arg)('limit', { nullable: true })),
+    __param(2, (0, type_graphql_1.Arg)('page', { nullable: true })),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [String, Number, Number]),
     __metadata("design:returntype", Promise)
 ], GeneralBlogCollectionResolver.prototype, "getAllBlogsForACollection", null);
 GeneralBlogCollectionResolver = __decorate([

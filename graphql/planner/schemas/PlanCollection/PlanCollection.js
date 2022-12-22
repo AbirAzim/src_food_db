@@ -21,7 +21,7 @@ __decorate([
     __metadata("design:type", String)
 ], PlanCollection.prototype, "slug", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
 ], PlanCollection.prototype, "image", void 0);
 __decorate([
