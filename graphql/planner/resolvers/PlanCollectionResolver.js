@@ -111,7 +111,7 @@ let PlanCollectionResolver = class PlanCollectionResolver {
                 }, {
                     new: true,
                 });
-                await planCollection_1.default.findOneAndUpdate({ _id: collection._id }, { collectionDataCount: bc.blogs.length });
+                await planCollection_1.default.findOneAndUpdate({ _id: collection._id }, { collectionDataCount: bc.plans.length });
             }
             else {
                 let bc = await planCollection_1.default.findOneAndUpdate({
@@ -125,7 +125,7 @@ let PlanCollectionResolver = class PlanCollectionResolver {
                 }, {
                     new: true,
                 });
-                await planCollection_1.default.findOneAndUpdate({ _id: collection._id }, { collectionDataCount: bc.blogs.length });
+                await planCollection_1.default.findOneAndUpdate({ _id: collection._id }, { collectionDataCount: bc.plans.length });
             }
         }
         if (collectionIds.length > 0) {
@@ -133,7 +133,7 @@ let PlanCollectionResolver = class PlanCollectionResolver {
         }
         let member = await memberModel_1.default.findOne({
             _id: memberId,
-        }).select('lastModifiedBlogCollection');
+        }).select('lastModifiedPlanCollection');
         let planCollections = await planCollection_1.default.find({
             memberId: memberId,
         });
@@ -178,7 +178,7 @@ let PlanCollectionResolver = class PlanCollectionResolver {
         });
         let memberData = await memberModel_1.default.findOne({
             _id: memberId,
-        }).select('lastModifiedBlogCollection');
+        }).select('lastModifiedPlanCollection');
         let defaultCollection = await planCollection_1.default.findOne({
             _id: memberData.lastModifiedPlanCollection,
         });

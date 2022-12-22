@@ -23,6 +23,8 @@ const BlogCollection_1 = __importDefault(require("../schema/blogCollection/BlogC
 const AddNewBlogCollection_1 = __importDefault(require("./inputType/BlogCollection/AddNewBlogCollection"));
 const BlogCollectionsWithDefaultCollection_1 = __importDefault(require("../schema/blogCollection/BlogCollectionsWithDefaultCollection"));
 const GeneralBlogCollectionWithPagination_1 = __importDefault(require("../schema/GeneralBlogCollectionWithPagination"));
+const blogComment_1 = __importDefault(require("../../../models/blogComment"));
+const mongoose_1 = __importDefault(require("mongoose"));
 let GeneralBlogCollectionResolver = class GeneralBlogCollectionResolver {
     async getAllBlogCollections(memberId) {
         let collections = await generalBlogCollection_1.default.find({
@@ -34,7 +36,7 @@ let GeneralBlogCollectionResolver = class GeneralBlogCollectionResolver {
                 slug: 'my-favorite',
                 memberId: memberId,
                 isDefault: true,
-                collectionDataCount: 1,
+                collectionDataCount: 0,
             });
             await memberModel_1.default.findOneAndUpdate({
                 _id: memberId,
@@ -188,7 +190,7 @@ let GeneralBlogCollectionResolver = class GeneralBlogCollectionResolver {
             defaultCollection: defaultCollection,
         };
     }
-    async getAllBlogsForACollection(collectionId, limit, page) {
+    async getAllBlogsForACollection(memberId, collectionId, limit, page) {
         if (!limit) {
             limit = 12;
         }
@@ -201,11 +203,32 @@ let GeneralBlogCollectionResolver = class GeneralBlogCollectionResolver {
             .populate('blogs')
             .limit(limit)
             .skip((page - 1) * limit);
+        let returnBlogs = [];
+        let blogs = collection.blogs;
+        for (let i = 0; i < blogs.length; i++) {
+            let blog = blogs[i];
+            blog.commentsCount = await blogComment_1.default.countDocuments({
+                blogId: new mongoose_1.default.mongo.ObjectId(blog._id),
+            });
+            let blogCollections = await generalBlogCollection_1.default.find({
+                memberId: memberId,
+                blogs: {
+                    $in: blog._id,
+                },
+            }).select('_id');
+            if (blogCollections.length > 0) {
+                blog.hasInCollection = true;
+            }
+            else {
+                blog.hasInCollection = false;
+            }
+            returnBlogs.push(blog);
+        }
         let coll = await generalBlogCollection_1.default.findOne({
             _id: collectionId,
         });
         return {
-            blogs: collection.blogs,
+            blogs: returnBlogs,
             collectionInfo: coll,
             totalBlogs: coll.collectionDataCount,
         };
@@ -255,11 +278,13 @@ __decorate([
 ], GeneralBlogCollectionResolver.prototype, "deleteBlogCollection", null);
 __decorate([
     (0, type_graphql_1.Query)(() => GeneralBlogCollectionWithPagination_1.default),
-    __param(0, (0, type_graphql_1.Arg)('collectionId')),
-    __param(1, (0, type_graphql_1.Arg)('limit', { nullable: true })),
-    __param(2, (0, type_graphql_1.Arg)('page', { nullable: true })),
+    __param(0, (0, type_graphql_1.Arg)('memberId')),
+    __param(1, (0, type_graphql_1.Arg)('collectionId')),
+    __param(2, (0, type_graphql_1.Arg)('limit', { nullable: true })),
+    __param(3, (0, type_graphql_1.Arg)('page', { nullable: true })),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Number, Number]),
+    __metadata("design:paramtypes", [String,
+        String, Number, Number]),
     __metadata("design:returntype", Promise)
 ], GeneralBlogCollectionResolver.prototype, "getAllBlogsForACollection", null);
 GeneralBlogCollectionResolver = __decorate([

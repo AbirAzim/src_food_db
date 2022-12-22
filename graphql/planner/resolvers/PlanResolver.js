@@ -30,6 +30,7 @@ const planShare_1 = __importDefault(require("../../../models/planShare"));
 const recipe_1 = __importDefault(require("../../../models/recipe"));
 const memberModel_1 = __importDefault(require("../../../models/memberModel"));
 const PlansAndRecipes_1 = __importDefault(require("../schemas/PlanSchema/PlansAndRecipes"));
+const planCollection_1 = __importDefault(require("../../../models/planCollection"));
 let PlanResolver = class PlanResolver {
     async createAPlan(input) {
         let myPlan = input;
@@ -179,7 +180,7 @@ let PlanResolver = class PlanResolver {
         });
         return 'Plan deleted';
     }
-    async getAllGlobalPlans(page, limit) {
+    async getAllGlobalPlans(page, limit, memberId) {
         let plans = [];
         if (page && limit) {
             plans = await Plan_1.default.find({ isGlobal: true })
@@ -235,7 +236,7 @@ let PlanResolver = class PlanResolver {
         for (let i = 0; i < plans.length; i++) {
             let plan = plans[i];
             plan.commentsCount = await this.attachCommentsCountWithPlan(plan._id);
-            plan.planCollection = null;
+            plan.hasInCollection = await this.checkThePlanIsInCollectionOrNot(plan._id, memberId);
             planWithCollectionAndComments.push(plan);
         }
         return {
@@ -243,7 +244,7 @@ let PlanResolver = class PlanResolver {
             totalPlans: await Plan_1.default.countDocuments({ isGlobal: true }),
         };
     }
-    async getAllRecentPlans(limit) {
+    async getAllRecentPlans(limit, memberId) {
         let plans = await Plan_1.default.find({ isGlobal: true })
             .populate({
             path: 'planData.recipes',
@@ -271,12 +272,12 @@ let PlanResolver = class PlanResolver {
         for (let i = 0; i < plans.length; i++) {
             let plan = plans[i];
             plan.commentsCount = await this.attachCommentsCountWithPlan(plan._id);
-            plan.planCollection = null;
+            plan.hasInCollection = await this.checkThePlanIsInCollectionOrNot(plan._id, memberId);
             planWithCollectionAndComments.push(plan);
         }
         return planWithCollectionAndComments;
     }
-    async getAllRecommendedPlans(limit) {
+    async getAllRecommendedPlans(limit, memberId) {
         let plans = await Plan_1.default.find({ isGlobal: true })
             .populate({
             path: 'planData.recipes',
@@ -304,12 +305,12 @@ let PlanResolver = class PlanResolver {
         for (let i = 0; i < plans.length; i++) {
             let plan = plans[i];
             plan.commentsCount = await this.attachCommentsCountWithPlan(plan._id);
-            plan.planCollection = null;
+            plan.hasInCollection = await this.checkThePlanIsInCollectionOrNot(plan._id, memberId);
             planWithCollectionAndComments.push(plan);
         }
         return planWithCollectionAndComments;
     }
-    async getAllPopularPlans(limit) {
+    async getAllPopularPlans(limit, memberId) {
         let plans = await Plan_1.default.find({ isGlobal: true })
             .populate({
             path: 'planData.recipes',
@@ -337,7 +338,7 @@ let PlanResolver = class PlanResolver {
         for (let i = 0; i < plans.length; i++) {
             let plan = plans[i];
             plan.commentsCount = await this.attachCommentsCountWithPlan(plan._id);
-            plan.planCollection = null;
+            plan.hasInCollection = await this.checkThePlanIsInCollectionOrNot(plan._id, memberId);
             planWithCollectionAndComments.push(plan);
         }
         return planWithCollectionAndComments;
@@ -410,6 +411,20 @@ let PlanResolver = class PlanResolver {
         });
         return commentsCount;
     }
+    async checkThePlanIsInCollectionOrNot(planId, memberId) {
+        let planCollection = await planCollection_1.default.find({
+            memberId: memberId,
+            plans: {
+                $in: planId,
+            },
+        }).select('_id');
+        if (planCollection.length > 0) {
+            return true;
+        }
+        else {
+            false;
+        }
+    }
 };
 __decorate([
     (0, type_graphql_1.Mutation)(() => String),
@@ -454,29 +469,32 @@ __decorate([
     (0, type_graphql_1.Query)(() => PlanWithTotal_1.default),
     __param(0, (0, type_graphql_1.Arg)('page', { nullable: true })),
     __param(1, (0, type_graphql_1.Arg)('limit', { nullable: true })),
+    __param(2, (0, type_graphql_1.Arg)('memberId', { nullable: true })),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, Number]),
+    __metadata("design:paramtypes", [Number, Number, String]),
     __metadata("design:returntype", Promise)
 ], PlanResolver.prototype, "getAllGlobalPlans", null);
 __decorate([
     (0, type_graphql_1.Query)(() => [Plan_2.default]),
     __param(0, (0, type_graphql_1.Arg)('limit')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
+    __metadata("design:paramtypes", [Number, String]),
     __metadata("design:returntype", Promise)
 ], PlanResolver.prototype, "getAllRecentPlans", null);
 __decorate([
     (0, type_graphql_1.Query)(() => [Plan_2.default]),
     __param(0, (0, type_graphql_1.Arg)('limit')),
+    __param(1, (0, type_graphql_1.Arg)('memberId')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
+    __metadata("design:paramtypes", [Number, String]),
     __metadata("design:returntype", Promise)
 ], PlanResolver.prototype, "getAllRecommendedPlans", null);
 __decorate([
     (0, type_graphql_1.Query)(() => [Plan_2.default]),
     __param(0, (0, type_graphql_1.Arg)('limit')),
+    __param(1, (0, type_graphql_1.Arg)('memberId')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
+    __metadata("design:paramtypes", [Number, String]),
     __metadata("design:returntype", Promise)
 ], PlanResolver.prototype, "getAllPopularPlans", null);
 __decorate([

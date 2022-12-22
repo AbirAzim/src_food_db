@@ -23,6 +23,7 @@ const generalBlog_1 = __importDefault(require("../../../models/generalBlog"));
 const blogComment_1 = __importDefault(require("../../../models/blogComment"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const AppError_1 = __importDefault(require("../../../utils/AppError"));
+const generalBlogCollection_1 = __importDefault(require("../../../models/generalBlogCollection"));
 let GeneralBlogResolver = class GeneralBlogResolver {
     async addGeneralBlog(data) {
         let blog = await generalBlog_1.default.findOne({ slug: data.slug });
@@ -64,7 +65,7 @@ let GeneralBlogResolver = class GeneralBlogResolver {
         await generalBlog_1.default.findOneAndUpdate({ _id: data.editId }, modifiedData);
         return 'Successfully edited general blog';
     }
-    async getAgeneralBlog(blogId, currentDate) {
+    async getAgeneralBlog(blogId, memberId, currentDate) {
         let today = new Date(new Date(currentDate).toISOString().slice(0, 10));
         await generalBlog_1.default.updateMany({
             publishDate: {
@@ -73,8 +74,21 @@ let GeneralBlogResolver = class GeneralBlogResolver {
             isPublished: false,
         }, { isPublished: true });
         let blog = await generalBlog_1.default.findOne({ _id: blogId });
-        blog.commentsCount = new mongoose_1.default.mongo.ObjectId(blog._id);
-        blog.hasInCollection = false;
+        blog.commentsCount = await blogComment_1.default.countDocuments({
+            blogId: new mongoose_1.default.mongo.ObjectId(blog._id),
+        });
+        let blogCollections = await generalBlogCollection_1.default.find({
+            memberId: memberId,
+            blogs: {
+                $in: blog._id,
+            },
+        }).select('_id');
+        if (blogCollections.length > 0) {
+            blog.hasInCollection = true;
+        }
+        else {
+            blog.hasInCollection = false;
+        }
         return blog;
     }
     async getAgeneralBlogBySlug(slug) {
@@ -96,7 +110,7 @@ let GeneralBlogResolver = class GeneralBlogResolver {
         let blogs = await generalBlog_1.default.find();
         return blogs;
     }
-    async getAllGeneralBlogForClient(currentDate) {
+    async getAllGeneralBlogForClient(currentDate, memberId) {
         let today = new Date(new Date(currentDate).toISOString().slice(0, 10));
         await generalBlog_1.default.updateMany({
             publishDate: {
@@ -111,7 +125,18 @@ let GeneralBlogResolver = class GeneralBlogResolver {
             blog.commentsCount = await blogComment_1.default.countDocuments({
                 blogId: new mongoose_1.default.mongo.ObjectId(blog._id),
             });
-            blog.hasInCollection = false;
+            let blogCollections = await generalBlogCollection_1.default.find({
+                memberId: memberId,
+                blogs: {
+                    $in: blog._id,
+                },
+            });
+            if (blogCollections.length > 0) {
+                blog.hasInCollection = true;
+            }
+            else {
+                blog.hasInCollection = false;
+            }
             returnBlogs.push(blog);
         }
         return returnBlogs;
@@ -138,9 +163,10 @@ __decorate([
 __decorate([
     (0, type_graphql_1.Query)(() => GeneralBlog_1.default),
     __param(0, (0, type_graphql_1.Arg)('blogId', (type) => type_graphql_1.ID)),
-    __param(1, (0, type_graphql_1.Arg)('currentDate')),
+    __param(1, (0, type_graphql_1.Arg)('memberId', (type) => type_graphql_1.ID)),
+    __param(2, (0, type_graphql_1.Arg)('currentDate')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:paramtypes", [String, String, String]),
     __metadata("design:returntype", Promise)
 ], GeneralBlogResolver.prototype, "getAgeneralBlog", null);
 __decorate([
@@ -160,8 +186,9 @@ __decorate([
 __decorate([
     (0, type_graphql_1.Query)(() => [GeneralBlog_1.default]),
     __param(0, (0, type_graphql_1.Arg)('currentDate')),
+    __param(1, (0, type_graphql_1.Arg)('memberId')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [String, String]),
     __metadata("design:returntype", Promise)
 ], GeneralBlogResolver.prototype, "getAllGeneralBlogForClient", null);
 __decorate([

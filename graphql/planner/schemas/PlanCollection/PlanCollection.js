@@ -13,6 +13,10 @@ const type_graphql_1 = require("type-graphql");
 let PlanCollection = class PlanCollection {
 };
 __decorate([
+    (0, type_graphql_1.Field)((type) => type_graphql_1.ID),
+    __metadata("design:type", String)
+], PlanCollection.prototype, "_id", void 0);
+__decorate([
     (0, type_graphql_1.Field)(),
     __metadata("design:type", String)
 ], PlanCollection.prototype, "name", void 0);
